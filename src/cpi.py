@@ -18,6 +18,7 @@ limitations under the License.
 
     Contributors:
         * Rafael Sene <rpsene@br.ibm.com>
+        * Daniel Kreling <dbkreling@br.ibm.com>
 """
 
 import sys
@@ -84,44 +85,25 @@ def main(argv=None):
     try:
         parser = ArgumentParser(description=program_license,
                                 formatter_class=RawDescriptionHelpFormatter)
-        parser.add_argument("-v", "--verbose", dest="verbose", type=int,
-                            choices=range(0, 4), required=False, default=0,
-                            help="set verbosity level [default: %(default)s]")
-        parser.add_argument("-o", "--optimize", dest="opt", type=int,
-                            choices=range(1, 5), required=False, default=3,
-                            help="set optimization level [default: %(default)s]")
-        parser.add_argument("-w", "--warning", dest="warn", type=int,
-                            choices=range(1, 5), required=False, default=2,
-                            help="set warning level [default: %(default)s]")
-        parser.add_argument("-p", "--processor", dest="processor", type=str,
-                            choices=['power7', 'power8'], required=False,
-                            default='power8',
-                            help="set processor model [default: %(default)s]")
-        parser.add_argument('-V', '--version', action='version',
-                            version=program_version_message)
         parser.add_argument(dest="path",
                             help="path to the application binary [default: %(default)s]",
-                            metavar="path", nargs='+')
+                            nargs='+')
 
         # Process arguments
         args, application_args = parser.parse_known_args()
-        verbose_value = args.verbose
-        optimization_value = str(args.opt)
-        warning_value = args.warn
-        processor_value = args.processor
-        binary_path = args.path[0]
-        binary_name = binary_path.split("/")[-1]
-        args.path.pop(0)
-        binary_cmd = binary_path + ' ' + ' '.join(map(str, application_args))
-        controller.runcpi(binary_cmd, binary_name, optimization_value,
-                          warning_value, verbose_value, processor_value)
+        binary_path = args.path.pop(0)
+        binary_args = ' ' + ' '.join(map(str, args.path))
+        binary_args += ' ' + ' '.join(map(str, application_args))
+
+        # Run CPI
+        controller.run_cpi(binary_path, binary_args)
 
     except KeyboardInterrupt:
         return 0
     except Exception, e:
         indent = len(program_name) * " "
         sys.stderr.write(program_name + ": " + repr(e) + "\n")
-        sys.stderr.write(indent + "  for help use --help")
+        sys.stderr.write(indent + "  for help use --help" + "\n")
         return 2
 
 if __name__ == "__main__":

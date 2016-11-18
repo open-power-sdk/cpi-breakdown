@@ -17,12 +17,19 @@ limitations under the License.
 
     Contributors:
         * Rafael Sene <rpsene@br.ibm.com>
+        * Daniel Kreling <dbkreling@br.ibm.com>
 """
 
 import core
-import sys
+import events_reader
+import commands
 
 
-def runcpi(binary_path, binary_name, opt_value, warn_value, verbose_value,
-           processor_value):
-    print "cpi"
+def run_cpi(binary_path, binary_args):
+    for event in events_reader.get_events(core.get_processor()):
+        ocount = "ocount -b"
+        for item in event:
+            ocount += " -e " + item
+        print "\n" + "Running: " + ocount + " " + binary_path + binary_args
+        core.execute(ocount + ' ' + binary_path + binary_args)
+    return

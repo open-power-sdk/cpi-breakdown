@@ -17,10 +17,12 @@ limitations under the License.
 
     Contributors:
         * Rafael Sene <rpsene@br.ibm.com>
+        * Daniel Kreling <dbkreling@br.ibm.com>
 """
 
 import subprocess
 import sys
+import commands
 
 
 def execute(command):
@@ -38,3 +40,13 @@ def cmdexists(command):
     subp = subprocess.call("type " + command, shell=True,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return subp == 0
+
+
+def get_processor():
+    """Check the system processor"""
+    if commands.getoutput('cat /proc/cpuinfo | grep -io power8 -m 1') == 'POWER8':
+        return 'POWER8'
+    elif commands.getoutput('cat /proc/cpuinfo | grep -io power7 -m 1') == 'POWER7':
+        return 'POWER7'
+    elif commands.getoutput('cat /proc/cpuinfo | grep -io power9 -m 1') == 'POWER9':
+        return 'POWER9'
