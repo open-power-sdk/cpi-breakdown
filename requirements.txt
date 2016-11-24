@@ -1,5 +1,3 @@
 nose
 argparse
-sys
-os
-time
+pyyaml
