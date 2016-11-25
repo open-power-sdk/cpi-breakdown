@@ -21,15 +21,21 @@ limitations under the License.
 """
 
 import core
+import sys
 import events_reader
 import commands
 
-
+#TODO: replace the ocount_out for the final location.
 def run_cpi(binary_path, binary_args):
+    ocount_out = "/home/iplsdk/tools/cpi/events/ocount_out.txt"
+    if not core.cmdexists("ocount"):
+        sys.stderr.write("ocount package is not installed in the system. " +
+                         "Install oprofile before continue." + "\n")
+        sys.exit(0)
     for event in events_reader.get_events(core.get_processor()):
         ocount = "ocount -b"
         for item in event:
             ocount += " -e " + item
         print "\n" + "Running: " + ocount + " " + binary_path + binary_args
-        core.execute(ocount + ' ' + binary_path + binary_args)
+        core.execute(ocount + ' ' + binary_path + binary_args,  ocount_out)
     return

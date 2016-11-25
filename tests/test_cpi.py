@@ -17,27 +17,38 @@ limitations under the License.
 
     Contributors:
         * Rafael Sene <rpsene@br.ibm.com>
+        * Daniel Kreling <dbkreling@br.ibm.com>
 """
 
 import unittest
 import platform
+import commands
 from src import core
+
 
 class TestCmdExecution(unittest.TestCase):
     def test_cmdexec(self):
         self.assertEqual(0, core.execute("ls"))
+
 
 class TestCmdExist(unittest.TestCase):
     @staticmethod
     def test_cmdexist():
         assert True == core.cmdexists("cd")
 
+
 class TestPlatform(unittest.TestCase):
     def test_platform(self):
         self.assertEqual('Linux', platform.system())
 
+
+class TestProcessor(unittest.TestCase):
+    def test_processor(self):
+        self.assertEqual(commands.getoutput("grep -io 'power[[:digit:]]\+' -m 1 /proc/cpuinfo"),
+                         core.get_processor())
+
 if __name__ == '__main__':
-    tests = [TestCmdExecution, TestCmdExist, TestPlatform]
+    tests = [TestCmdExecution, TestCmdExist, TestPlatform, TestProcessor]
     loader = unittest.TestLoader()
     test_suit = []
 
