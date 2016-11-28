@@ -22,13 +22,9 @@ limitations under the License.
 
 from setuptools import setup, find_packages
 from pip.req import parse_requirements
-import time
 
 with open('README.rst') as f:
     readme = f.read()
-
-with open('LICENSE') as f:
-    toollicense = f.read()
 
 requirements_list = parse_requirements('./requirements.txt', session=False)
 requirements = [str(required.req) for required in requirements_list]
@@ -41,7 +37,7 @@ setup(
     author='Rafael Peria de Sene',
     author_email='rpsene@br.ibm.com',
     url='https://www-304.ibm.com/webapp/set2/sas/f/lopdiags/sdklop.html',
-    license=toollicense,
+    license='Apache Software License 2.0',
     install_requires=requirements,
     packages=find_packages(exclude=("tests",)),
     data_files=[("", ["LICENSE"])],
@@ -58,6 +54,6 @@ setup(
         'Programming Language :: C',
         'Programming Language :: C++',
         'Topic :: Software Development :: Build Tools',
-        'License :: OSI Approved :: Apache Software License',
+        'License :: OSI Approved :: Apache Software License 2.0',
           ],
 )
