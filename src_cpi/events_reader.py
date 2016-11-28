@@ -26,13 +26,14 @@ import os
 def get_events(processor):
     """return the events based on the processor version"""
     events_file = os.path.abspath("../events/" + str.lower(processor) + ".yaml")
-    events_list = []
     return read_events(events_file)
+
 
 def read_events(events_file):
     """read the events from the respective file"""
     with open(events_file, "r") as f:
         groups = yaml.load(f)
+        events_list = []
         for i in groups.values():
             events_list.append(i)
         return events_list
