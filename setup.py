@@ -31,7 +31,7 @@ with open('LICENSE') as f:
 
 setup(
     name='cpi',
-    version='1.0.' + time.strftime("%Y%m%d%H%M%S"),
+    version='1.0.timestamp',
     description='Profiles C/C++ applications with the CPI (cycles per instruction) breakdown model for POWER8.',
     long_description=readme,
     author='Rafael Peria de Sene',

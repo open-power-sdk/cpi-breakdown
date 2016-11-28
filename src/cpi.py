@@ -29,12 +29,10 @@ from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
 
 import controller
+import pkg_resources
 
 __all__ = []
-# TODO: these values must be static
-__version__ = '1.0.' + time.strftime("%Y%m%d%H%M%S")
-__updated__ = time.strftime("%Y/%m/%d|%H:%M:%S")
-
+__version__ =  pkg_resources.require("cpi")[0].version
 
 class CLIError(Exception):
     def __init__(self, msg):
@@ -56,8 +54,7 @@ def main(argv=None):
 
     program_name = os.path.basename(sys.argv[0])
     program_version = "v%s" % __version__
-    program_build_date = str(__updated__)
-    program_version_message = '%%(prog)s %s (%s)' % (program_version, program_build_date)
+    program_version_message = '%%(prog)s %s ' % (program_version)
     program_shortdesc = '''
     Profiles C/C++ applications with the CPI (cycles per instruction) breakdown
     model for POWER8.'''
@@ -85,6 +82,8 @@ def main(argv=None):
     try:
         parser = ArgumentParser(description=program_license,
                                 formatter_class=RawDescriptionHelpFormatter)
+        parser.add_argument('-V', '--version', action='version',
+                            version=program_version_message)
         parser.add_argument(dest="path",
                             help="path to the application binary [default: %(default)s]",
                             nargs='+')
