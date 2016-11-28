@@ -23,7 +23,7 @@ limitations under the License.
 import unittest
 import platform
 import commands
-from src import core
+from src_cpi import core
 
 
 class TestCmdExecution(unittest.TestCase):
