@@ -21,6 +21,7 @@ limitations under the License.
 """
 
 from setuptools import setup, find_packages
+from pip.req import parse_requirements
 import time
 
 with open('README.rst') as f:
@@ -28,6 +29,9 @@ with open('README.rst') as f:
 
 with open('LICENSE') as f:
     toollicense = f.read()
+
+requirements_list = parse_requirements('./requirements.txt', session=False)
+requirements = [str(required.req) for required in requirements_list]
 
 setup(
     name='cpi',
@@ -38,6 +42,7 @@ setup(
     author_email='rpsene@br.ibm.com',
     url='https://www-304.ibm.com/webapp/set2/sas/f/lopdiags/sdklop.html',
     license=toollicense,
+    install_requires=requirements,
     packages=find_packages(exclude=("tests",)),
     data_files=[("", ["LICENSE"])],
     include_package_data=True,
