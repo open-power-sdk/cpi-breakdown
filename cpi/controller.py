@@ -20,14 +20,22 @@ limitations under the License.
         * Daniel Kreling <dbkreling@br.ibm.com>
 """
 
-import core
-import sys
-import events_reader
 import commands
+import core
+import events_reader
+import os
+import sys
 
-#TODO: replace the ocount_out for the final location.
+
+# TODO: replace the ocount_out for the final location.
 def run_cpi(binary_path, binary_args):
-    ocount_out = "/home/iplsdk/tools/cpi/cpi/events/ocount_out.txt"
+    results = os.path.expanduser("~/sdk_results/")
+    if not os.path.exists(results):
+        os.mkdir(results)
+
+    ocount_out = os.path.dirname(results) + "/ocount_out." + \
+                 str(core.get_timestamp())
+
     if not core.cmdexists("ocount"):
         sys.stderr.write("ocount package is not installed in the system. " +
                          "Install oprofile before continue." + "\n")
@@ -38,4 +46,5 @@ def run_cpi(binary_path, binary_args):
             ocount += " -e " + item
         print "\n" + "Running: " + ocount + " " + binary_path + binary_args
         core.execute(ocount + ' ' + binary_path + binary_args,  ocount_out)
+    core.parse_file(ocount_out)
     return

@@ -23,6 +23,7 @@ limitations under the License.
 import subprocess
 import sys
 import commands
+import time
 
 
 def execute(command, output_stream=None):
@@ -53,3 +54,20 @@ def cmdexists(command):
 def get_processor():
     """Check the system processor"""
     return commands.getoutput("grep -io 'power[[:digit:]]\+' -m 1 /proc/cpuinfo")
+
+
+def parse_file(output_stream):
+    parsed_file = output_stream + "_parsed"
+    """Parse the ocount output file to get events and values"""
+    with open(output_stream, "r") as f:
+        for line in f:
+            if not line.isspace():
+                with open(parsed_file, "a+") as ff:
+                    line.split(",")[0], line.split(",")[1]
+                    ff.write(line.split(",")[0] + " : ")
+                    ff.write(line.split(",")[1] + "\n")
+
+
+def get_timestamp():
+    ''' Return the current timestamp '''
+    return time.strftime("%Y%m%d%H%M%S")
