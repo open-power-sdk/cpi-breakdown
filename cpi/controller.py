@@ -27,7 +27,7 @@ import commands
 
 #TODO: replace the ocount_out for the final location.
 def run_cpi(binary_path, binary_args):
-    ocount_out = "/home/iplsdk/tools/cpi/events/ocount_out.txt"
+    ocount_out = "/home/iplsdk/tools/cpi/cpi/events/ocount_out.txt"
     if not core.cmdexists("ocount"):
         sys.stderr.write("ocount package is not installed in the system. " +
                          "Install oprofile before continue." + "\n")

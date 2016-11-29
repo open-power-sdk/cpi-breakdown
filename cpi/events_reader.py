@@ -23,9 +23,11 @@ limitations under the License.
 import yaml
 import os
 
+DIR_PATH = os.path.dirname(os.path.realpath(__file__))
+
 def get_events(processor):
     """return the events based on the processor version"""
-    events_file = os.path.abspath("../events/" + str.lower(processor) + ".yaml")
+    events_file = DIR_PATH + "/events/" + str.lower(processor) + ".yaml"
     return read_events(events_file)
 
 
