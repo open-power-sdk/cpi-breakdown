@@ -1,5 +1,4 @@
 include LICENSE
 include requirements.txt
 recursive-include data *
-include cpi/events/power7.yaml
 include cpi/events/power8.yaml

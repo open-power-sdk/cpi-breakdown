@@ -18,6 +18,7 @@ limitations under the License.
     Contributors:
         * Rafael Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
+        * Roberto Oliveira <rdutra@br.ibm.com>
 """
 
 import commands
@@ -50,7 +51,9 @@ def run_cpi(binary_path, binary_args, output_location):
         sys.stderr.write("ocount package is not installed in the system. " +
                          "Install oprofile before continue." + "\n")
         sys.exit(0)
-    for event in events_reader.get_events(core.get_processor()):
+
+    reader = events_reader.EventsReader(core.get_processor())
+    for event in reader.get_events():
         ocount = "ocount -b"
         for item in event:
             ocount += " -e " + item
