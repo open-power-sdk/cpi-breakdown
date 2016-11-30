@@ -26,22 +26,14 @@ import commands
 import time
 
 
-def execute(command, output_stream=None):
+def execute(command):
     """execute a command with its parameters"""
-    if output_stream is not None:
-        try:
-            return subprocess.check_call([command],
-                                         stdout=open(output_stream, "a+"),
-                                         shell=True)
-        except subprocess.CalledProcessError as e:
-            return e.returncode
-    elif output_stream is None:
-        try:
-            return subprocess.check_call([command],
-                                         stderr=subprocess.STDOUT,
-                                         shell=True)
-        except subprocess.CalledProcessError as e:
-            return e.returncode
+    try:
+        return subprocess.check_call([command],
+                                     stderr=subprocess.STDOUT,
+                                     shell=True)
+    except subprocess.CalledProcessError as e:
+        return e.returncode
 
 
 def cmdexists(command):
@@ -56,9 +48,9 @@ def get_processor():
     return commands.getoutput("grep -io 'power[[:digit:]]\+' -m 1 /proc/cpuinfo")
 
 
-def parse_file(output_stream):
-    parsed_file = output_stream + "_parsed"
+def parse_file(output_stream, timestamp):
     """Parse the ocount output file to get events and values"""
+    parsed_file = output_stream + "_" + timestamp
     with open(output_stream, "r") as f:
         for line in f:
             if not line.isspace():

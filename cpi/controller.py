@@ -45,7 +45,8 @@ def run_cpi(binary_path, binary_args, output_location):
                 raise
                 sys.exit(0)
 
-    ocount_out = output_location + "/ocount_out." + str(core.get_timestamp())
+    timestamp = core.get_timestamp()
+    ocount_out = output_location + "/ocount_out"
 
     if not core.cmdexists("ocount"):
         sys.stderr.write("ocount package is not installed in the system. " +
@@ -54,10 +55,11 @@ def run_cpi(binary_path, binary_args, output_location):
 
     reader = events_reader.EventsReader(core.get_processor())
     for event in reader.get_events():
-        ocount = "ocount -b"
+        ocount = "ocount -b -f " + ocount_out
         for item in event:
             ocount += " -e " + item
         print "\n" + "Running: " + ocount + " " + binary_path + binary_args
-        core.execute(ocount + ' ' + binary_path + binary_args,  ocount_out)
-    core.parse_file(ocount_out)
+        core.execute(ocount + ' ' + binary_path + binary_args)
+        core.parse_file(ocount_out, timestamp)
+    core.execute("rm " + ocount_out)
     return
