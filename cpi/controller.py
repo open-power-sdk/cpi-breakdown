@@ -22,19 +22,29 @@ limitations under the License.
 
 import commands
 import core
-import events_reader
 import os
 import sys
 
+import events_reader
 
-# TODO: replace the ocount_out for the final location.
-def run_cpi(binary_path, binary_args):
-    results = os.path.expanduser("~/sdk_results/")
-    if not os.path.exists(results):
-        os.mkdir(results)
 
-    ocount_out = os.path.dirname(results) + "/ocount_out." + \
-                 str(core.get_timestamp())
+def run_cpi(binary_path, binary_args, output_location):
+    '''
+    Uses the current path as destination if nothing is set
+    by the user.
+    '''
+    if not output_location:
+        output_location = os.getcwd()
+    else:
+        try:
+            if not (os.path.isdir(output_location)):
+                os.makedirs(output_location)
+        except OSError as exception:
+            if exception.errno != errno.EEXIST:
+                raise
+                sys.exit(0)
+
+    ocount_out = output_location + "/ocount_out." + str(core.get_timestamp())
 
     if not core.cmdexists("ocount"):
         sys.stderr.write("ocount package is not installed in the system. " +

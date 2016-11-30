@@ -25,15 +25,15 @@ limitations under the License.
 import sys
 import os
 import time
-
+import pkg_resources
 from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
 
 import controller
-import pkg_resources
 
 __all__ = []
-__version__ =  pkg_resources.require("cpi")[0].version
+__version__ = pkg_resources.require("cpi")[0].version
+
 
 class CLIError(Exception):
     def __init__(self, msg):
@@ -61,21 +61,16 @@ def main(argv=None):
     Profiles C/C++ applications with the CPI (cycles per instruction) breakdown
     model for POWER8.'''
 
-    program_license = '''%s \n
-    Licensed under the Apache Software License 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
-
-    Contributors:
-        * Rafael Sene <rpsene@br.ibm.com>
-        * Daniel Kreling <dbkreling@br.ibm.com>
-        * Roberto Oliveira <rdutra@br.ibm.com>
-    ----------------------------------------------------------
-''' % (program_shortdesc)
-
     try:
-        parser = ArgumentParser(description=program_license,
+        parser = ArgumentParser(description=program_shortdesc,
                                 formatter_class=RawDescriptionHelpFormatter)
         parser.add_argument('-V', '--version', action='version',
                             version=program_version_message)
+        parser.add_argument("-o", "--output-location", dest="output_location",
+                            type=str,
+                            help="The location where to store the result of the execution.\
+                            e.g.: --output-location=<path>",
+                            nargs='?')
         parser.add_argument(dest="path",
                             help="path to the application binary",
                             nargs='+')
@@ -87,7 +82,7 @@ def main(argv=None):
         binary_args += ' ' + ' '.join(map(str, application_args))
 
         # Run CPI
-        controller.run_cpi(binary_path, binary_args)
+        controller.run_cpi(binary_path, binary_args, args.output_location)
 
     except KeyboardInterrupt:
         return 0
