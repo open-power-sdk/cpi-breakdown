@@ -26,6 +26,7 @@ import os
 import sys
 
 import events_reader
+from drilldown.drilldown_view import DrilldownView
 
 
 def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
@@ -115,14 +116,16 @@ def compare_output(file_names):
 
 def run_drilldown(event, binary_path, binary_args, advance_toolchain):
     """ Run the drilldown feature """
-    tool_prefix = ''
+    operf = "operf"
+    opreport = "opreport"
     if advance_toolchain:
-        tool_prefix = "/opt/" + advance_toolchain + "/bin/"
+        operf = "/opt/" + advance_toolchain + "/bin/" + operf
+        opreport = "/opt/" + advance_toolchain + "/bin/" + opreport
 
-    if not core.cmdexists(tool_prefix + "operf"):
-        sys.stderr.write(tool_prefix + "operf is not installed in the system. " +
+    if not core.cmdexists(operf):
+        sys.stderr.write(operf + " is not installed in the system. " +
                          "Install oprofile before continue." + "\n")
-        sys.exit(0)
+        sys.exit(2)
 
     reader = events_reader.EventsReader(core.get_processor())
 
@@ -130,17 +133,27 @@ def run_drilldown(event, binary_path, binary_args, advance_toolchain):
     if not reader.valid_event(event):
         sys.stderr.write("Event {0} is not supported by drilldown feature.".format(event) +
                          "\nChoose a supported event and try again\n")
-        sys.exit(0)
+        sys.exit(1)
 
     # Run operf command
     event_min_count = str(reader.get_event_mincount(event))
-    operf_cmd = tool_prefix + "operf -e {0}:{1} {2} {3}".format(event, event_min_count, binary_path, binary_args)
-    core.execute(operf_cmd)
+    operf_cmd = operf + " -e {0}:{1} {2} {3}".format(event, event_min_count,
+                                                     binary_path, binary_args)
+    status = core.execute(operf_cmd)
+    if status != 0:
+        sys.stderr.write("Failed to run {0} command.\n".format(operf) +
+                         "For more information check the error message above")
+        sys.exit(1)
 
     # Run opreport command
-    temp_file = "opreport.xml"
-    opreport_cmd = tool_prefix + "opreport --debug-info --symbols --details --xml event:{0} -o {1}".format(
-        event, temp_file)
-    core.execute(opreport_cmd)
+    report_file = "opreport.xml"
+    opreport_cmd = opreport + " --debug-info --symbols --details "
+    opreport_cmd += "--xml event:{0} -o {1}".format(event, report_file)
+    status = core.execute(opreport_cmd)
+    if status != 0:
+        sys.stderr.write("Failed to run {0} command.\n".format(opreport) +
+                         "For more information check the error message above")
+        sys.exit(1)
 
-    # TODO: Implement the parser for the generated file
+    drilldown_view = DrilldownView()
+    drilldown_view.print_drilldown(event, report_file)
