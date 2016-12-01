@@ -49,7 +49,7 @@ def run_cpi(binary_path, binary_args, output_location):
     ocount_out = output_location + "/ocount_out"
 
     if not core.cmdexists("ocount"):
-        sys.stderr.write("ocount package is not installed in the system. " +
+        sys.stderr.write("ocount is not installed in the system. " +
                          "Install oprofile before continue." + "\n")
         sys.exit(0)
 
@@ -63,3 +63,32 @@ def run_cpi(binary_path, binary_args, output_location):
         core.parse_file(ocount_out, timestamp)
     core.execute("rm " + ocount_out)
     return
+
+
+def run_drilldown(event, binary_path, binary_args):
+    """ Run the drilldown feature """
+    if not core.cmdexists("operf"):
+        sys.stderr.write("operf is not installed in the system. " +
+                         "Install oprofile before continue." + "\n")
+        sys.exit(0)
+
+    reader = events_reader.EventsReader(core.get_processor())
+
+    # Event is not supported with drilldown feature
+    if not reader.valid_event(event):
+        sys.stderr.write("Event {0} is not supported by drilldown feature.".format(event) +
+                         "\nChoose a supported event and try again\n")
+        sys.exit(0)
+
+    # Run operf command
+    event_min_count = str(reader.get_event_mincount(event))
+    operf_cmd = "operf -e {0}:{1} {2} {3}".format(event, event_min_count, binary_path, binary_args)
+    core.execute(operf_cmd)
+
+    # Run opreport command
+    temp_file = "opreport.xml"
+    opreport_cmd = "opreport --debug-info --symbols --details --xml event:{0} -o {1}".format(
+        event, temp_file)
+    core.execute(opreport_cmd)
+
+    # TODO: Implement the parser for the generated file

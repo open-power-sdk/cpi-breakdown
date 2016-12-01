@@ -71,18 +71,25 @@ def main(argv=None):
                             help="The location where to store the result of the execution.\
                             e.g.: --output-location=<path>",
                             nargs='?')
+        parser.add_argument('--drilldown', dest="event_name", type=str,
+                            help="Use the drilldown feature with the given event", nargs="?")
         parser.add_argument(dest="path",
                             help="path to the application binary",
                             nargs='+')
 
         # Process arguments
         args, application_args = parser.parse_known_args()
+        event_name = args.event_name
         binary_path = args.path.pop(0)
         binary_args = ' ' + ' '.join(map(str, args.path))
         binary_args += ' ' + ' '.join(map(str, application_args))
 
-        # Run CPI
-        controller.run_cpi(binary_path, binary_args, args.output_location)
+        # Run CPI (counter)
+        if event_name is None:
+            controller.run_cpi(binary_path, binary_args, args.output_location)
+        # Run drilldown (profiler)
+        else:
+            controller.run_drilldown(event_name, binary_path, binary_args)
 
     except KeyboardInterrupt:
         return 0

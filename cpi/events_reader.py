@@ -27,6 +27,7 @@ import os
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
+
 class EventsReader:
     """Class to deal with events from yaml files"""
     processor_version = ''
@@ -40,16 +41,25 @@ class EventsReader:
         self.events = self.read_events(events_file)
 
     def get_events(self):
-        """return the events based on the processor version"""
+        """Return the events based on the processor version"""
         events_list = []
         for events_dic in self.events:
             # Append dict keys (event name) in list
             events_list.append(events_dic.keys())
         return events_list
 
+    def valid_event(self, event_name):
+        """Return if the event is supported in the drilldown"""
+        for events_dic in self.events:
+            if event_name in events_dic:
+                return True
+        return False
+
     def get_event_mincount(self, event_name):
         """Return the event minimum count"""
-        # TODO: Implement me in next patch
+        for events_dic in self.events:
+            if event_name in events_dic:
+                return events_dic.get(event_name)
 
     def read_events(self, events_file):
         """
