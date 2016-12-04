@@ -21,13 +21,12 @@ limitations under the License.
 """
 
 import subprocess
-import sys
 import commands
 import time
 
 
 def execute(command):
-    """execute a command with its parameters"""
+    """Execute a command with its parameters"""
     try:
         return subprocess.check_call([command],
                                      stderr=subprocess.STDOUT,
@@ -37,7 +36,7 @@ def execute(command):
 
 
 def cmdexists(command):
-    """check if a command exists"""
+    """Check if a command exists"""
     subp = subprocess.call("type " + command, shell=True,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return subp == 0
@@ -49,17 +48,28 @@ def get_processor():
 
 
 def parse_file(output_stream, timestamp):
-    """Parse the ocount output file to get events and values"""
+    """Read lines from output_stream file and writes it into another file in
+    a dictionary format"""
     parsed_file = output_stream + "_" + timestamp
     with open(output_stream, "r") as f:
         for line in f:
             if not line.isspace():
                 with open(parsed_file, "a+") as ff:
-                    line.split(",")[0], line.split(",")[1]
                     ff.write(line.split(",")[0] + " : ")
                     ff.write(line.split(",")[1] + "\n")
 
 
 def get_timestamp():
-    ''' Return the current timestamp '''
+    """Return the current timestamp"""
     return time.strftime("%Y%m%d_%H%M%S")
+
+
+def file_to_dict(filename):
+    """Read contents of a file and return it as a dictionary"""
+    with open(filename, "r") as f:
+        dictionary = {}
+        for line in f:
+            k, v = line.strip().split(" : ")
+            dictionary[k] = v
+
+    return dictionary
