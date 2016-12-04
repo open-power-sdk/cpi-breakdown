@@ -62,4 +62,4 @@ def parse_file(output_stream, timestamp):
 
 def get_timestamp():
     ''' Return the current timestamp '''
-    return time.strftime("%Y%m%d%H%M%S")
+    return time.strftime("%Y%m%d_%H%M%S")
