@@ -27,6 +27,7 @@ import os
 import sys
 
 import events_reader
+import metrics_calculator
 
 
 def run_cpi(binary_path, binary_args, output_location):
@@ -62,6 +63,16 @@ def run_cpi(binary_path, binary_args, output_location):
         core.execute(ocount + ' ' + binary_path + binary_args)
         core.parse_file(ocount_out, timestamp)
     core.execute("rm " + ocount_out)
+    '''
+    TODO: calculate metrics here
+    mc = MetricsCalculator(core.get_processor())
+    events_result = defaultdict(list)
+    with open("./output") as fin:
+        for line in fin:
+            k, v = line.strip().split(" : ")
+            events_result[k].append(v)
+    print mc.calculate_metrics(events_result)
+    '''
     return
 
 
