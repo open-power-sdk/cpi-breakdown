@@ -19,10 +19,11 @@ limitations under the License.
         * Rafael Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
 """
-
+import os
 import subprocess
 import commands
 import time
+import re
 
 
 def execute(command):
@@ -73,3 +74,16 @@ def file_to_dict(filename):
             dictionary[k] = v
 
     return dictionary
+
+
+def get_installed_at():
+    at_pattern = re.compile("^at([0-9]?[0-9]).[0-9]$")
+    installed_at = []
+    for directory in os.listdir("/opt"):
+        if at_pattern.match(str(directory)):
+            installed_at.append(directory)
+    if len(installed_at) > 0:
+        return installed_at
+    else:
+        installed_at.append(" Advance Toolchain is not installed ")
+        return installed_at

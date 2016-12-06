@@ -30,11 +30,15 @@ import events_reader
 import metrics_calculator
 
 
-def run_cpi(binary_path, binary_args, output_location):
+def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
     '''
     Uses the current path as destination if nothing is set
     by the user.
     '''
+    tool_prefix = ''
+    if advance_toolchain:
+        tool_prefix = "/opt/" + advance_toolchain + "/bin/"
+
     if not output_location:
         output_location = os.getcwd()
     else:
@@ -49,14 +53,14 @@ def run_cpi(binary_path, binary_args, output_location):
     timestamp = core.get_timestamp()
     ocount_out = output_location + "/output"
 
-    if not core.cmdexists("ocount"):
-        sys.stderr.write("ocount is not installed in the system. " +
+    if not core.cmdexists(tool_prefix + "ocount"):
+        sys.stderr.write(tool_prefix + "ocount is not installed in the system. " +
                          "Install oprofile before continue." + "\n")
         sys.exit(0)
 
     reader = events_reader.EventsReader(core.get_processor())
     for event in reader.get_events():
-        ocount = "ocount -b -f " + ocount_out
+        ocount = tool_prefix + "ocount -b -f " + ocount_out
         for item in event:
             ocount += " -e " + item
         print "\n" + "Running: " + ocount + " " + binary_path + binary_args
@@ -76,10 +80,14 @@ def run_cpi(binary_path, binary_args, output_location):
     return
 
 
-def run_drilldown(event, binary_path, binary_args):
+def run_drilldown(event, binary_path, binary_args, advance_toolchain):
     """ Run the drilldown feature """
-    if not core.cmdexists("operf"):
-        sys.stderr.write("operf is not installed in the system. " +
+    tool_prefix = ''
+    if advance_toolchain:
+        tool_prefix = "/opt/" + advance_toolchain + "/bin/"
+
+    if not core.cmdexists(tool_prefix + "operf"):
+        sys.stderr.write(tool_prefix + "operf is not installed in the system. " +
                          "Install oprofile before continue." + "\n")
         sys.exit(0)
 
@@ -93,12 +101,12 @@ def run_drilldown(event, binary_path, binary_args):
 
     # Run operf command
     event_min_count = str(reader.get_event_mincount(event))
-    operf_cmd = "operf -e {0}:{1} {2} {3}".format(event, event_min_count, binary_path, binary_args)
+    operf_cmd = tool_prefix + "operf -e {0}:{1} {2} {3}".format(event, event_min_count, binary_path, binary_args)
     core.execute(operf_cmd)
 
     # Run opreport command
     temp_file = "opreport.xml"
-    opreport_cmd = "opreport --debug-info --symbols --details --xml event:{0} -o {1}".format(
+    opreport_cmd = tool_prefix + "opreport --debug-info --symbols --details --xml event:{0} -o {1}".format(
         event, temp_file)
     core.execute(opreport_cmd)
 

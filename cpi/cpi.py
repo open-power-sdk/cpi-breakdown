@@ -30,6 +30,7 @@ from argparse import ArgumentParser
 from argparse import RawDescriptionHelpFormatter
 
 import controller
+import core
 
 __all__ = []
 __version__ = pkg_resources.require("cpi")[0].version
@@ -68,28 +69,36 @@ def main(argv=None):
                             version=program_version_message)
         parser.add_argument("-o", "--output-location", dest="output_location",
                             type=str,
-                            help="The location where to store the result of the execution.\
+                            help="the location where to store the result of the execution.\
                             e.g.: --output-location=<path>",
                             nargs='?')
+        parser.add_argument('--advance-toolchain', dest='advance_toolchain',\
+                            choices=core.get_installed_at(),\
+                            help="allows selecting oprofile from an \
+                            installed version of Advance Toolchain instead of\
+                            using the installed version of the system.\
+                            e.g.: --advance-toolchain=at10.0.\
+                            To learn about Advance Toolchain access ibm.co/AdvanceToolchain."
+                            )
         parser.add_argument('--drilldown', dest="event_name", type=str,
                             help="Use the drilldown feature with the given event", nargs="?")
-        parser.add_argument(dest="path",
-                            help="path to the application binary",
+        parser.add_argument(dest="application_path",
+                            help="path to the application binary and its arguments",
                             nargs='+')
 
         # Process arguments
         args, application_args = parser.parse_known_args()
         event_name = args.event_name
-        binary_path = args.path.pop(0)
-        binary_args = ' ' + ' '.join(map(str, args.path))
+        binary_path = args.application_path.pop(0)
+        binary_args = ' ' + ' '.join(map(str, args.application_path))
         binary_args += ' ' + ' '.join(map(str, application_args))
 
         # Run CPI (counter)
         if event_name is None:
-            controller.run_cpi(binary_path, binary_args, args.output_location)
+            controller.run_cpi(binary_path, binary_args, args.output_location, args.advance_toolchain)
         # Run drilldown (profiler)
         else:
-            controller.run_drilldown(event_name, binary_path, binary_args)
+            controller.run_drilldown(event_name, binary_path, binary_args, args.advance_toolchain)
 
     except KeyboardInterrupt:
         return 0
