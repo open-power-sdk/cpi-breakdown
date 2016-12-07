@@ -47,7 +47,7 @@ def run_cpi(binary_path, binary_args, output_location):
                 sys.exit(0)
 
     timestamp = core.get_timestamp()
-    ocount_out = output_location + "/ocount_out"
+    ocount_out = output_location + "/output"
 
     if not core.cmdexists("ocount"):
         sys.stderr.write("ocount is not installed in the system. " +
@@ -61,7 +61,7 @@ def run_cpi(binary_path, binary_args, output_location):
             ocount += " -e " + item
         print "\n" + "Running: " + ocount + " " + binary_path + binary_args
         core.execute(ocount + ' ' + binary_path + binary_args)
-        core.parse_file(ocount_out, timestamp)
+        core.parse_file(ocount_out, timestamp, ".cpi")
     core.execute("rm " + ocount_out)
     '''
     TODO: calculate metrics here

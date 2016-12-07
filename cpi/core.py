@@ -47,10 +47,10 @@ def get_processor():
     return commands.getoutput("grep -io 'power[[:digit:]]\+' -m 1 /proc/cpuinfo")
 
 
-def parse_file(output_stream, timestamp):
-    """Read lines from output_stream file and writes it into another file in
-    a dictionary format"""
-    parsed_file = output_stream + "_" + timestamp
+def parse_file(output_stream, timestamp, extension):
+    """Read lines from output_stream file and writes it into another file as
+    a dictionary"""
+    parsed_file = output_stream + "." + timestamp + extension
     with open(output_stream, "r") as f:
         for line in f:
             if not line.isspace():
