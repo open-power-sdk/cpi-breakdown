@@ -32,7 +32,7 @@ class MetricsCalculationTests(unittest.TestCase):
     Test cases for metrics calculation structure
     '''
 
-    metric_pattern = re.compile("^([A-Z][0-9]+)+$")
+    metric_pattern = re.compile("(\(?[-+]?[0-9]*\.?[0-9]+[\/\+\-\*]\)?)+")
 
     def test_eval_add_sub(self):
         '''
@@ -73,11 +73,11 @@ class MetricsCalculationTests(unittest.TestCase):
         for parameter in calc_function:
             if parameter in parsed_output:
                 calc_function[calc_function.index(parameter)] = parsed_output.get(parameter)[0]
+        metric = ''.join(calc_function)
+        metric_result = eval(metric)
+        self.assertTrue(metric_result == -4)
+        self.assertTrue(self.metric_pattern.match(str(metric)))
 
-        metric = parser.expr(''.join(calc_function)).compile()
-        if self.metric_pattern.match(str(metric)):
-            metric_result = eval(parser.expr(''.join(calc_function)).compile())
-            self.assertTrue(metric_result == -4)
 
 if __name__ == '__main__':
     unittest.main()

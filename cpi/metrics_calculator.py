@@ -34,7 +34,7 @@ class MetricsCalculator(object):
     '''
     Class that calculates metrics
     '''
-    metric_pattern = re.compile("^([A-Z][0-9]+)+$")
+    metric_pattern = re.compile("(\(?[-+]?[0-9]*\.?[0-9]+[\/\+\-\*]\)?)+")
     metrics_groups = []
 
     def __init__(self, processor):
@@ -94,7 +94,7 @@ class MetricsCalculator(object):
                     Once the events are replaced by its values in the metric,
                     we put it all togheter again and calculate the metric
                     '''
-                    metric = parser.expr(''.join(calc_function)).compile()
+                    metric = ''.join(calc_function)
                     if self.metric_pattern.match(str(metric)):
                         metric_result = eval(metric)
                         result_tmp.append(group["NAME"])
@@ -107,7 +107,7 @@ class MetricsCalculator(object):
                         metrics_results.append(result_tmp)
                     else:
                         sys.stderr.write("Could not calculate the metric " +
-                                         metric)
+                                         str(metric))
                         sys.exit(0)
                 return metrics_results
             else:
