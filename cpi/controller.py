@@ -19,6 +19,7 @@ limitations under the License.
         * Rafael Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
 """
 
 import core
@@ -27,7 +28,8 @@ import sys
 
 import events_reader
 from drilldown.drilldown_view import DrilldownView
-
+from metrics_calculator import MetricsCalculator
+from terminaltables import AsciiTable
 
 def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
     '''
@@ -58,6 +60,8 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
         sys.exit(2)
 
     reader = events_reader.EventsReader(core.get_processor())
+    results_file_name = ocount_out + timestamp + ".cpi"
+
     for event in reader.get_events():
         ocount_cmd = ocount + " -b -f " + ocount_out
         for item in event:
@@ -69,19 +73,20 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
                              "For more information check the error message " +
                              "above")
             sys.exit(1)
-
-        core.parse_file(ocount_out, timestamp, ".cpi")
+        core.parse_file(ocount_out, results_file_name)
     core.execute("rm " + ocount_out)
-    '''
-    TODO: calculate metrics here
-    mc = MetricsCalculator(core.get_processor())
-    events_result = defaultdict(list)
-    with open("./output") as fin:
-        for line in fin:
-            k, v = line.strip().split(" : ")
-            events_result[k].append(v)
-    print mc.calculate_metrics(events_result)
-    '''
+
+    metrics_calc = MetricsCalculator(core.get_processor())
+    events = core.file_to_dict(results_file_name)
+
+    metrics = metrics_calc.calculate_metrics(events)
+
+    met_table = [['Metric', 'Value', 'Percentage']]
+    for row in metrics:
+        met_table.append(row)
+    met_tab = AsciiTable(met_table)
+    print met_tab.table
+
     return
 
 

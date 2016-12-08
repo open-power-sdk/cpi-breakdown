@@ -18,6 +18,7 @@ limitations under the License.
     Contributors:
         * Rafael Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
+        * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
 """
 import os
 import subprocess
@@ -48,10 +49,10 @@ def get_processor():
     return commands.getoutput("grep -io 'power[[:digit:]]\+' -m 1 /proc/cpuinfo")
 
 
-def parse_file(output_stream, timestamp, extension):
+def parse_file(output_stream, parsed_file):
     """Read lines from output_stream file and writes it into another file as
     a dictionary"""
-    parsed_file = output_stream + "." + timestamp + extension
+    #parsed_file = output_stream + "." + timestamp + extension
     with open(output_stream, "r") as f:
         for line in f:
             if not line.isspace():
