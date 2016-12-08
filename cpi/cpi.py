@@ -110,12 +110,7 @@ def main(argv=None):
             controller.run_drilldown(event_name, binary_path, binary_args, args.advance_toolchain)
 
     except KeyboardInterrupt:
-        return 0
-    except Exception, e:
-        indent = len(program_name) * " "
-        sys.stderr.write(program_name + ": " + repr(e) + "\n")
-        sys.stderr.write(indent + "  for help use --help" + "\n")
-        return 2
+        return 1
 
 if __name__ == "__main__":
     sys.exit(main())
