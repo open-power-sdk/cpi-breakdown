@@ -21,13 +21,11 @@ limitations under the License.
         * Roberto Oliveira <rdutra@br.ibm.com>
 """
 
-import commands
 import core
 import os
 import sys
 
 import events_reader
-import metrics_calculator
 
 
 def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
@@ -78,6 +76,41 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
     print mc.calculate_metrics(events_result)
     '''
     return
+
+
+def compare_output(file_names):
+    """ Get the contents of two ocount output files and compare their
+        results, print it in a format of a table """
+    print "Comparing file_names: %s and %s" % (file_names[0], file_names[1])
+    dict_list = []
+    for file_name in file_names:
+        dict_i = core.file_to_dict(file_name)
+        dict_list.append(dict_i)
+
+    # Create one dictionary as {"events" : (val_file_1, val_file_2), ...}
+    dict_vals = {}
+    for key in dict_list[0]:
+        dict_vals[key] = tuple(d[key] for d in dict_list)
+
+    print "%-*s: %-*s -> %*s  :  %s" % (35, "Event Name", 7, "Value", 7,
+                                        "Value", "Gain")
+    print '-' * 35, '', '-' * 7, ' ' * 3, '-' * 7, '  ', '-'*10
+
+    # Create table reading first and second values in each key
+    for key in dict_vals:
+        try:
+            if int(dict_vals[key][0]) != 0:
+                percentage = core.percentage(int(dict_vals[key][1]),
+                                             int(dict_vals[key][0]))
+            else:
+                percentage = "-"
+            print "%-*s: %-*s -> %-*s  :  %s %-*s" % (35, key, 7,
+                                                      dict_vals[key][0], 7,
+                                                      dict_vals[key][1],
+                                                      percentage, 3, "%")
+        except IndexError:
+            sys.exit(1)
+    return 0
 
 
 def run_drilldown(event, binary_path, binary_args, advance_toolchain):

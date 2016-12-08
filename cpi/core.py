@@ -77,6 +77,7 @@ def file_to_dict(filename):
 
 
 def get_installed_at():
+    """Gets the AT version installed in the system"""
     at_pattern = re.compile("^at([0-9]?[0-9]).[0-9]$")
     installed_at = []
     for directory in os.listdir("/opt"):
@@ -87,3 +88,9 @@ def get_installed_at():
     else:
         installed_at.append(" Advance Toolchain is not installed ")
         return installed_at
+
+
+def percentage(init_val, final_val):
+    """Calculate a percentage relative to the initial amount of two values"""
+    value = 100 * (final_val - init_val) / float(init_val)
+    return "%.2f" % value

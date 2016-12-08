@@ -82,17 +82,26 @@ def main(argv=None):
                             )
         parser.add_argument('--drilldown', dest="event_name", type=str,
                             help="Use the drilldown feature with the given event", nargs="?")
+        parser.add_argument('-c', '--compare', dest="file_names",
+                            metavar=('output_1', 'output_2'), type=str,
+                            help="Compare different runs passing a list of\
+                            files.", nargs=2)
         parser.add_argument(dest="application_path",
+                            metavar=('binary', 'options'),
                             help="path to the application binary and its arguments",
                             nargs='+')
 
         # Process arguments
         args, application_args = parser.parse_known_args()
         event_name = args.event_name
+        file_names = args.file_names
         binary_path = args.application_path.pop(0)
         binary_args = ' ' + ' '.join(map(str, args.application_path))
         binary_args += ' ' + ' '.join(map(str, application_args))
 
+        # Run compare runs
+        if file_names:
+            controller.compare_output(file_names)
         # Run CPI (counter)
         if event_name is None:
             controller.run_cpi(binary_path, binary_args, args.output_location, args.advance_toolchain)
