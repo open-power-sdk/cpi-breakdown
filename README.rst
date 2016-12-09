@@ -13,3 +13,11 @@ CPI breakdown models. Even within Power Systems servers, differences exist betwe
 processor. Processor performance can be measured by profiling the application with tools such as OProfile or Perf.
 The CPI breakdown plug-in automates this process, enabling you to access the CPI breakdown model of
 any C/C++ application without manually tracking the events and calculating the metrics.
+
+
+Exit Status
+    CPI may return one of several error codes if it encounters problems.
+
+    0 No problems occurred.
+    1 Generic error code.
+    2 Some dependency tool is missing

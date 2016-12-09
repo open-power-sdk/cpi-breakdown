@@ -33,9 +33,9 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
     Uses the current path as destination if nothing is set
     by the user.
     '''
-    tool_prefix = ''
+    ocount = "ocount"
     if advance_toolchain:
-        tool_prefix = "/opt/" + advance_toolchain + "/bin/"
+        ocount = "/opt/" + advance_toolchain + "/bin/" + ocount
 
     if not output_location:
         output_location = os.getcwd()
@@ -46,23 +46,29 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
         except OSError as exception:
             if exception.errno != errno.EEXIST:
                 raise
-                sys.exit(0)
+                sys.exit(1)
 
     timestamp = core.get_timestamp()
     ocount_out = output_location + "/output"
 
-    if not core.cmdexists(tool_prefix + "ocount"):
-        sys.stderr.write(tool_prefix + "ocount is not installed in the system. " +
+    if not core.cmdexists(ocount):
+        sys.stderr.write(ocount + " is not installed in the system. " +
                          "Install oprofile before continue." + "\n")
-        sys.exit(0)
+        sys.exit(2)
 
     reader = events_reader.EventsReader(core.get_processor())
     for event in reader.get_events():
-        ocount = tool_prefix + "ocount -b -f " + ocount_out
+        ocount_cmd = ocount + " -b -f " + ocount_out
         for item in event:
-            ocount += " -e " + item
-        print "\n" + "Running: " + ocount + " " + binary_path + binary_args
-        core.execute(ocount + ' ' + binary_path + binary_args)
+            ocount_cmd += " -e " + item
+        print "\n" + "Running: " + ocount_cmd + " " + binary_path + binary_args
+        status = core.execute(ocount_cmd + ' ' + binary_path + binary_args)
+        if status != 0:
+            sys.stderr.write("\nFailed to run {0} command.\n".format(ocount) +
+                             "For more information check the error message " +
+                             "above")
+            sys.exit(1)
+
         core.parse_file(ocount_out, timestamp, ".cpi")
     core.execute("rm " + ocount_out)
     '''
