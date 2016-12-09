@@ -87,7 +87,6 @@ def main(argv=None):
                             help="Compare different runs passing a list of\
                             files.", nargs=2)
         parser.add_argument(dest="application_path",
-                            metavar=('binary', 'options'),
                             help="path to the application binary and its arguments",
                             nargs='+')
 
