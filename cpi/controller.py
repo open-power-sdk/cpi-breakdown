@@ -81,9 +81,11 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
 
 def compare_output(file_names):
     """ Get the contents of two ocount output files and compare their
-        results, print it in a format of a table """
-    print "Comparing file_names: %s and %s" % (file_names[0], file_names[1])
+        results. Return a list with all values and percentage """
     dict_list = []
+    final_array = []
+
+    # Create a list with two dictionaries containing "event:value" pairs
     for file_name in file_names:
         dict_i = core.file_to_dict(file_name)
         dict_list.append(dict_i)
@@ -93,11 +95,7 @@ def compare_output(file_names):
     for key in dict_list[0]:
         dict_vals[key] = tuple(d[key] for d in dict_list)
 
-    print "%-*s: %-*s -> %*s  :  %s" % (35, "Event Name", 7, "Value", 7,
-                                        "Value", "Gain")
-    print '-' * 35, '', '-' * 7, ' ' * 3, '-' * 7, '  ', '-'*10
-
-    # Create table reading first and second values in each key
+    # Create final_array, with event names, values and percentages
     for key in dict_vals:
         try:
             if int(dict_vals[key][0]) != 0:
@@ -105,13 +103,12 @@ def compare_output(file_names):
                                              int(dict_vals[key][0]))
             else:
                 percentage = "-"
-            print "%-*s: %-*s -> %-*s  :  %s %-*s" % (35, key, 7,
-                                                      dict_vals[key][0], 7,
-                                                      dict_vals[key][1],
-                                                      percentage, 3, "%")
+            final_array.append([key, dict_vals[key][0], dict_vals[key][1],
+                         percentage])
         except IndexError:
             sys.exit(1)
-    return 0
+
+    return final_array
 
 
 def run_drilldown(event, binary_path, binary_args, advance_toolchain):

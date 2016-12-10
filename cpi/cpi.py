@@ -31,6 +31,7 @@ from argparse import RawDescriptionHelpFormatter
 
 import controller
 import core
+import table_creator
 
 __all__ = []
 __version__ = pkg_resources.require("cpi")[0].version
@@ -100,7 +101,7 @@ def main(argv=None):
 
         # Run compare runs
         if file_names:
-            controller.compare_output(file_names)
+            table_creator.table_creator(file_names)
         # Run CPI (counter)
         if event_name is None:
             controller.run_cpi(binary_path, binary_args, args.output_location, args.advance_toolchain)
