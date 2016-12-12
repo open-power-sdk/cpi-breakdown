@@ -110,8 +110,8 @@ def compare_output(file_names):
     for key in dict_vals:
         try:
             if int(dict_vals[key][0]) != 0:
-                percentage = core.percentage(int(dict_vals[key][1]),
-                                             int(dict_vals[key][0]))
+                percentage = core.percentage(int(dict_vals[key][0]),
+                                             int(dict_vals[key][1]))
             else:
                 percentage = "-"
             final_array.append([key, dict_vals[key][0], dict_vals[key][1],
