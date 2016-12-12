@@ -25,6 +25,7 @@ limitations under the License.
 import core
 import os
 import sys
+import time
 
 import events_reader
 from drilldown.drilldown_view import DrilldownView
@@ -61,19 +62,25 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
 
     reader = events_reader.EventsReader(core.get_processor())
     results_file_name = ocount_out + timestamp + ".cpi"
-
+    start_time = time.time()
+    exec_counter = 0
+    sys.stdout.write("\n")
     for event in reader.get_events():
+        exec_counter = exec_counter + 1
         ocount_cmd = ocount + " -b -f " + ocount_out
         for item in event:
             ocount_cmd += " -e " + item
-        print "\n" + "Running: " + ocount_cmd + " " + binary_path + binary_args
-        status = core.execute(ocount_cmd + ' ' + binary_path + binary_args)
+        sys.stdout.write("\r    Executing CPI Breakdown: %d/%d iterations (elapsed time: %d seconds)"\
+                 % (exec_counter, len(reader.get_events()), (time.time() - start_time)))
+        sys.stdout.flush()
+        status = core.execute(ocount_cmd + ' ' + binary_path + binary_args + '> /dev/null 2>&1')
         if status != 0:
             sys.stderr.write("\nFailed to run {0} command.\n".format(ocount) +
                              "For more information check the error message " +
                              "above")
             sys.exit(1)
         core.parse_file(ocount_out, results_file_name)
+    sys.stdout.write("\n\n")
     core.execute("rm " + ocount_out)
 
     metrics_calc = MetricsCalculator(core.get_processor())
