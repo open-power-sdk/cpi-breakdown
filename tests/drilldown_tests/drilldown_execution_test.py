@@ -37,7 +37,7 @@ class DrilldownExecutionTest(unittest.TestCase):
                 clean_output.append(event.split(':')[0])
 
     def execution_test(self):
-        self.assertTrue(len(self.clean_output) == 45)
+        self.assertTrue(len(self.clean_output) == 46)
         if core.cmdexists('cpi'):
             for event in self.clean_output:
                 core.execute('cpi --drilldown=' + event + " sleep 1")

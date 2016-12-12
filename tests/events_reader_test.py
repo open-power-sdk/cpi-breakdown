@@ -35,7 +35,7 @@ class EventsReaderTests(unittest.TestCase):
     def test_get_events(self):
         events_list = self.reader.get_events()
         assert not None == events_list
-        self.assertEqual(19, len(events_list))
+        self.assertEqual(20, len(events_list))
 
     def test_valid_event(self):
         assert True == self.reader.valid_event(VALID_EVENT)

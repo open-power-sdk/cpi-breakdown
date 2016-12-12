@@ -34,7 +34,6 @@ class MetricsCalculator(object):
     '''
     Class that calculates metrics
     '''
-    metric_pattern = re.compile("(\(?[-+]?[0-9]*\.?[0-9]+[\/\+\-\*]\)?)+")
     metrics_groups = []
 
     def __init__(self, processor):
@@ -67,7 +66,7 @@ class MetricsCalculator(object):
         parsed_output = parsed_output_dict
         metrics_results = []
         try:
-            if int(parsed_output.get('PM_RUN_CYC')[0]) > 0:
+            if int(parsed_output.get('PM_RUN_INST_CMPL')[0]) > 0:
                 for group in self.metrics_groups.values():
                     result_tmp = []
                     '''
@@ -82,36 +81,31 @@ class MetricsCalculator(object):
                      PM_CMPLU_STALL_DMISS_REMOTE, )]
                     '''
                     calc_function = re.split("([+-/*/(/)//])",
-                                             group['METRIC'].replace(" ", ""))
+                                             group['FORMULA'].replace(" ", ""))
                     for parameter in calc_function:
                         '''
                         If we find the event in the parsed output, it is
                         replaced by its value.
                         '''
                         if parameter in parsed_output:
-                            calc_function[calc_function.index(parameter)] = parsed_output.get(parameter)[0]
+                            calc_function[calc_function.index(parameter)] = 'float(' + parsed_output.get(parameter) + ')'
                     '''
                     Once the events are replaced by its values in the metric,
                     we put it all togheter again and calculate the metric
                     '''
                     metric = ''.join(calc_function)
-                    if self.metric_pattern.match(str(metric)):
-                        metric_result = eval(metric)
-                        result_tmp.append(group["NAME"])
-                        if metric_result > 0:
-                            result_tmp.append(metric_result)
-                            result_tmp.append(fabs((metric_result*100) / float(parsed_output.get('PM_RUN_CYC')[0])))
-                        else:
-                            result_tmp.append(0)
-                            result_tmp.append(fabs(0))
-                        metrics_results.append(result_tmp)
+                    metric_result = eval(metric)
+                    result_tmp.append(group["NAME"])
+                    if metric_result > 0:
+                        result_tmp.append(metric_result)
+                        result_tmp.append(eval('(float(metric_result) / (float(parsed_output.get(\'PM_RUN_CYC\'))/float(parsed_output.get(\'PM_RUN_INST_CMPL\'))))*100'))
                     else:
-                        sys.stderr.write("Could not calculate the metric " +
-                                         str(metric))
-                        sys.exit(0)
+                        result_tmp.append(0)
+                        result_tmp.append(fabs(0))
+                    metrics_results.append(result_tmp)
                 return metrics_results
             else:
-                sys.stderr.write("PM_RUN_CYC is 0.")
+                sys.stderr.write("PM_RUN_INST_CMPL is 0.")
                 sys.stderr.write("As it is the base divisor for all metrics \
                                  calculation it can not be 0. \
                                  Please run CPI again.")
