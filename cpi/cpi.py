@@ -96,8 +96,11 @@ def main(argv=None):
         event_name = args.event_name
         file_names = args.file_names
         binary_path = args.application_path.pop(0)
-        binary_args = ' ' + ' '.join(map(str, args.application_path))
-        binary_args += ' ' + ' '.join(map(str, application_args))
+        # If a binary argument contains space, it was passed inside quotes
+        binary_args = ' ' + ' '.join((i if " " not in i else "'" + i + "'")
+                                     for i in args.application_path)
+        binary_args += ' ' + ' '.join((i if " " not in i else "'" + i + "'")
+                                      for i in application_args)
 
         # Run compare runs
         if file_names:
