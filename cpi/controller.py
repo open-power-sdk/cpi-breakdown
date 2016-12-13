@@ -26,6 +26,8 @@ import core
 import os
 import sys
 import time
+import os.path
+import errno
 
 import events_reader
 from breakdown_tree import BreakdownTree
@@ -44,16 +46,20 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
     if advance_toolchain:
         ocount = "/opt/" + advance_toolchain + "/bin/" + ocount
 
+    if not os.path.isfile(binary_path) or not os.access(binary_path, os.X_OK):
+        sys.stderr.write('Something wrong with ' + binary_path
+                         + ' file. Check if it is a valid path or file\n')
+        sys.exit(1)
+
     if not output_location:
         output_location = os.getcwd()
     else:
         try:
-            if not (os.path.isdir(output_location)):
+            if not os.path.isdir(output_location):
                 os.makedirs(output_location)
         except OSError as exception:
             if exception.errno != errno.EEXIST:
-                raise
-                sys.exit(1)
+                raise sys.exit(1)
 
     timestamp = core.get_timestamp()
     ocount_out = output_location + "/output"
@@ -111,6 +117,9 @@ def compare_output(file_names):
 
     # Create a list with two dictionaries containing "event:value" pairs
     for file_name in file_names:
+        if not os.path.isfile(file_name):
+            print file_name + ' file not found\n'
+            return final_array
         dict_i = core.file_to_dict(file_name)
         dict_list.append(dict_i)
 
@@ -139,6 +148,11 @@ def run_drilldown(event, binary_path, binary_args, advance_toolchain):
     """ Run the drilldown feature """
     operf = "operf"
     opreport = "opreport"
+
+    if not os.path.isfile(binary_path):
+        sys.stderr.write(binary_path + ' binary file not found\n')
+        sys.exit(1)
+
     if advance_toolchain:
         operf = "/opt/" + advance_toolchain + "/bin/" + operf
         opreport = "/opt/" + advance_toolchain + "/bin/" + opreport
