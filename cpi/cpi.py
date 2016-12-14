@@ -113,7 +113,8 @@ def main(argv=None):
                                args.output_location,
                                args.advance_toolchain)
             exit(0)
-
+        elif event_name is None:
+            controller.run_cpi(binary_path, binary_args, args.output_location, args.advance_toolchain)
         # Run drilldown (profiler)
         if drilldown_args:
             binary_path = ''
