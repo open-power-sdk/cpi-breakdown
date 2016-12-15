@@ -48,7 +48,7 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
 
     if not os.path.isfile(binary_path) or not os.access(binary_path, os.X_OK):
         sys.stderr.write('Something wrong with ' + binary_path
-                         + ' file. Check if it is a valid path or file\n')
+                         + ' file. Check if it is a valid binary path\n')
         sys.exit(1)
 
     if not output_location:
@@ -82,12 +82,11 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
         sys.stdout.write("\r    Executing CPI Breakdown: %d/%d iterations (elapsed time: %d seconds)"\
                  % (exec_counter, len(reader.get_events()), (time.time() - start_time)))
         sys.stdout.flush()
-        status = core.execute(ocount_cmd + ' ' + binary_path + ' ' +
-                              binary_args + '> /dev/null 2>&1')
+        status, output = core.execute_stdout(ocount_cmd + ' ' + binary_path +
+                                             ' ' + binary_args)
         if status != 0:
-            sys.stderr.write("\nFailed to run {0} command.\n".format(ocount) +
-                             "For more information check the error message " +
-                             "above")
+            sys.stderr.write("\n\nFailed to run {0} command.".format(ocount) +
+                             "\n" + output + "\n")
             sys.exit(1)
         core.parse_file(ocount_out, results_file_name)
     sys.stdout.write("\n\n")
@@ -177,7 +176,7 @@ def run_drilldown(event, binary_path, binary_args, advance_toolchain):
     status = core.execute(operf_cmd)
     if status != 0:
         sys.stderr.write("Failed to run {0} command.\n".format(operf) +
-                         "For more information check the error message above")
+                         "For more information check the error message above\n")
         sys.exit(1)
 
     # Run opreport command
@@ -187,7 +186,7 @@ def run_drilldown(event, binary_path, binary_args, advance_toolchain):
     status = core.execute(opreport_cmd)
     if status != 0:
         sys.stderr.write("Failed to run {0} command.\n".format(opreport) +
-                         "For more information check the error message above")
+                         "For more information check the error message above\n")
         sys.exit(1)
 
     drilldown_view = DrilldownView()

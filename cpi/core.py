@@ -19,6 +19,7 @@ limitations under the License.
         * Rafael Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
+        * Roberto Oliveira <rdutra@br.ibm.com>
 """
 import os
 import subprocess
@@ -28,13 +29,23 @@ import re
 
 
 def execute(command):
-    """Execute a command with its parameters"""
+    """ Execute a command with its parameters and return the exit code """
     try:
-        return subprocess.check_call([command],
-                                     stderr=subprocess.STDOUT,
+        return subprocess.check_call([command], stderr=subprocess.STDOUT,
                                      shell=True)
     except subprocess.CalledProcessError as e:
         return e.returncode
+
+
+def execute_stdout(command):
+    """ Execute a command with its parameter and return the exit code
+    and the command output """
+    try:
+        subprocess.check_output([command], stderr=subprocess.STDOUT,
+                                shell=True)
+        return 0, ""
+    except subprocess.CalledProcessError as e:
+        return e.returncode, e.output
 
 
 def cmdexists(command):

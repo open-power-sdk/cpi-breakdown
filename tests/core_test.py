@@ -32,6 +32,15 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(0, core.execute("cd"))
         self.assertNotEqual(0, core.execute("foo_bar"))
 
+    def test_execute_stdout(self):
+        status, output = core.execute_stdout("cd")
+        self.assertEqual(0, status)
+        self.assertEqual("", output)
+
+        status, output = core.execute_stdout("ls /bla/foo")
+        self.assertNotEqual(0, status)
+        self.assertIn("No such file or directory", output)
+
     def test_cmdexist(self):
         assert True == core.cmdexists("cd")
         assert False == core.cmdexists("foo_bar")
