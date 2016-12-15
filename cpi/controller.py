@@ -73,7 +73,8 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
         sys.stdout.write("\r    Executing CPI Breakdown: %d/%d iterations (elapsed time: %d seconds)"\
                  % (exec_counter, len(reader.get_events()), (time.time() - start_time)))
         sys.stdout.flush()
-        status = core.execute(ocount_cmd + ' ' + binary_path + binary_args + '> /dev/null 2>&1')
+        status = core.execute(ocount_cmd + ' ' + binary_path + ' ' +
+                              binary_args + '> /dev/null 2>&1')
         if status != 0:
             sys.stderr.write("\nFailed to run {0} command.\n".format(ocount) +
                              "For more information check the error message " +

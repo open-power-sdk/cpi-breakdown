@@ -107,7 +107,6 @@ def main(argv=None):
 
         # Run CPI (counter)
         if args.application_path and not drilldown_args:
-            print 'run cpi'
             [binary_path, binary_args] = get_binary_path_args(args.application_path,
                                                               application_args)
             controller.run_cpi(binary_path, binary_args,
@@ -141,15 +140,12 @@ def main(argv=None):
     except KeyboardInterrupt:
         return 1
 
+
 def get_binary_path_args(app_path, application_args):
     """ Return binary path and binary args """
     binary_path = app_path.pop(0)
-    # If a binary argument contains space, it was passed inside quotes
-    binary_args = ' ' + ' '.join((i if " " not in i else "'" + i + "'")
-                                 for i in app_path)
-    binary_args += ' ' + ' '.join((i if " " not in i else "'" + i + "'")
-                                  for i in application_args)
-
+    binary_args = ' '.join(("'" + i + "'") for i in app_path +
+                           application_args)
     return binary_path, binary_args
 
 
