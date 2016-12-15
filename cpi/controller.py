@@ -28,9 +28,12 @@ import sys
 import time
 
 import events_reader
+from breakdown_tree import BreakdownTree
+
 from drilldown.drilldown_view import DrilldownView
 from metrics_calculator import MetricsCalculator
 from terminaltables import AsciiTable
+
 
 def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
     '''
@@ -85,11 +88,13 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
 
     metrics_calc = MetricsCalculator(core.get_processor())
     events = core.file_to_dict(results_file_name)
+    metrics_value = metrics_calc.calculate_metrics(events)
 
-    metrics = metrics_calc.calculate_metrics(events)
+    tree = BreakdownTree(metrics_calc.get_raw_metrics(), metrics_value)
+    tree.print_tree()
 
     met_table = [['Metric', 'Value', 'Percentage']]
-    for row in metrics:
+    for row in metrics_value:
         met_table.append(row)
     met_tab = AsciiTable(met_table)
     print met_tab.table

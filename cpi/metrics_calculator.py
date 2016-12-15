@@ -46,6 +46,9 @@ class MetricsCalculator(object):
         with open(metrics_file, "r") as metrics:
             self.metrics_groups = yaml.load(metrics)
 
+    def get_raw_metrics(self):
+        return self.metrics_groups
+
     def calculate_metrics(self, parsed_output_dict):
         '''
         Calculate the metrics based on the processor model and returns a list
