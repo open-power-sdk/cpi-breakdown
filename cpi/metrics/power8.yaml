@@ -270,7 +270,7 @@
     COMPONENTS : []
 55 :
     NAME : GCT_EMPTY_DISP_HELD_SRQ_CPI
-    DESCRIPTION : Cycles global completion table empty where dispatch was held due to store reject qeue
+    DESCRIPTION : Cycles global completion table empty where dispatch was held due to store reorder queue
     FORMULA : PM_GCT_NOSLOT_DISP_HELD_SRQ / PM_RUN_INST_CMPL
     COMPONENTS : []
 56 :
