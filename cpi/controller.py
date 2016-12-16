@@ -129,14 +129,17 @@ def compare_output(file_names):
 
     # Create final_array, with event names, values and percentages
     for key in dict_vals:
+        init_value = dict_vals[key][0]
+        final_value = dict_vals[key][1]
         try:
-            if int(dict_vals[key][0]) != 0:
-                percentage = core.percentage(int(dict_vals[key][0]),
-                                             int(dict_vals[key][1]))
+            if int(init_value) != 0:
+                percentage = core.percentage(int(init_value),
+                                             int(final_value))
+            elif int(final_value) == 0:
+                percentage = "0.00"
             else:
-                percentage = "-"
-            final_array.append([key, dict_vals[key][0], dict_vals[key][1],
-                         percentage])
+                percentage = "n/a"
+            final_array.append([key, init_value, final_value, percentage])
         except IndexError:
             sys.exit(1)
 
