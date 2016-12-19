@@ -28,6 +28,7 @@ VALID_EVENT = "PM_RUN_CYC"
 INVALID_EVENT = "FOO_BAR"
 PROCESSOR_VERSION = "POWER8"
 
+
 class EventsReaderTests(unittest.TestCase):
     """ Class to run tests from events_reader """
     reader = events_reader.EventsReader(PROCESSOR_VERSION)
@@ -44,6 +45,13 @@ class EventsReaderTests(unittest.TestCase):
     def test_get_event_mincount(self):
         self.assertEquals(100000, self.reader.get_event_mincount(VALID_EVENT))
         self.assertEquals(None, self.reader.get_event_mincount(INVALID_EVENT))
+
+    def test_read_events(self):
+        """ Test with an invalid file """
+        with self.assertRaises(SystemExit) as exit_status:
+            reader = events_reader.EventsReader("POWER7")
+        self.assertEqual(exit_status.exception.code, 1)
+
 
 if __name__ == '__main__':
     unittest.main()

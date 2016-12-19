@@ -23,6 +23,7 @@ limitations under the License.
 
 import yaml
 import os
+import sys
 
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -30,15 +31,13 @@ DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 class EventsReader:
     """Class to deal with events from yaml files"""
-    processor_version = ''
 
     # Hold events from yaml files
     events = []
 
-    def __init__(self, processor_version):
-        self.processor_version = processor_version
-        events_file = DIR_PATH + "/events/" + str.lower(processor_version) + ".yaml"
-        self.events = self.read_events(events_file)
+    def __init__(self, processor):
+        events_file = DIR_PATH + "/events/" + str.lower(processor) + ".yaml"
+        self.events = self.__read_events(events_file)
 
     def get_events(self):
         """Return the events based on the processor version"""
@@ -61,14 +60,17 @@ class EventsReader:
             if event_name in events_dic:
                 return events_dic.get(event_name)
 
-    def read_events(self, events_file):
-        """
-        Read the events from the respective file.
-        PS: Not intented to be used outside this class
-        """
-        with open(events_file, "r") as f:
-            groups = yaml.load(f)
-            events_dic = []
-            for i in groups.values():
-                events_dic.append(i)
-            return events_dic
+    def __read_events(self, events_file):
+        """Read the events from the respective file"""
+        try:
+            with open(events_file, "r") as f:
+                groups = yaml.load(f)
+                events_dic = []
+                for i in groups.values():
+                    events_dic.append(i)
+                return events_dic
+        except IOError:
+            sys.stderr.write("Could not find file '{}'. Check if your "
+                             "installation is correct or try to install "
+                             "cpi again.\n".format(events_file))
+            sys.exit(1)

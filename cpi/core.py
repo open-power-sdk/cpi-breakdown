@@ -27,6 +27,9 @@ import commands
 import time
 import re
 
+# List with supported processors for hardware dependent cpi features
+SUPPORTED_PROCESSORS = ["POWER8"]
+
 
 def execute(command):
     """ Execute a command with its parameters and return the exit code """
@@ -58,6 +61,11 @@ def cmdexists(command):
 def get_processor():
     """Check the system processor"""
     return commands.getoutput("grep -io 'power[[:digit:]]\+' -m 1 /proc/cpuinfo")
+
+
+def supported_processor(processor_version):
+    """Check if processor is supported"""
+    return processor_version in SUPPORTED_PROCESSORS
 
 
 def parse_file(output_stream, parsed_file):

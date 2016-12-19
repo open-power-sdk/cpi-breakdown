@@ -48,5 +48,9 @@ class CoreTests(unittest.TestCase):
     def test_get_processor(self):
         self.assertEqual("POWER8", core.get_processor())
 
+    def test_supported_processor(self):
+        assert False == core.supported_processor("POWER7")
+        assert True == core.supported_processor("POWER8")
+
 if __name__ == '__main__':
     unittest.main()

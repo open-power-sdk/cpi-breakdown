@@ -24,6 +24,9 @@ import os
 import parser
 import re
 
+from cpi.metrics_calculator import MetricsCalculator
+
+
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -77,6 +80,12 @@ class MetricsCalculationTests(unittest.TestCase):
         metric_result = eval(metric)
         self.assertTrue(metric_result == -4)
         self.assertTrue(self.metric_pattern.match(str(metric)))
+
+    def test_read_metrics(self):
+        """ Test with an invalid file """
+        with self.assertRaises(SystemExit) as exit_status:
+            metrics = MetricsCalculator("POWER7")
+        self.assertEqual(exit_status.exception.code, 1)
 
 
 if __name__ == '__main__':

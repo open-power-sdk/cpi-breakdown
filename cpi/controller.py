@@ -38,10 +38,10 @@ from terminaltables import AsciiTable
 
 
 def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
-    '''
-    Uses the current path as destination if nothing is set
-    by the user.
-    '''
+    """ Run the breakdown feature """
+    processor = core.get_processor()
+    __supported_processor(processor, "Breakdown")
+
     ocount = "ocount"
     if advance_toolchain:
         ocount = "/opt/" + advance_toolchain + "/bin/" + ocount
@@ -70,7 +70,7 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
                          "Install oprofile before continue." + "\n")
         sys.exit(2)
 
-    reader = events_reader.EventsReader(core.get_processor())
+    reader = events_reader.EventsReader(processor)
     results_file_name = ocount_out + "_" + timestamp + ".cpi"
     start_time = time.time()
     exec_counter = 0
@@ -93,7 +93,7 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
     sys.stdout.write("\n\n")
     core.execute("rm " + ocount_out)
 
-    metrics_calc = MetricsCalculator(core.get_processor())
+    metrics_calc = MetricsCalculator(processor)
     events = core.file_to_dict(results_file_name)
     metrics_value = metrics_calc.calculate_metrics(events)
 
@@ -149,13 +149,15 @@ def compare_output(file_names):
 
 def run_drilldown(event, binary_path, binary_args, advance_toolchain):
     """ Run the drilldown feature """
-    operf = "operf"
-    opreport = "opreport"
+    processor = core.get_processor()
+    __supported_processor(processor, "Drilldown")
 
     if not os.path.isfile(binary_path):
         sys.stderr.write(binary_path + ' binary file not found\n')
         sys.exit(1)
 
+    operf = "operf"
+    opreport = "opreport"
     if advance_toolchain:
         operf = "/opt/" + advance_toolchain + "/bin/" + operf
         opreport = "/opt/" + advance_toolchain + "/bin/" + opreport
@@ -165,7 +167,7 @@ def run_drilldown(event, binary_path, binary_args, advance_toolchain):
                          "Install oprofile before continue." + "\n")
         sys.exit(2)
 
-    reader = events_reader.EventsReader(core.get_processor())
+    reader = events_reader.EventsReader(processor)
 
     # Event is not supported with drilldown feature
     if not reader.valid_event(event):
@@ -195,3 +197,12 @@ def run_drilldown(event, binary_path, binary_args, advance_toolchain):
 
     drilldown_view = DrilldownView()
     drilldown_view.print_drilldown(event, report_file)
+
+
+def __supported_processor(processor, feature_name):
+    """Check if the current processor is supported. If it is not supported,
+    force the execution to finish"""
+    if not core.supported_processor(processor):
+        sys.stderr.write("{} feature is not supported in processor: {}\n"
+                         .format(feature_name, processor))
+        sys.exit(1)

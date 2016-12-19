@@ -40,7 +40,7 @@ class DrilldownExecutionTest(unittest.TestCase):
         self.assertTrue(len(self.clean_output) == 46)
         if core.cmdexists('cpi'):
             for event in self.clean_output:
-                core.execute('cpi --drilldown=' + event + " sleep 1")
+                core.execute('cpi --drilldown=' + event + " /bin/sleep 1")
 
 
 if __name__ == '__main__':

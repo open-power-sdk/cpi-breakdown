@@ -38,13 +38,20 @@ class MetricsCalculator(object):
 
     def __init__(self, processor):
         metrics_file = DIR_PATH + "/metrics/" + str.lower(processor) + ".yaml"
-        '''
-        Get the metrics based on the processor version. They are located
+        self.metrics_groups = self.__read_metrics(metrics_file)
+
+    def __read_metrics(self, metrics_file):
+        """ Get the metrics based on the processor version. They are located
         at /metrics/<processor_model>.yaml. It returns a dictionary which
-        contains the NAME an the EQUATION
-        '''
-        with open(metrics_file, "r") as metrics:
-            self.metrics_groups = yaml.load(metrics)
+        contains the NAME an the EQUATION """
+        try:
+            with open(metrics_file, "r") as metrics:
+                return yaml.load(metrics)
+        except IOError:
+            sys.stderr.write("Could not find file '{}'. Check if your "
+                             "installation is correct or try to install "
+                             "cpi again.\n".format(metrics_file))
+            sys.exit(1)
 
     def get_raw_metrics(self):
         return self.metrics_groups
