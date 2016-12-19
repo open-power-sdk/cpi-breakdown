@@ -62,7 +62,8 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
                 raise sys.exit(1)
 
     timestamp = core.get_timestamp()
-    ocount_out = output_location + "/output"
+    binary_name = binary_path.split("/").pop(-1)
+    ocount_out = output_location + "/" + binary_name
 
     if not core.cmdexists(ocount):
         sys.stderr.write(ocount + " is not installed in the system. " +
@@ -70,7 +71,7 @@ def run_cpi(binary_path, binary_args, output_location, advance_toolchain):
         sys.exit(2)
 
     reader = events_reader.EventsReader(core.get_processor())
-    results_file_name = ocount_out + timestamp + ".cpi"
+    results_file_name = ocount_out + "_" + timestamp + ".cpi"
     start_time = time.time()
     exec_counter = 0
     sys.stdout.write("\n")
