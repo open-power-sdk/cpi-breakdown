@@ -29,18 +29,18 @@ import errno
 from terminaltables import AsciiTable
 
 import core
-import table_creator
 import events_reader
 from breakdown_tree import BreakdownTree
 from drilldown.drilldown_view import DrilldownView
 from metrics_calculator import MetricsCalculator
+from compare import table_creator
+from compare.comparator import Comparator
 
 
 class Controller(object):
-    '''
+    """
     Controls the execution of CPI commands
-    '''
-
+    """
     __application_args = ''
 
     def run(self, args, application_args):
@@ -51,7 +51,7 @@ class Controller(object):
             self.__application_args = application_args[0]
 
         if 'cpi_files' in args:
-            table_creator.table_creator(args.cpi_files)
+            self.__run_compare(args.cpi_files)
         elif 'event_name' in args:
             self.__run_drilldown(args.event_name[0],
                                  args.binary_path,
@@ -60,6 +60,7 @@ class Controller(object):
             self.__run_cpi(args.binary_path,
                            self.__application_args,
                            args.output_path)
+
     @classmethod
     def __run_cpi(cls, binary_path, binary_args, output_location):
         """ Run the breakdown feature """
@@ -117,7 +118,15 @@ class Controller(object):
         core.execute("rm " + ocount_out)
 
         metrics_calc = MetricsCalculator(processor)
-        events = core.file_to_dict(results_file_name)
+        try:
+            events = core.file_to_dict(results_file_name)
+        except ValueError:
+            sys.stderr.write("File {} was not correctly formatted.\n"
+                         "{} may have failed when generating the report file. "
+                         "Try to run breakdown feature again\n"
+                         .format(results_file_name, ocount))
+            sys.exit(1)
+
         metrics_value = metrics_calc.calculate_metrics(events)
 
         tree = BreakdownTree(metrics_calc.get_raw_metrics(), metrics_value)
@@ -180,3 +189,36 @@ class Controller(object):
 
         drilldown_view = DrilldownView()
         drilldown_view.print_drilldown(event, report_file)
+
+    @classmethod
+    def __run_compare(cls, file_names):
+        """ Get the contents of two ocount output files, compare their results
+        and display in a table """
+        dict_list = []
+        final_array = []
+
+        # Create a list with two dictionaries containing "event:value" pairs
+        for file_name in file_names:
+            if not os.path.isfile(file_name):
+                print file_name + ' file not found\n'
+                return final_array
+            try:
+                dict_i = core.file_to_dict(file_name)
+                dict_list.append(dict_i)
+            except ValueError:
+                sys.stderr.write("Could not parse {} file.\n"
+                                 "Select a properly formatted file and run "
+                                 "the compare feature again\n".format(
+                                     file_name))
+                sys.exit(1)
+
+        try:
+            comparator = Comparator(dict_list)
+            final_array = comparator.compare()
+        except (KeyError, ValueError):
+            sys.stderr.write("Could not perform the comparison between files.\n"
+                             "Select properly formatted files and run the "
+                             "compare feature again.\n")
+            sys.exit(1)
+
+        table_creator.create_table(file_names, final_array)

@@ -52,5 +52,10 @@ class CoreTests(unittest.TestCase):
         assert False == core.supported_processor("POWER7")
         assert True == core.supported_processor("POWER8")
 
+    def test_percentage(self):
+        self.assertEqual("100.00", core.percentage(10, 20))
+        self.assertEqual("-50.00", core.percentage(20, 10))
+        self.assertEqual("0.00", core.percentage(10, 10))
+
 if __name__ == '__main__':
     unittest.main()
