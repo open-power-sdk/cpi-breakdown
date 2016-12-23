@@ -23,13 +23,12 @@ limitations under the License.
 """
 
 import sys
-import pkg_resources
+import argparse
 from argparse import ArgumentParser
-from argparse import RawDescriptionHelpFormatter
+from argparse import RawTextHelpFormatter
+import pkg_resources
 
-import controller
-import core
-import table_creator
+from controller import Controller
 
 __all__ = []
 __version__ = pkg_resources.require("cpi")[0].version
@@ -64,89 +63,82 @@ def main(argv=None):
 
     try:
         parser = ArgumentParser(description=program_shortdesc,
-                                formatter_class=RawDescriptionHelpFormatter)
-        parser.add_argument('-V', '--version', action='version',
+                                formatter_class=RawTextHelpFormatter)
+        parser.add_argument('-V', '--version',
+                            action='version',
                             version=program_version_message)
-        parser.add_argument("-o", "--output-location", dest="output_location",
-                            type=str,
-                            help="the location where to store the result of the execution.\
-                            e.g.: --output-location=<path>",
-                            nargs='?')
-        parser.add_argument('--advance-toolchain', dest='advance_toolchain',\
-                            choices=core.get_installed_at(),\
-                            help="allows selecting oprofile from an \
-                            installed version of Advance Toolchain instead of\
-                            using the installed version of the system.\
-                            e.g.: --advance-toolchain=at10.0.\
-                            To learn about Advance Toolchain access ibm.co/AdvanceToolchain.")
-        parser.add_argument('--drilldown', dest="drilldown_args", type=str, default='',
-                            metavar="event_name",
-                            help="Use the drilldown feature with the given event", nargs="+")
-        parser.add_argument('-c', '--compare', dest="file_names", default='',
-                            metavar=('output_1', 'output_2'), type=str,
-                            help="Compare different runs passing a list of\
-                            files.", nargs=2)
-        parser.add_argument(dest="application_path", type=str,
-                            help="path to the application binary and its arguments",
-                            default='', nargs='*')
+        subparsers = parser.add_subparsers(help="list of common CPI commands\n\n")
+
+        # Execution
+        parser_execution = subparsers.add_parser(
+            'execute',
+            formatter_class=RawTextHelpFormatter,
+            help="collect the value of the events used in the breakdown\n"
+                 "e.g: cpi execute -b <binary> '<binary_args>'\n"
+                 "see cpi execute --help\n\n")
+        parser_execution.add_argument(
+            '-o', '--output',
+            dest='output_path',
+            type=str,
+            default='',
+            nargs=1,
+            help="specify the directory to save the output of the execution")
+        parser_execution.add_argument(
+            '-b', '--binary',
+            dest='binary_path',
+            type=str, default='',
+            required=True,
+            help="specify the path to the application binary and its\n"
+                 "arguments which are between single quotes")
+
+        # Drilldown
+        parser_drilldown = subparsers.add_parser(
+            'drilldown',
+            formatter_class=argparse.RawTextHelpFormatter,
+            help="perform a drilldown execution for a specific event\n"
+                 "e.g: cpi drilldown -e <event> -b <binary> '<binary_args>'\n"
+                 "see cpi drilldown --help\n\n")
+        parser_drilldown.add_argument(
+            '-e', '--event',
+            dest='event_name',
+            type=str,
+            default='',
+            nargs=1,
+            required=True,
+            help="specify the event that will be used for drilldown")
+        parser_drilldown.add_argument(
+            '-b', '--binary',
+            dest='binary_path',
+            type=str,
+            default='',
+            required=True,
+            help="specify the path to the application binary and its\n"
+                 "arguments which are between single quotes")
+
+        # Compare
+        parser_compare = subparsers.add_parser(
+            'compare',
+            formatter_class=argparse.RawTextHelpFormatter,
+            help="compare the collected results of two CPI executions and\n"
+                 "provide feedback on performance variations\n"
+                 "e.g: cpi compare -f file_1 file_2\n"
+                 "see cpi compare --help")
+        parser_compare.add_argument(
+            '-f', '--files',
+            dest="cpi_files",
+            default='',
+            type=str,
+            nargs=2,
+            required=True,
+            metavar=('file_1', 'file_2'),
+            help="specify the files to execute the comparation")
 
         # Process arguments
         args, application_args = parser.parse_known_args()
-
-        if not args.application_path and not args.file_names and not args.drilldown_args:
-            parser.print_usage()
-            exit(1)
-
-        drilldown_args = args.drilldown_args
-        file_names = args.file_names
-
-        # Run compare runs
-        if file_names:
-            table_creator.table_creator(file_names)
-            exit(0)
-
-        # Run CPI (counter)
-        if args.application_path and not drilldown_args:
-            [binary_path, binary_args] = get_binary_path_args(args.application_path,
-                                                              application_args)
-            controller.run_cpi(binary_path, binary_args,
-                               args.output_location,
-                               args.advance_toolchain)
-            exit(0)
-        # Run drilldown (profiler)
-        if drilldown_args:
-            binary_path = ''
-            event_name = ''
-            binary_args = ' '
-
-            if len(drilldown_args) == 1 and not args.application_path:
-                event_name = drilldown_args[0]
-                sys.stderr.write("For drilldown, you must set an event and a binary path\n")
-                return 1
-
-            if len(drilldown_args) >= 2:
-                [binary_path, binary_args] = get_binary_path_args(drilldown_args[1:],
-                                                                  application_args)
-                event_name = drilldown_args[0]
-
-            if len(args.application_path) > 0:
-                [binary_path, binary_args] = get_binary_path_args(args.application_path,
-                                                                  application_args)
-                event_name = drilldown_args[0]
-
-            controller.run_drilldown(event_name, binary_path, binary_args, args.advance_toolchain)
-
+        ctrller = Controller()
+        ctrller.run(args, application_args)
     except KeyboardInterrupt:
         return 1
-
-
-def get_binary_path_args(app_path, application_args):
-    """ Return binary path and binary args """
-    binary_path = app_path.pop(0)
-    binary_args = ' '.join(("'" + i + "'") for i in app_path +
-                           application_args)
-    return binary_path, binary_args
-
 
 if __name__ == "__main__":
     sys.exit(main())

@@ -68,16 +68,60 @@ def supported_processor(processor_version):
     return processor_version in SUPPORTED_PROCESSORS
 
 
+def supported_feature(processor, feature_name):
+    """Check whether a feature is supported. If it is not supported,
+    force the execution to finish"""
+    if not supported_processor(processor):
+        sys.stderr.write("{} feature is not supported in processor: {}\n"
+                         .format(feature_name, processor))
+        sys.exit(1)
+
+
 def parse_file(output_stream, parsed_file):
     """Read lines from output_stream file and writes it into another file as
     a dictionary"""
-    #parsed_file = output_stream + "." + timestamp + extension
+    # Parsed_file = output_stream + "." + timestamp + extension
     with open(output_stream, "r") as f:
         for line in f:
             if not line.isspace():
                 with open(parsed_file, "a+") as ff:
                     ff.write(line.split(",")[0] + " : ")
                     ff.write(line.split(",")[1] + "\n")
+
+
+def compare_output(file_names):
+    """ Get the contents of two ocount output files and compare their
+        results. Return a list with all values and percentage """
+    dict_list = []
+    final_array = []
+    # Create a list with two dictionaries containing "event:value" pairs
+    for file_name in file_names:
+        if not os.path.isfile(file_name):
+            print file_name + ' file not found\n'
+            return final_array
+        dict_i = file_to_dict(file_name)
+        dict_list.append(dict_i)
+
+    # Create one dictionary as {"events" : (val_file_1, val_file_2), ...}
+    dict_vals = {}
+    for key in dict_list[0]:
+        dict_vals[key] = tuple(d[key] for d in dict_list)
+
+    # Create final_array, with event names, values and percentages
+    for key in dict_vals:
+        init_value = dict_vals[key][0]
+        final_value = dict_vals[key][1]
+        try:
+            if int(init_value) != 0:
+                percentage = __percentage(int(init_value), int(final_value))
+            elif int(final_value) == 0:
+                percentage = "0.00"
+            else:
+                percentage = "n/a"
+            final_array.append([key, init_value, final_value, percentage])
+        except IndexError:
+            sys.exit(1)
+    return final_array
 
 
 def get_timestamp():
@@ -110,7 +154,7 @@ def get_installed_at():
         return installed_at
 
 
-def percentage(init_val, final_val):
+def __percentage(init_val, final_val):
     """Calculate a percentage relative to the initial amount of two values"""
     value = 100 * (final_val - init_val) / float(init_val)
     return "%.2f" % value

@@ -1,11 +1,12 @@
 from terminaltables import AsciiTable
-import controller
+
+import core
 
 
 def table_creator(file_names):
     """ Create a table with comparison two output files """
 
-    results_list = controller.compare_output(file_names)
+    results_list = core.compare_output(file_names)
     if not results_list:
         return 1
 
