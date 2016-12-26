@@ -85,6 +85,11 @@ def main(argv=None):
             nargs=1,
             help="specify the directory to save the output of the execution")
         parser_execution.add_argument(
+            '-t', '--table',
+            dest='table_format',
+            action='store_true',
+            help="show the breakdown model in a table format")
+        parser_execution.add_argument(
             '-b', '--binary',
             dest='binary_path',
             type=str, default='',

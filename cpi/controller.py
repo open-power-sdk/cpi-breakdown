@@ -21,16 +21,16 @@ limitations under the License.
         * Roberto Oliveira <rdutra@br.ibm.com>
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
 """
+
 import os
-import os.path
 import sys
 import time
 import errno
-from terminaltables import AsciiTable
 
 import core
 import events_reader
-from breakdown_tree import BreakdownTree
+from breakdown.breakdown_tree import BreakdownTree
+from breakdown.breakdown_table import BreakdownTable
 from drilldown.drilldown_view import DrilldownView
 from metrics_calculator import MetricsCalculator
 from compare import table_creator
@@ -44,9 +44,9 @@ class Controller(object):
     __application_args = ''
 
     def run(self, args, application_args):
-        '''
+        """
         Executes the correct action according the user input
-        '''
+        """
         if application_args:
             self.__application_args = application_args[0]
 
@@ -59,17 +59,18 @@ class Controller(object):
         else:
             self.__run_cpi(args.binary_path,
                            self.__application_args,
-                           args.output_path)
+                           args.output_path,
+                           args.table_format)
 
     @classmethod
-    def __run_cpi(cls, binary_path, binary_args, output_location):
+    def __run_cpi(cls, binary_path, binary_args, output_location,
+                  table_format):
         """ Run the breakdown feature """
         processor = core.get_processor()
         ocount = "ocount"
         core.supported_feature(processor, "Breakdown")
-        if not os.path.isfile(binary_path) or not os.access(binary_path, os.X_OK):
-            sys.stderr.write('Something wrong with ' + binary_path +
-                             ' file. Check if it is a valid binary path\n')
+        if not os.path.isfile(binary_path):
+            sys.stderr.write(binary_path + ' binary file not found\n')
             sys.exit(1)
 
         if not output_location:
@@ -96,6 +97,8 @@ class Controller(object):
         start_time = time.time()
         exec_counter = 0
         sys.stdout.write("\n")
+
+        # Run ocount for all events groups
         for event in reader.get_events():
             exec_counter = exec_counter + 1
             ocount_cmd = ocount + " -b -f " + ocount_out
@@ -117,28 +120,26 @@ class Controller(object):
         sys.stdout.write("\n\n")
         core.execute("rm " + ocount_out)
 
+        # Calculate metrics values
         metrics_calc = MetricsCalculator(processor)
         try:
             events = core.file_to_dict(results_file_name)
         except ValueError:
             sys.stderr.write("File {} was not correctly formatted.\n"
-                         "{} may have failed when generating the report file. "
-                         "Try to run breakdown feature again\n"
-                         .format(results_file_name, ocount))
+                             "{} may have failed when generating the report "
+                             "file. Try to run breakdown feature again\n"
+                             .format(results_file_name, ocount))
             sys.exit(1)
 
         metrics_value = metrics_calc.calculate_metrics(events)
 
-        tree = BreakdownTree(metrics_calc.get_raw_metrics(), metrics_value)
-        tree.print_tree()
-
-        met_table = [['Metric', 'Value', 'Percentage']]
-        for row in metrics_value:
-            met_table.append(row)
-        met_tab = AsciiTable(met_table)
-        print met_tab.table
-
-        return
+        # Show breakdown output
+        if table_format:
+            table = BreakdownTable(metrics_value)
+            table.print_table()
+        else:
+            tree = BreakdownTree(metrics_calc.get_raw_metrics(), metrics_value)
+            tree.print_tree()
 
     @classmethod
     def __run_drilldown(cls, event, binary_path, binary_args):
