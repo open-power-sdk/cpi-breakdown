@@ -1,66 +1,66 @@
 1 :
-    PM_CMPLU_STALL_THRD : 10000
-    PM_CMPLU_STALL_BRU_CRU : 10000
-    PM_CMPLU_STALL_COQ_FULL : 10000
-    PM_CMPLU_STALL_BRU : 10000
-    PM_RUN_INST_CMPL : 100000
-    PM_RUN_CYC : 100000
+    PM_CMPLU_STALL_THRD : [10000,"Completion stall due to thread conflict. Group ready to complete but it was another thread's turn."]
+    PM_CMPLU_STALL_BRU_CRU : [10000,"Completion stall due to thread conflict. Completion stall due to IFU (Instruction Fetch Unit)."]
+    PM_CMPLU_STALL_COQ_FULL : [10000,"Completion stall due to Cast Out Queue full."]
+    PM_CMPLU_STALL_BRU : [10000,"Completion stall due to a Branch Unit."]
+    PM_RUN_INST_CMPL : [100000,"Run_Instructions."]
+    PM_RUN_CYC : [100000,"Run Cycles. Processor Cycles gated by the run latch. Operating systems use the run latch to indicate when they are doing useful work. The run latch is typically cleared in the OS idle loop. Gating by the run latch filters out the idle loop."]
 2 :
-    PM_CMPLU_STALL_VSU : 10000
-    PM_CMPLU_STALL_VECTOR_LONG : 10000
+    PM_CMPLU_STALL_VSU : [10000,"Cycles stalled by Vector-and-Scalar Unit (PM_CMPLU_STALL_VECTOR:PM_CMPLU_STALL_SCALAR and PM_CMPLU_STALL_DFP )."]
+    PM_CMPLU_STALL_VECTOR_LONG : [10000,"Completion stall due to VSU (Vector-and-Scalar Unit) vector instruction."]
 3 :
-    PM_CMPLU_STALL_VECTOR : 10000
-    PM_CMPLU_STALL_ST_FWD : 10000
+    PM_CMPLU_STALL_VECTOR : [10000,"Completion stall due to VSU (Vector-and-Scalar Unit) vector instruction."]
+    PM_CMPLU_STALL_ST_FWD : [10000,"Completion stall due to store forward."]
 4 :
-    PM_NTCG_ALL_FIN : 10000
+    PM_NTCG_ALL_FIN : [10000,"Cycles in which all instructions in the group have finished but completion is still pending."]
 5 :
-    PM_CMPLU_STALL_FXU : 10000
-    PM_CMPLU_STALL_FLUSH : 10000
-    PM_CMPLU_STALL : 10000
+    PM_CMPLU_STALL_FXU : [10000,"Completion stall due to FXU (Fixed Point Unit)."]
+    PM_CMPLU_STALL_FLUSH : [10000,"Completion stall due to flush by own thread."]
+    PM_CMPLU_STALL : [10000,"Completion stall."]
 6 :
-    PM_CMPLU_STALL_SCALAR_LONG : 10000
-    PM_CMPLU_STALL_REJ_LMQ_FULL : 10000
+    PM_CMPLU_STALL_SCALAR_LONG : [10000,"Completion stall due to VSU (Vector-and-Scalar Unit) scalar long latency instruction."]
+    PM_CMPLU_STALL_REJ_LMQ_FULL : [10000,"Completion stall due to LSU (Load Store Unit) reject LMQ (Load Miss Queue) full."]
 7 :
-    PM_GCT_NOSLOT_CYC : 10000
-    PM_CMPLU_STALL_LSU : 10000
-    PM_CMPLU_STALL_FXLONG : 10000
+    PM_GCT_NOSLOT_CYC : [10000,"Pipeline empty (No itags assigned :no GCT slots used)"]
+    PM_CMPLU_STALL_LSU : [10000,"Completion stall by LSU (Load Store Unit) instruction."]
+    PM_CMPLU_STALL_FXLONG : [10000,"Completion stall due to a long latency fixed point instruction."]
 8 :
-    PM_CMPLU_STALL_STORE : 10000
-    PM_CMPLU_STALL_SCALAR : 10000
+    PM_CMPLU_STALL_STORE : [10000,"Completion stall by stores:this includes store agen finishes in pipe LS0/LS1 and store data finishes in LS2/LS3."]
+    PM_CMPLU_STALL_SCALAR : [10000,"Completion stall due to VSU (Vector-and-Scalar Unit) scalar long latency instruction."]
 9 :
-    PM_CMPLU_STALL_DCACHE_MISS : 10000
-    PM_CMPLU_STALL_HWSYNC : 10000
-    PM_CMPLU_STALL_DMISS_L2L3_CONFLICT : 10000
+    PM_CMPLU_STALL_DCACHE_MISS : [10000,"Completion stall by Dcache miss."]
+    PM_CMPLU_STALL_HWSYNC : [10000,"Completion stall due to hwsync."]
+    PM_CMPLU_STALL_DMISS_L2L3_CONFLICT : [10000,"Completion stall due to cache miss resolving in core's L2/L3 with a conflict."]
 10 :
-    PM_CMPLU_STALL_DMISS_L2L3 : 10000
-    PM_CMPLU_STALL_DMISS_LMEM : 10000
+    PM_CMPLU_STALL_DMISS_L2L3 : [10000,"Completion stall by Dcache miss which resolved in L2/L3."]
+    PM_CMPLU_STALL_DMISS_LMEM : [10000,"Completion stall due to cache miss resolving in core's Local Memory. (GCT empty by branch  mispredict + IC miss)."]
 11 :
-    PM_CMPLU_STALL_DMISS_L21_L31 : 10000
-    PM_CMPLU_STALL_MEM_ECC_DELAY : 10000
-    PM_CMPLU_STALL_DMISS_L3MISS : 10000
+    PM_CMPLU_STALL_DMISS_L21_L31 : [10000,"Completion stall by Dcache miss which resolved on chip (excluding local L2/L3)."]
+    PM_CMPLU_STALL_MEM_ECC_DELAY : [10000,"Completion stall due to mem ECC delay."]
+    PM_CMPLU_STALL_DMISS_L3MISS : [10000,"Completion stall due to cache miss resolving missed the L3."]
 12 :
-    PM_CMPLU_STALL_DMISS_REMOTE : 10000
-    PM_CMPLU_STALL_ERAT_MISS : 10000
+    PM_CMPLU_STALL_DMISS_REMOTE : [10000,"Completion stall by Dcache miss which resolved on chip (excluding local L2/L3)."]
+    PM_CMPLU_STALL_ERAT_MISS : [10000,"Completion stall due to LSU (Load Store Unit) reject ERAT miss."]
 13 :
-    PM_CMPLU_STALL_REJECT_LHS : 10000
-    PM_CMPLU_STALL_REJECT : 10000
+    PM_CMPLU_STALL_REJECT_LHS : [10000,"Completion stall due to reject (Load Hit Store)."]
+    PM_CMPLU_STALL_REJECT : [10000,"Completion stall due to LSU (Load Store Unit) reject."]
 14 :
-    PM_CMPLU_STALL_LWSYNC : 10000
-    PM_CMPLU_STALL_LOAD_FINISH : 10000
+    PM_CMPLU_STALL_LWSYNC : [10000,"Completion stall due to isync/lwsync."]
+    PM_CMPLU_STALL_LOAD_FINISH : [10000,"Completion stall due to a Load finish."]
 15 :
-    PM_GCT_NOSLOT_IC_MISS : 10000
-    PM_GCT_NOSLOT_IC_L3MISS : 10000
+    PM_GCT_NOSLOT_IC_MISS : [10000,"Gct (Global Completion Table) empty for this thread due to Icache Miss."]
+    PM_GCT_NOSLOT_IC_L3MISS : [10000,"Gct (Global Completion Table) empty for this thread due to icach l3 miss."]
 16 :
-    PM_GCT_NOSLOT_DISP_HELD_ISSQ : 10000
-    PM_GCT_NOSLOT_BR_MPRED : 10000
+    PM_GCT_NOSLOT_DISP_HELD_ISSQ : [10000,"Completion stall due to thread conflict."]
+    PM_GCT_NOSLOT_BR_MPRED : [10000,"Gct (Global Completion Table) empty for this thread due to branch mispred."]
 17 :
-    PM_GCT_NOSLOT_DISP_HELD_OTHER : 10000
-    PM_GCT_NOSLOT_BR_MPRED_ICMISS : 10000
+    PM_GCT_NOSLOT_DISP_HELD_OTHER : [10000,"Gct (Global Completion Table) empty for this thread due to dispatch hold on this thread due to sync."]
+    PM_GCT_NOSLOT_BR_MPRED_ICMISS : [10000,"Gct (Global Completion Table) empty for this thread due to Icache Miss and branch mispred."]
 18 :
-    PM_GCT_NOSLOT_DISP_HELD_SRQ : 10000
-    PM_GCT_NOSLOT_DISP_HELD_MAP : 10000
+    PM_GCT_NOSLOT_DISP_HELD_SRQ : [10000,"Gct (Global Completion Table) empty for this thread due to dispatch hold on this thread due to SRQ full."]
+    PM_GCT_NOSLOT_DISP_HELD_MAP : [10000,"Gct (Global Completion Table) empty for this thread due to dispatch hold on this thread due to Mapper full."]
 19 :
-    PM_1PLUS_PPC_CMPL : 100000
-    PM_CMPLU_STALL_NO_NTF : 10000
+    PM_1PLUS_PPC_CMPL : [100000,"1 or more ppc instructions finished."]
+    PM_CMPLU_STALL_NO_NTF : [10000,"Completion stall due to nop."]
 20 :
-    PM_CMPLU_STALL_NTCG_FLUSH : 10000
+    PM_CMPLU_STALL_NTCG_FLUSH : [10000,"Completion stall due to ntcg flush."]

@@ -54,11 +54,25 @@ class EventsReader:
                 return True
         return False
 
-    def get_event_mincount(self, event_name):
-        """Return the event minimum count"""
+    def __get_event_dict_value(self, event_name):
+        """Return the value (a list) for the event_name key"""
         for events_dic in self.events:
             if event_name in events_dic:
                 return events_dic.get(event_name)
+
+    def get_event_mincount(self, event_name):
+        """Return the event minimum count"""
+        try:
+            return self.__get_event_dict_value(event_name)[0]
+        except TypeError:
+            return None
+
+    def get_event_description(self, event_name):
+        """Return the event description"""
+        try:
+            return self.__get_event_dict_value(event_name)[1]
+        except TypeError:
+            return None
 
     def __read_events(self, events_file):
         """Read the events from the respective file"""

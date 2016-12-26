@@ -17,6 +17,7 @@ limitations under the License.
 
     Contributors:
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Daniel Kreling <dbkreling@br.ibm.com>
 """
 
 import unittest
@@ -27,7 +28,10 @@ from cpi import events_reader
 VALID_EVENT = "PM_RUN_CYC"
 INVALID_EVENT = "FOO_BAR"
 PROCESSOR_VERSION = "POWER8"
-
+DESCRIPTION = "Run Cycles. Processor Cycles gated by the run latch. Operating \
+systems use the run latch to indicate when they are doing useful work. The \
+run latch is typically cleared in the OS idle loop. Gating by the run latch \
+filters out the idle loop."
 
 class EventsReaderTests(unittest.TestCase):
     """ Class to run tests from events_reader """
@@ -45,6 +49,11 @@ class EventsReaderTests(unittest.TestCase):
     def test_get_event_mincount(self):
         self.assertEquals(100000, self.reader.get_event_mincount(VALID_EVENT))
         self.assertEquals(None, self.reader.get_event_mincount(INVALID_EVENT))
+
+    def test_get_event_description(self):
+        self.assertEquals(DESCRIPTION,
+                          self.reader.get_event_description(VALID_EVENT))
+        self.assertEquals(None, self.reader.get_event_description(INVALID_EVENT))
 
     def test_read_events(self):
         """ Test with an invalid file """

@@ -32,6 +32,7 @@ import events_reader
 from breakdown.breakdown_tree import BreakdownTree
 from breakdown.breakdown_table import BreakdownTable
 from drilldown.drilldown_view import DrilldownView
+from info import info_handler
 from metrics_calculator import MetricsCalculator
 from compare import table_creator
 from compare.comparator import Comparator
@@ -56,6 +57,8 @@ class Controller(object):
             self.__run_drilldown(args.event_name[0],
                                  args.binary_path,
                                  self.__application_args)
+        elif 'event_info' in args:
+            self.__show_info(args.event_info[0])
         else:
             self.__run_cpi(args.binary_path,
                            self.__application_args,
@@ -223,3 +226,10 @@ class Controller(object):
             sys.exit(1)
 
         table_creator.create_table(file_names, final_array, sort_opt)
+
+    @classmethod
+    def __show_info(cls, event_info):
+        """ Display information about an event (event_info) """
+        ih = info_handler.InfoHandler(event_info)
+        ih.show_events_info(event_info)
+        return 0

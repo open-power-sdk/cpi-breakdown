@@ -128,7 +128,7 @@ def main(argv=None):
             help="compare the collected results of two CPI executions and\n"
                  "provide feedback on performance variations\n"
                  "e.g: cpi compare -f file_1 file_2\n"
-                 "see cpi compare --help")
+                 "see cpi compare --help\n\n")
         parser_compare.add_argument(
             '-f', '--files',
             dest="cpi_files",
@@ -136,12 +136,25 @@ def main(argv=None):
             type=str,
             nargs=2,
             required=True,
-            metavar=('file_1', 'file_2'),
+            metavar=('FILE_1', 'FILE_2'),
             help="specify the files to execute the comparation")
         parser_compare.add_argument('--sort',
                                     dest="sort_opt",
                                     action='store_true',
                                     help="sort values by percentage")
+        # Show_info
+        parser_info = subparsers.add_parser(
+            'info',
+            formatter_class=argparse.RawTextHelpFormatter,
+            help='show information about <event>.\nsee cpi info <event>')
+        parser_info.add_argument(
+            '-e', '--event',
+            dest='event_info',
+            type=str,
+            required=True,
+            metavar='EVENT_NAME',
+            nargs=1,
+            help='display information about <EVENT>')
 
         # Process arguments
         args, application_args = parser.parse_known_args()
