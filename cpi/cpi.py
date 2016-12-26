@@ -133,6 +133,10 @@ def main(argv=None):
             required=True,
             metavar=('file_1', 'file_2'),
             help="specify the files to execute the comparation")
+        parser_compare.add_argument('--sort',
+                                    dest="sort_opt",
+                                    action='store_true',
+                                    help="sort values by percentage")
 
         # Process arguments
         args, application_args = parser.parse_known_args()

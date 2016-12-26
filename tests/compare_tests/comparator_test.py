@@ -54,9 +54,9 @@ class ComparatorTests(unittest.TestCase):
         l = list1[0]
         self.assertEqual(4, len(l))
         self.assertEqual("event2", l[0])
-        self.assertEqual("200", l[1])
-        self.assertEqual("400", l[2])
-        self.assertEqual("100.00", l[3])
+        self.assertEqual(200, l[1])
+        self.assertEqual(400, l[2])
+        self.assertEqual(100.00, l[3])
 
         with self.assertRaises(ValueError):
             comparator = Comparator(self.dict_list3)

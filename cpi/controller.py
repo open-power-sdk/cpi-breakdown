@@ -51,7 +51,7 @@ class Controller(object):
             self.__application_args = application_args[0]
 
         if 'cpi_files' in args:
-            self.__run_compare(args.cpi_files)
+            self.__run_compare(args.cpi_files, args.sort_opt)
         elif 'event_name' in args:
             self.__run_drilldown(args.event_name[0],
                                  args.binary_path,
@@ -191,7 +191,7 @@ class Controller(object):
         drilldown_view.print_drilldown(event, report_file)
 
     @classmethod
-    def __run_compare(cls, file_names):
+    def __run_compare(cls, file_names, sort_opt):
         """ Get the contents of two ocount output files, compare their results
         and display in a table """
         dict_list = []
@@ -221,4 +221,4 @@ class Controller(object):
                              "compare feature again.\n")
             sys.exit(1)
 
-        table_creator.create_table(file_names, final_array)
+        table_creator.create_table(file_names, final_array, sort_opt)

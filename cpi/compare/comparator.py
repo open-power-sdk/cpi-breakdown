@@ -57,9 +57,9 @@ class Comparator:
             if init_value != 0:
                 percentage = core.percentage(init_value, final_value)
             elif final_value == 0:
-                percentage = "0.00"
+                percentage = float(0.00)
             else:
                 percentage = "n/a"
-            final_array.append([key, str(init_value), str(final_value),
-                                percentage])
+            final_array.append([key, init_value, final_value,
+                                float(percentage)])
         return final_array
