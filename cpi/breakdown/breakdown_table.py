@@ -34,6 +34,7 @@ class MetricsTable(object):
         for row in self.metrics_values:
             met_table.append(row)
         met_tab = AsciiTable(met_table)
+        met_tab.justify_columns = {1: 'right', 2: 'right'}
         print met_tab.table
 
 
@@ -51,5 +52,6 @@ class EventsTable(object):
         for row in events_values:
             event_table.append(row)
         e_table = AsciiTable(event_table, title)
+        e_table.justify_columns = {1: 'right'}
         print "\n"
         print e_table.table
