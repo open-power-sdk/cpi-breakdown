@@ -30,7 +30,7 @@ import errno
 import core
 import events_reader
 from breakdown.breakdown_tree import BreakdownTree
-from breakdown.breakdown_table import BreakdownTable
+from breakdown.breakdown_table import *
 from drilldown.drilldown_view import DrilldownView
 from info import info_handler
 from metrics_calculator import MetricsCalculator
@@ -42,38 +42,42 @@ class Controller(object):
     """
     Controls the execution of CPI commands
     """
-    __application_args = ''
+    def __init__(self):
+        self.__binary_path = ''
+        self.__binary_args = ''
 
     def run(self, args, application_args):
         """
         Executes the correct action according the user input
         """
+        try:
+            self.__binary_path = args.binary_path
+        except AttributeError:
+            self.__binary_path = ''
         if application_args:
-            self.__application_args = application_args[0]
+            self.__binary_args = application_args[0]
 
+        # Run compare
         if 'cpi_files' in args:
             self.__run_compare(args.cpi_files, args.sort_opt)
+        # Run drilldown
         elif 'event_name' in args:
-            self.__run_drilldown(args.event_name[0],
-                                 args.binary_path,
-                                 self.__application_args)
+            self.__run_drilldown(args.event_name[0])
+        # Run info
         elif 'event_info' in args:
             self.__show_info(args.event_info[0])
+        # Run breakdown
         else:
-            self.__run_cpi(args.binary_path,
-                           self.__application_args,
-                           args.output_path,
-                           args.table_format)
+            self.__run_cpi(args.output_path, args.table_format,
+                           args.show_events)
 
-    @classmethod
-    def __run_cpi(cls, binary_path, binary_args, output_location,
-                  table_format):
+    def __run_cpi(self, output_location, table_format, show_events):
         """ Run the breakdown feature """
         processor = core.get_processor()
         ocount = "ocount"
         core.supported_feature(processor, "Breakdown")
-        if not os.path.isfile(binary_path):
-            sys.stderr.write(binary_path + ' binary file not found\n')
+        if not os.path.isfile(self.__binary_path):
+            sys.stderr.write(self.__binary_path + ' binary file not found\n')
             sys.exit(1)
 
         if not output_location:
@@ -87,7 +91,7 @@ class Controller(object):
                     raise sys.exit(1)
 
         timestamp = core.get_timestamp()
-        binary_name = binary_path.split("/").pop(-1)
+        binary_name = self.__binary_path.split("/").pop(-1)
         ocount_out = output_location + "/output"
 
         if not core.cmdexists(ocount):
@@ -113,8 +117,8 @@ class Controller(object):
                                 (time.time() - start_time)))
             sys.stdout.flush()
             status, output = core.execute_stdout(ocount_cmd + ' ' +
-                                                 binary_path + ' ' +
-                                                 binary_args)
+                                                 self.__binary_path + ' ' +
+                                                 self.__binary_args)
             if status != 0:
                 sys.stderr.write("\n\nFailed to run {0} command.".
                                  format(ocount) + "\n" + output + "\n")
@@ -123,8 +127,6 @@ class Controller(object):
         sys.stdout.write("\n\n")
         core.execute("rm " + ocount_out)
 
-        # Calculate metrics values
-        metrics_calc = MetricsCalculator(processor)
         try:
             events = core.file_to_dict(results_file_name)
         except ValueError:
@@ -134,26 +136,32 @@ class Controller(object):
                              .format(results_file_name, ocount))
             sys.exit(1)
 
+        # Calculate metrics values
+        metrics_calc = MetricsCalculator(processor)
         metrics_value = metrics_calc.calculate_metrics(events)
 
         # Show breakdown output
         if table_format:
-            table = BreakdownTable(metrics_value)
+            table = MetricsTable(metrics_value)
             table.print_table()
         else:
             tree = BreakdownTree(metrics_calc.get_raw_metrics(), metrics_value)
             tree.print_tree()
 
-    @classmethod
-    def __run_drilldown(cls, event, binary_path, binary_args):
+        # Show events values
+        if show_events:
+            events_table = EventsTable(events)
+            events_table.print_table()
+
+    def __run_drilldown(self, event):
         """ Run the drilldown feature """
         operf = "operf"
         opreport = "opreport"
         processor = core.get_processor()
         core.supported_feature(processor, "Drilldown")
 
-        if not os.path.isfile(binary_path):
-            sys.stderr.write(binary_path + ' binary file not found\n')
+        if not os.path.isfile(self.__binary_path):
+            sys.stderr.write(self.__binary_path + ' binary file not found\n')
             sys.exit(1)
 
         if not core.cmdexists(operf):
@@ -171,8 +179,10 @@ class Controller(object):
             sys.exit(1)
 
         # Run operf command
-        event_min_count = str(reader.get_event_mincount(event))
-        operf_cmd = operf + " -e {0}:{1} {2} {3}".format(event, event_min_count, binary_path, binary_args)
+        min_count = str(reader.get_event_mincount(event))
+        operf_cmd = operf + " -e {0}:{1} {2} {3}".format(event, min_count,
+                                                         self.__binary_path,
+                                                         self.__binary_args)
         status = core.execute(operf_cmd)
         if status != 0:
             sys.stderr.write("Failed to run {0} command.\n".format(operf) +
@@ -194,8 +204,7 @@ class Controller(object):
         drilldown_view = DrilldownView()
         drilldown_view.print_drilldown(event, report_file)
 
-    @classmethod
-    def __run_compare(cls, file_names, sort_opt):
+    def __run_compare(self, file_names, sort_opt):
         """ Get the contents of two ocount output files, compare their results
         and display in a table """
         dict_list = []
@@ -220,15 +229,14 @@ class Controller(object):
             comparator = Comparator(dict_list)
             final_array = comparator.compare()
         except (KeyError, ValueError):
-            sys.stderr.write("Could not perform the comparison between files.\n"
-                             "Select properly formatted files and run the "
+            sys.stderr.write("Could not perform the comparison between files."
+                             "\nSelect properly formatted files and run the "
                              "compare feature again.\n")
             sys.exit(1)
 
         table_creator.create_table(file_names, final_array, sort_opt)
 
-    @classmethod
-    def __show_info(cls, event_info):
+    def __show_info(self, event_info):
         """ Display information about an event (event_info) """
         ih = info_handler.InfoHandler(event_info)
         ih.show_events_info(event_info)

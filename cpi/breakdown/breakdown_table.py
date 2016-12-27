@@ -23,7 +23,7 @@ limitations under the License.
 from terminaltables import AsciiTable
 
 
-class BreakdownTable(object):
+class MetricsTable(object):
     """ Print the CPI Breakdown in table format """
 
     def __init__(self, metrics_values):
@@ -35,3 +35,21 @@ class BreakdownTable(object):
             met_table.append(row)
         met_tab = AsciiTable(met_table)
         print met_tab.table
+
+
+class EventsTable(object):
+    """ Print the events values in table format """
+
+    def __init__(self, events_values_dict):
+        self.events_values_dict = events_values_dict
+
+    def print_table(self):
+        title = "Events Values"
+        event_table = [['Event', 'Value']]
+
+        events_values = self.events_values_dict.items()
+        for row in events_values:
+            event_table.append(row)
+        e_table = AsciiTable(event_table, title)
+        print "\n"
+        print e_table.table

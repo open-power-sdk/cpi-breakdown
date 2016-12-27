@@ -90,12 +90,18 @@ def main(argv=None):
             action='store_true',
             help="show the breakdown model in a table format")
         parser_execution.add_argument(
+            '--events-values',
+            dest='show_events',
+            action='store_true',
+            help="show the events used to calculate the breakdown model and \n"
+                 "its values")
+        parser_execution.add_argument(
             '-b', '--binary',
             dest='binary_path',
             type=str, default='',
             required=True,
-            help="specify the path to the application binary and its\n"
-                 "arguments which are between single quotes")
+            help="path to the application binary and its arguments \n"
+                 "inside quotes")
 
         # Drilldown
         parser_drilldown = subparsers.add_parser(
@@ -118,8 +124,8 @@ def main(argv=None):
             type=str,
             default='',
             required=True,
-            help="specify the path to the application binary and its\n"
-                 "arguments which are between single quotes")
+            help="path to the application binary and its arguments \n"
+                 "inside quotes")
 
         # Compare
         parser_compare = subparsers.add_parser(
