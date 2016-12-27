@@ -186,8 +186,8 @@ class Controller(object):
         status = core.execute(operf_cmd)
         if status != 0:
             sys.stderr.write("Failed to run {0} command.\n".format(operf) +
-                             "For more information check the error message \
-                             above\n")
+                             "For more information check the error message "\
+                             "above\n")
             sys.exit(1)
 
         # Run opreport command
@@ -197,8 +197,8 @@ class Controller(object):
         status = core.execute(opreport_cmd)
         if status != 0:
             sys.stderr.write("Failed to run {0} command.\n".format(opreport) +
-                             "For more information check the error message \
-                             above\n")
+                             "For more information check the error message "\
+                             "above\n")
             sys.exit(1)
 
         drilldown_view = DrilldownView()
