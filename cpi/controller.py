@@ -32,6 +32,7 @@ import events_reader
 from breakdown.breakdown_tree import BreakdownTree
 from breakdown.breakdown_table import *
 from drilldown.drilldown_view import DrilldownView
+import drilldown.drilldown_core as drilldown_core
 from info import info_handler
 from metrics_calculator import MetricsCalculator
 from compare import table_creator
@@ -48,7 +49,11 @@ class Controller(object):
 
     def run(self, args, application_args):
         """
-        Executes the correct action according the user input
+        Executes the correct action according the user input.
+
+        Parameters:
+            args - arguments collected by argparser
+            application_args - the application binary arguments
         """
         try:
             self.__binary_path = args.binary_path
@@ -62,17 +67,26 @@ class Controller(object):
             self.__run_compare(args.cpi_files, args.sort_opt)
         # Run drilldown
         elif 'event_name' in args:
-            self.__run_drilldown(args.event_name[0])
+            self.__run_drilldown(args.event_name)
         # Run info
         elif 'event_info' in args:
             self.__show_info(args.event_info[0])
         # Run breakdown
         else:
-            self.__run_cpi(args.output_path, args.table_format,
+            self.__run_cpi(args.output_path, True, args.table_format,
                            args.show_events)
 
-    def __run_cpi(self, output_location, table_format, show_events):
-        """ Run the breakdown feature """
+    def __run_cpi(self, output_location, show_breakdown, table_format,
+                  show_events):
+        """ Run the breakdown feature and return a formatted events file
+        with .cpi extension
+
+        Parameters:
+            output_location - the path where the cpi file will be generated
+            show_breakdown - if should show the breakdown model
+            table_format - if should show the breakdown in a table format
+            show_events - if should show the events values
+        """
         processor = core.get_processor()
         ocount = "ocount"
         core.supported_feature(processor, "Breakdown")
@@ -129,6 +143,9 @@ class Controller(object):
 
         try:
             events = core.file_to_dict(results_file_name)
+        except IOError:
+            sys.stderr.write(results_file_name + " file not found\n")
+            sys.exit(1)
         except ValueError:
             sys.stderr.write("File {} was not correctly formatted.\n"
                              "{} may have failed when generating the report "
@@ -140,23 +157,29 @@ class Controller(object):
         metrics_calc = MetricsCalculator(processor)
         metrics_value = metrics_calc.calculate_metrics(events)
 
-        # Show breakdown output
-        if table_format:
-            table = MetricsTable(metrics_value)
-            table.print_table()
-        else:
-            tree = BreakdownTree(metrics_calc.get_raw_metrics(), metrics_value)
-            tree.print_tree()
+        # Show breakdown model
+        if show_breakdown:
+            if table_format:
+                table = MetricsTable(metrics_value)
+                table.print_table()
+            else:
+                tree = BreakdownTree(metrics_calc.get_raw_metrics(),
+                                     metrics_value)
+                tree.print_tree()
 
         # Show events values
         if show_events:
             events_table = EventsTable(events)
             events_table.print_table()
 
+        return results_file_name
+
     def __run_drilldown(self, event):
-        """ Run the drilldown feature """
-        operf = "operf"
-        opreport = "opreport"
+        """ Run the drilldown feature
+
+        Parameters:
+            event - the event to be used in drilldown
+        """
         processor = core.get_processor()
         core.supported_feature(processor, "Drilldown")
 
@@ -164,60 +187,56 @@ class Controller(object):
             sys.stderr.write(self.__binary_path + ' binary file not found\n')
             sys.exit(1)
 
+        operf = drilldown_core.OPERF
         if not core.cmdexists(operf):
             sys.stderr.write(operf + " is not installed in the system. " +
                              "Install oprofile before continue." + "\n")
             sys.exit(2)
 
+        events = {event: '0'}
+        events = drilldown_core.sort_events(events)
         reader = events_reader.EventsReader(processor)
+        # Run drilldown with chosen events
+        for element in events:
+            event = element[0]
+            # Event is not supported with drilldown feature
+            if not reader.valid_event(event):
+                sys.stderr.write("Event {0} is not supported by drilldown \
+                                 feature.".format(event) +
+                                 "\nChoose a supported event and try again\n")
+                sys.exit(1)
 
-        # Event is not supported with drilldown feature
-        if not reader.valid_event(event):
-            sys.stderr.write("Event {0} is not supported by drilldown \
-                             feature.".format(event) +
-                             "\nChoose a supported event and try again\n")
-            sys.exit(1)
+            # Run operf
+            min_count = str(reader.get_event_mincount(event))
+            drilldown_core.run_operf(self.__binary_path, self.__binary_args,
+                                     event, min_count)
+            # Run opreport
+            report_file = "opreport.xml"
+            drilldown_core.run_opreport(event, report_file)
 
-        # Run operf command
-        min_count = str(reader.get_event_mincount(event))
-        operf_cmd = operf + " -e {0}:{1} {2} {3}".format(event, min_count,
-                                                         self.__binary_path,
-                                                         self.__binary_args)
-        status = core.execute(operf_cmd)
-        if status != 0:
-            sys.stderr.write("Failed to run {0} command.\n".format(operf) +
-                             "For more information check the error message "\
-                             "above\n")
-            sys.exit(1)
-
-        # Run opreport command
-        report_file = "opreport.xml"
-        opreport_cmd = opreport + " --debug-info --symbols --details "
-        opreport_cmd += "--xml event:{0} -o {1}".format(event, report_file)
-        status = core.execute(opreport_cmd)
-        if status != 0:
-            sys.stderr.write("Failed to run {0} command.\n".format(opreport) +
-                             "For more information check the error message "\
-                             "above\n")
-            sys.exit(1)
-
-        drilldown_view = DrilldownView()
-        drilldown_view.print_drilldown(event, report_file)
+            # Run drilldown
+            drilldown_view = DrilldownView()
+            drilldown_view.print_drilldown(event, report_file)
 
     def __run_compare(self, file_names, sort_opt):
         """ Get the contents of two ocount output files, compare their results
-        and display in a table """
+        and display in a table
+
+        Parameters:
+            file_names - cpi formatted file names
+            sort_opt - if should sort the compare
+        """
         dict_list = []
         final_array = []
 
         # Create a list with two dictionaries containing "event:value" pairs
         for file_name in file_names:
-            if not os.path.isfile(file_name):
-                print file_name + ' file not found\n'
-                return final_array
             try:
                 dict_i = core.file_to_dict(file_name)
                 dict_list.append(dict_i)
+            except IOError:
+                sys.stderr.write(file_name + " file not found")
+                sys.exit(1)
             except ValueError:
                 sys.stderr.write("Could not parse {} file.\n"
                                  "Select a properly formatted file and run "

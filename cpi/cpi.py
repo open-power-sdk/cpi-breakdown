@@ -110,13 +110,12 @@ def main(argv=None):
             help="perform a drilldown execution for a specific event\n"
                  "e.g: cpi drilldown -e <event> -b <binary> '<binary_args>'\n"
                  "see cpi drilldown --help\n\n")
-        parser_drilldown.add_argument(
+        drilldown_group = parser_drilldown.add_mutually_exclusive_group(
+            required=True)
+        drilldown_group.add_argument(
             '-e', '--event',
             dest='event_name',
             type=str,
-            default='',
-            nargs=1,
-            required=True,
             help="specify the event that will be used for drilldown")
         parser_drilldown.add_argument(
             '-b', '--binary',
