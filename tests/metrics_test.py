@@ -26,7 +26,6 @@ import re
 
 from cpi.metrics_calculator import MetricsCalculator
 
-
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -75,7 +74,8 @@ class MetricsCalculationTests(unittest.TestCase):
 
         for parameter in calc_function:
             if parameter in parsed_output:
-                calc_function[calc_function.index(parameter)] = parsed_output.get(parameter)[0]
+                calc_function[calc_function.index(parameter)] = \
+                    parsed_output.get(parameter)[0]
         metric = ''.join(calc_function)
         metric_result = eval(metric)
         self.assertTrue(metric_result == -4)
@@ -86,7 +86,6 @@ class MetricsCalculationTests(unittest.TestCase):
         with self.assertRaises(SystemExit) as exit_status:
             metrics = MetricsCalculator("POWER7")
         self.assertEqual(exit_status.exception.code, 1)
-
 
 if __name__ == '__main__':
     unittest.main()

@@ -29,12 +29,13 @@ import errno
 
 import core
 import events_reader
+import metrics_calculator
+from info.info_handler import InfoHandler
 from breakdown.breakdown_tree import BreakdownTree
-from breakdown.breakdown_table import *
+from breakdown.breakdown_table import MetricsTable
+from breakdown.breakdown_table import EventsTable
 from drilldown.drilldown_view import DrilldownView
 import drilldown.drilldown_core as drilldown_core
-from info import info_handler
-from metrics_calculator import MetricsCalculator
 from compare import table_creator
 from compare.comparator import Comparator
 
@@ -69,8 +70,8 @@ class Controller(object):
         elif 'event_name' in args:
             self.__run_drilldown(args.event_name)
         # Run info
-        elif 'event_info' in args:
-            self.__show_info(args.event_info[0])
+        elif 'occurrence_info' in args:
+            self.__show_info(args.occurrence_info[0])
         # Run breakdown
         else:
             self.__run_cpi(args.output_path, True, args.table_format,
@@ -154,7 +155,7 @@ class Controller(object):
             sys.exit(1)
 
         # Calculate metrics values
-        metrics_calc = MetricsCalculator(processor)
+        metrics_calc = metrics_calculator.MetricsCalculator(processor)
         metrics_value = metrics_calc.calculate_metrics(events)
 
         # Show breakdown model
@@ -255,8 +256,8 @@ class Controller(object):
 
         table_creator.create_table(file_names, final_array, sort_opt)
 
-    def __show_info(self, event_info):
-        """ Display information about an event (event_info) """
-        ih = info_handler.InfoHandler(event_info)
-        ih.show_events_info(event_info)
+    def __show_info(self, ocurrence):
+        """ Display information about an ocurrence (event or metric) """
+        ih = InfoHandler()
+        ih.show_info(ocurrence)
         return 0
