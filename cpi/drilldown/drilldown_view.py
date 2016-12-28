@@ -34,20 +34,27 @@ class DrilldownView:
         drilldown_model = DrilldownModel()
         ui_binmodule_list = drilldown_model.create_drilldown_model(report_file)
 
-        self.print_logo(event)
+        title = "Drilldown for event: " + event
+        border = self.__get_border(title)
+        self.__print_logo(title, border)
+
         for ui_binmodule in ui_binmodule_list:
             print ui_binmodule.get_text()
             for ui_symbol in ui_binmodule.get_symbols_list():
                 print TABULATION + ui_symbol.get_text()
                 for ui_sample in ui_symbol.get_samples_list():
                     print TABULATION + TABULATION + ui_sample.get_text()
-            print ""
+            if ui_binmodule is not ui_binmodule_list[-1]:
+                print ""
+        print border + "\n"
 
-    def print_logo(self, event):
+    def __print_logo(self, title, border):
         """ Print the drilldown logo """
-        text = "Drilldown for event: " + event
-        border = "=" * len(text)
         print "\n\n"
         print border
-        print text
+        print title
         print border
+
+    def __get_border(self, title):
+        """ Get the border """
+        return "=" * len(title)

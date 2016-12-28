@@ -100,13 +100,15 @@ def file_to_dict(filename):
     The file should be in format: event_name : envent_value
     """
     dictionary = {}
-    with open(filename, "r") as f:
-        try:
+    try:
+        with open(filename, "r") as f:
             for line in f:
                 k, v = line.strip().split(" : ")
                 dictionary[k] = v
-        except ValueError:
-            raise ValueError
+    except ValueError:
+        raise ValueError
+    except IOError:
+        raise IOError
     return dictionary
 
 
