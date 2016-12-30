@@ -118,6 +118,13 @@ def main(argv=None):
             type=str,
             help="specify the event that will be used for drilldown")
         parser_drilldown.add_argument(
+            '-t', '--threshold',
+            dest='threshold',
+            metavar='VALUE',
+            type=int,
+            help="do not display drilldown for first-level groups less \n"
+                  "than x%%")
+        parser_drilldown.add_argument(
             '-b', '--binary',
             dest='binary_path',
             type=str,

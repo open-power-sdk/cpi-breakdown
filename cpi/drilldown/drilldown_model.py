@@ -113,6 +113,9 @@ class UiBinModule:
         text = str(self.percentage) + "% in " + self.name
         return text
 
+    def get_percentage(self):
+        return self.percentage
+
     def __lt__(self, other):
         """ Sort list ascending by percentage """
         return self.percentage > other.percentage

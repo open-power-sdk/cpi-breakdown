@@ -216,7 +216,7 @@ class Controller(object):
 
             # Run drilldown
             drilldown_view = DrilldownView()
-            drilldown_view.print_drilldown(event, report_file)
+            drilldown_view.print_drilldown(event, report_file, threshold)
 
     def __run_compare(self, file_names, sort_opt):
         """ Get the contents of two ocount output files, compare their results
