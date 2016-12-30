@@ -131,6 +131,13 @@ def main(argv=None):
             help="allow auto-drilldown to consume events from a previously\n"
                  "generated .cpi file")
         parser_drilldown.add_argument(
+            '-t', '--threshold',
+            dest='threshold',
+            metavar='VALUE',
+            type=int,
+            help="do not display drilldown for first-level groups less \n"
+                  "than x%%")
+        parser_drilldown.add_argument(
             '-b', '--binary',
             dest='binary_path',
             type=str,

@@ -68,7 +68,7 @@ class Controller(object):
         # Run drilldown
         elif 'event_name' in args:
             self.__run_drilldown(args.event_name, args.autodrilldown,
-                                 args.autodrilldown_file)
+                                 args.autodrilldown_file, args.threshold)
         # Run info
         elif 'event_info' in args:
             self.__show_info(args.event_info[0])
@@ -175,7 +175,8 @@ class Controller(object):
 
         return results_file_name
 
-    def __run_drilldown(self, event, autodrilldown, autodrilldown_file):
+    def __run_drilldown(self, event, autodrilldown, autodrilldown_file,
+                        threshold):
         """ Run the drilldown feature
 
         Parameters:
@@ -183,6 +184,7 @@ class Controller(object):
             autodrilldown - run autodrilldown in top 'n' events
             autodrilldown_file - run the autodrilldown using values from a
                                 generated file
+            threshold - the threshold value to show groups
         """
         processor = core.get_processor()
         core.supported_feature(processor, "Drilldown")
@@ -245,7 +247,7 @@ class Controller(object):
 
             # Run drilldown
             drilldown_view = DrilldownView()
-            drilldown_view.print_drilldown(event, report_file)
+            drilldown_view.print_drilldown(event, report_file, threshold)
 
     def __run_compare(self, file_names, sort_opt):
         """ Get the contents of two ocount output files, compare their results

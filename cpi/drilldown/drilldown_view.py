@@ -29,7 +29,7 @@ TABULATION = "    "
 class DrilldownView:
     """ This class represents the drilldown view """
 
-    def print_drilldown(self, event, report_file):
+    def print_drilldown(self, event, report_file, threshold):
         """ Print the drilldown view based on drilldown model """
         drilldown_model = DrilldownModel()
         ui_binmodule_list = drilldown_model.create_drilldown_model(report_file)
@@ -39,13 +39,17 @@ class DrilldownView:
         self.__print_logo(title, border)
 
         for ui_binmodule in ui_binmodule_list:
+            # Do not print values smaller than the threshold value
+            if ui_binmodule.get_percentage() < threshold:
+                continue
+            # If not the first element, print a new line
+            if ui_binmodule is not ui_binmodule_list[0]:
+                print ""
             print ui_binmodule.get_text()
             for ui_symbol in ui_binmodule.get_symbols_list():
                 print TABULATION + ui_symbol.get_text()
                 for ui_sample in ui_symbol.get_samples_list():
                     print TABULATION + TABULATION + ui_sample.get_text()
-            if ui_binmodule is not ui_binmodule_list[-1]:
-                print ""
         print border + "\n"
 
     def __print_logo(self, title, border):
