@@ -28,11 +28,9 @@ class InfoHandlerTest(unittest.TestCase):
     '''
     Test cases for InfoHandler
     '''
-    VALID_METRIC = "RUN_CPI"
-    INVALID_METRIC = "FOO_BAR"
+    VALID_METRIC = ["RUN_CPI"]
+    INVALID_METRIC = ["FOO_BAR"]
     DESCRIPTION = "Run cycles per run instruction"
-    COMPONENTS = "STALL_CPI, NTCG_ALL_FIN_CPI, THREAD_BLOCK_STALL_CPI, \
-GCT_EMPTY_CPI, COMPLETION_CPI, OTHER_CPI"
     FORMULA = "PM_RUN_CYC / PM_RUN_INST_CMPL"
 
     ih = InfoHandler()
@@ -40,38 +38,40 @@ GCT_EMPTY_CPI, COMPLETION_CPI, OTHER_CPI"
     def show_info_test(self):
         """ Test show_info method """
         with self.assertRaises(SystemExit) as cm:
-            self.ih.show_info(self.VALID_METRIC)
+            self.ih.show_info(self.VALID_METRIC, False)
         self.assertEqual(cm.exception.code, 0)
 
         with self.assertRaises(SystemExit) as cm:
-            self.ih.show_info(self.INVALID_METRIC)
+            self.ih.show_info(self.INVALID_METRIC, False)
         self.assertEqual(cm.exception.code, 1)
+
+    def show_all_test(self):
+        """ Test show_all method """
+        with self.assertRaises(SystemExit) as cm:
+            self.ih.show_info(self.VALID_METRIC, True)
+        self.assertEqual(cm.exception.code, 0)
 
     def get_metric_name_test(self):
         """ Test if correctly displaying metric name """
-        self.assertEquals(self.VALID_METRIC,
-                          self.ih.get_metric_name(self.VALID_METRIC))
-        self.assertEquals(None, self.ih.get_metric_name(self.INVALID_METRIC))
+        self.assertEquals(self.VALID_METRIC[0],
+                          self.ih.get_metric_name(self.VALID_METRIC[0]))
+        self.assertEquals(None,
+                          self.ih.get_metric_name(self.INVALID_METRIC[0]))
 
     def get_metric_formula_test(self):
         """ Test if correctly displaying metric formula """
         self.assertEquals(self.FORMULA,
-                          self.ih.get_metric_formula(self.VALID_METRIC))
-        self.assertEquals(None, self.ih.get_metric_formula(self.INVALID_METRIC))
-
-    def get_metric_components_test(self):
-        """ Test if correctly displaying metric components """
-        self.assertEquals(self.COMPONENTS,
-                          self.ih.get_metric_components(self.VALID_METRIC))
+                          self.ih.get_metric_formula(self.VALID_METRIC[0]))
         self.assertEquals(None,
-                          self.ih.get_metric_components(self.INVALID_METRIC))
+                          self.ih.get_metric_formula(self.INVALID_METRIC[0]))
 
     def get_metric_description_test(self):
         """ Test if correctly displaying metric description """
         self.assertEquals(self.DESCRIPTION,
-                          self.ih.get_metric_description(self.VALID_METRIC))
+                          self.ih.get_metric_description(self.VALID_METRIC[0]))
         self.assertEquals(None,
-                          self.ih.get_metric_description(self.INVALID_METRIC))
+                          self.ih.get_metric_description(self.INVALID_METRIC[0]
+                                                         ))
 
 if __name__ == '__main__':
     unittest.main()

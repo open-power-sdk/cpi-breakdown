@@ -71,7 +71,7 @@ class Controller(object):
             self.__run_drilldown(args.event_name)
         # Run info
         elif 'occurrence_info' in args:
-            self.__show_info(args.occurrence_info[0])
+            self.__show_info(args.occurrence_info, args.all_opt)
         # Run breakdown
         else:
             self.__run_cpi(args.output_path, True, args.table_format,
@@ -261,8 +261,8 @@ class Controller(object):
         else:
             compare_view.create_table(file_names)
 
-    def __show_info(self, ocurrence):
+    def __show_info(self, occurrence, all_opt):
         """ Display information about an ocurrence (event or metric) """
         ih = InfoHandler()
-        ih.show_info(ocurrence)
+        ih.show_info(occurrence, all_opt)
         return 0

@@ -173,14 +173,22 @@ def main(argv=None):
             'info',
             formatter_class=argparse.RawTextHelpFormatter,
             help='show information about <EVENT|METRIC>.\nsee cpi info --help')
-        parser_info.add_argument(
+        info_group = parser_info.add_mutually_exclusive_group(
+            required=True)
+        info_group.add_argument(
             '-e', '--element',
             dest='occurrence_info',
             type=str,
-            required=True,
-            metavar='EVENT|METRIC',
+            metavar='EVENT/METRIC',
+            default='',
             nargs=1,
             help='display information about <EVENT|METRIC>')
+        info_group.add_argument(
+            '-a', '--all',
+            dest='all_opt',
+            action='store_true',
+            help='Show information for all ocurrences supported by CPI'
+        )
 
         # Process arguments
         args, application_args = parser.parse_known_args()
