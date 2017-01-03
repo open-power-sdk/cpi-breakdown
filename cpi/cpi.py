@@ -163,10 +163,17 @@ def main(argv=None):
             required=True,
             metavar=('FILE_1', 'FILE_2'),
             help="specify the files to execute the comparation")
-        parser_compare.add_argument('--sort',
-                                    dest="sort_opt",
-                                    action='store_true',
-                                    help="sort values by percentage")
+        parser_compare.add_argument(
+            '-s', '--sort',
+            dest="sort_opt",
+            action='store_true',
+            help="sort values by percentage")
+        parser_compare.add_argument(
+            '-c', '--csv',
+            dest="csv",
+            action='store_true',
+            help="save the compare output in a csv file")
+
         # Show_info
         parser_info = subparsers.add_parser(
             'info',

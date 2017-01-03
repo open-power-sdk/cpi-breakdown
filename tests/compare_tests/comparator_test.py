@@ -28,8 +28,8 @@ class ComparatorTests(unittest.TestCase):
     """ Class to run tests from comparator """
 
     # Correct dict_list
-    dict_list1 = [{"event1": "100", "event2": "200"},
-                  {"event1": "200", "event2": "400"}]
+    dict_list1 = [{"event1": "100", "event2": "300", "event3": "100"},
+                  {"event1": "200", "event2": "400", "event3": "1000"}]
 
     # event1 is different from event10 in second dictionary
     dict_list2 = [{"event1": "100", "event2": "200"},
@@ -42,25 +42,35 @@ class ComparatorTests(unittest.TestCase):
     def test_create_dict(self):
         comparator = Comparator(self.dict_list1)
 
+        # Test with invalid event match
         with self.assertRaises(KeyError):
             comparator = Comparator(self.dict_list2)
 
-    def test_comparison(self):
+    def test_compare(self):
         comparator = Comparator(self.dict_list1)
-        list1 = comparator.compare()
-        self.assertEqual(2, len(list1))
 
+        # Test events
+        list1 = comparator.compare(False)
+        self.assertEqual(3, len(list1))
         # Get first internal list
         l = list1[0]
         self.assertEqual(4, len(l))
         self.assertEqual("event2", l[0])
-        self.assertEqual(200, l[1])
+        self.assertEqual(300, l[1])
         self.assertEqual(400, l[2])
-        self.assertEqual(100.00, l[3])
+        self.assertEqual(33.33, l[3])
 
+        # Test with events sorted
+        list1 = comparator.compare(True)
+        self.assertEqual(3, len(list1))
+        self.assertEqual("event3", list1[0][0])
+        self.assertEqual("event1", list1[1][0])
+        self.assertEqual("event2", list1[2][0])
+
+        # Test with invalid value
         with self.assertRaises(ValueError):
             comparator = Comparator(self.dict_list3)
-            comparator.compare()
+            comparator.compare(False)
 
 if __name__ == '__main__':
     unittest.main()
