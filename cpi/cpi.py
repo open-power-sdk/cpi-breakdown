@@ -171,15 +171,15 @@ def main(argv=None):
         parser_info = subparsers.add_parser(
             'info',
             formatter_class=argparse.RawTextHelpFormatter,
-            help='show information about <event>.\nsee cpi info <event>')
+            help='show information about <EVENT|METRIC>.\nsee cpi info --help')
         parser_info.add_argument(
-            '-e', '--event',
-            dest='event_info',
+            '-e', '--element',
+            dest='occurrence_info',
             type=str,
             required=True,
-            metavar='EVENT_NAME',
+            metavar='EVENT|METRIC',
             nargs=1,
-            help='display information about <EVENT>')
+            help='display information about <EVENT|METRIC>')
 
         # Process arguments
         args, application_args = parser.parse_known_args()
