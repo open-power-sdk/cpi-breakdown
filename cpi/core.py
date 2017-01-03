@@ -26,6 +26,7 @@ import subprocess
 import commands
 import time
 import re
+import csv
 
 # List with supported processors for hardware dependent cpi features
 SUPPORTED_PROCESSORS = ["POWER8"]
@@ -88,6 +89,17 @@ def parse_file(output_stream_file, parsed_file):
                 with open(parsed_file, "a+") as ff:
                     ff.write(line.split(",")[0] + " : ")
                     ff.write(line.split(",")[1] + "\n")
+
+
+def create_csv_file(file_name, values_list):
+    """ Create a csv file using values from a list of lists and return the
+    path where file was created """
+    with open(file_name, 'w') as csvfile:
+        path = os.path.realpath(csvfile.name)
+        writer = csv.writer(csvfile)
+        for item in values_list:
+            writer.writerow(item)
+    return path
 
 
 def get_timestamp():

@@ -41,7 +41,7 @@ class Comparator:
         except KeyError:
             raise KeyError
 
-    def compare(self):
+    def compare(self, sort):
         """ Calculate the percentage from dictionary values and return a list
         of lists composed by: event_name, init_value, final_value and
         percentage"""
@@ -62,4 +62,8 @@ class Comparator:
                 percentage = "n/a"
             final_array.append([key, init_value, final_value,
                                 float(percentage)])
+
+        # If should short the final list
+        if sort:
+            final_array = sorted(final_array, key=lambda x: x[3], reverse=True)
         return final_array

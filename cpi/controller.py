@@ -36,7 +36,7 @@ from breakdown.breakdown_table import MetricsTable
 from breakdown.breakdown_table import EventsTable
 from drilldown.drilldown_view import DrilldownView
 import drilldown.drilldown_core as drilldown_core
-from compare import table_creator
+from compare.compare_view import CompareView
 from compare.comparator import Comparator
 
 
@@ -65,7 +65,7 @@ class Controller(object):
 
         # Run compare
         if 'cpi_files' in args:
-            self.__run_compare(args.cpi_files, args.sort_opt)
+            self.__run_compare(args.cpi_files, args.sort_opt, args.csv)
         # Run drilldown
         elif 'event_name' in args:
             self.__run_drilldown(args.event_name)
@@ -219,13 +219,14 @@ class Controller(object):
             drilldown_view = DrilldownView()
             drilldown_view.print_drilldown(event, report_file, threshold)
 
-    def __run_compare(self, file_names, sort_opt):
+    def __run_compare(self, file_names, sort_opt, csv_file):
         """ Get the contents of two ocount output files, compare their results
         and display in a table
 
         Parameters:
             file_names - cpi formatted file names
             sort_opt - if should sort the compare
+            csv_file - if should redirect the comparison result to a csv file
         """
         dict_list = []
         final_array = []
@@ -247,14 +248,18 @@ class Controller(object):
 
         try:
             comparator = Comparator(dict_list)
-            final_array = comparator.compare()
+            final_array = comparator.compare(sort_opt)
         except (KeyError, ValueError):
             sys.stderr.write("Could not perform the comparison between files."
                              "\nSelect properly formatted files and run the "
                              "compare feature again.\n")
             sys.exit(1)
 
-        table_creator.create_table(file_names, final_array, sort_opt)
+        compare_view = CompareView(final_array)
+        if csv_file:
+            compare_view.save_to_file("cpi_compare.csv")
+        else:
+            compare_view.create_table(file_names)
 
     def __show_info(self, ocurrence):
         """ Display information about an ocurrence (event or metric) """
