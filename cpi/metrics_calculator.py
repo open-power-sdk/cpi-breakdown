@@ -107,7 +107,7 @@ class MetricsCalculator(object):
                     metric_result = eval(metric)
                     result_tmp.append(group["NAME"])
                     if metric_result > 0:
-                        result_tmp.append("%.5f" % metric_result)
+                        result_tmp.append("%.3f" % metric_result)
                         result_tmp.append("%.2f" % eval('(float(metric_result) / (float(parsed_output.get(\'PM_RUN_CYC\'))/float(parsed_output.get(\'PM_RUN_INST_CMPL\'))))*100'))
                     else:
                         result_tmp.append(0)
