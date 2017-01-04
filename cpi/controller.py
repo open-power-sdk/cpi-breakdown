@@ -34,6 +34,7 @@ from info.info_handler import InfoHandler
 from breakdown.breakdown_tree import BreakdownTree
 from breakdown.breakdown_table import MetricsTable
 from breakdown.breakdown_table import EventsTable
+from breakdown.breakdown_hotspots import HotSpots
 from drilldown.drilldown_view import DrilldownView
 import drilldown.drilldown_core as drilldown_core
 from compare.compare_view import CompareView
@@ -75,10 +76,10 @@ class Controller(object):
         # Run breakdown
         else:
             self.__run_cpi(args.output_path, True, args.table_format,
-                           args.show_events)
+                           args.show_events, args.hot_spots)
 
     def __run_cpi(self, output_location, show_breakdown, table_format,
-                  show_events):
+                  show_events, hot_spots):
         """ Run the breakdown feature and return a formatted events file
         with .cpi extension
 
@@ -87,6 +88,7 @@ class Controller(object):
             show_breakdown - if should show the breakdown model
             table_format - if should show the breakdown in a table format
             show_events - if should show the events values
+            hot_spots - if should show hot spots for top 'n' events and metrics
         """
         processor = core.get_processor()
         ocount = "ocount"
@@ -172,6 +174,11 @@ class Controller(object):
         if show_events:
             events_table = EventsTable(events)
             events_table.print_table()
+
+        # Show events and metrics hot spots
+        if hot_spots:
+            hs = HotSpots(hot_spots, metrics_value, events)
+            hs.print_hotspots()
 
         return results_file_name
 

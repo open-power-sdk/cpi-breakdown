@@ -96,6 +96,12 @@ def main(argv=None):
             help="show the events used to calculate the breakdown model and \n"
                  "its values")
         parser_execution.add_argument(
+            '-H', '--hot-spots',
+            dest='hot_spots',
+            metavar='VALUE',
+            type=int,
+            help="show top 'n' events and metrics values")
+        parser_execution.add_argument(
             '-b', '--binary',
             dest='binary_path',
             type=str, default='',
