@@ -73,7 +73,8 @@ class Controller(object):
                                  args.autodrilldown_file, args.threshold)
         # Run info
         elif 'occurrence_info' in args:
-            self.__show_info(args.occurrence_info, args.all_opt)
+            self.__show_info(args.occurrence_info, args.all_events_opt,
+                             args.all_metrics_opt, args.all_opt)
         # Run breakdown
         else:
             self.__run_cpi(args.output_path, True, args.table_format,
@@ -299,8 +300,9 @@ class Controller(object):
         else:
             compare_view.create_table(file_names)
 
-    def __show_info(self, occurrence, all_opt):
+    def __show_info(self, occurrence, all_events_opt,
+                    all_metrics_opt, all_opt):
         """ Display information about an ocurrence (event or metric) """
         ih = InfoHandler()
-        ih.show_info(occurrence, all_opt)
+        ih.show_info(occurrence, all_events_opt, all_metrics_opt, all_opt)
         return 0

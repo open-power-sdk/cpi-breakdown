@@ -199,8 +199,17 @@ def main(argv=None):
             '-a', '--all',
             dest='all_opt',
             action='store_true',
-            help='Show information for all ocurrences supported by CPI'
-        )
+            help='show information for all ocurrences supported by CPI')
+        info_group.add_argument(
+            '--all-events',
+            dest='all_events_opt',
+            action='store_true',
+            help='show all events supported by cpi')
+        info_group.add_argument(
+            '--all-metrics',
+            dest='all_metrics_opt',
+            action='store_true',
+            help='show all metrics supported by cpi')
 
         # Process arguments
         args, application_args = parser.parse_known_args()
