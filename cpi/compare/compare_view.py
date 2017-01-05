@@ -35,7 +35,7 @@ class CompareView:
     def create_table(self, file_names):
         """ Create a table with comparison two output files """
         title = "Comparison Table"
-        print "\nComparing file_names:"
+        print "\nComparing file names:"
         print "FILE 1 = %s\nFILE 2 = %s" % (file_names[0], file_names[1])
         print "\nNOTE:\nA raise in number of all events represent a decrease in "\
               "the \nperformance of the application. Therefore, the smallest the "\
