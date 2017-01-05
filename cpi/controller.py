@@ -209,7 +209,7 @@ class Controller(object):
 
         # Running autodrilldown generating a .cpi file
         if autodrilldown and not autodrilldown_file:
-            events_file = self.__run_cpi(None, False, False, False)
+            events_file = self.__run_cpi(None, False, False, False, None)
         # Running autodrilldown using an already created file
         elif autodrilldown and autodrilldown_file:
             events_file = autodrilldown_file
