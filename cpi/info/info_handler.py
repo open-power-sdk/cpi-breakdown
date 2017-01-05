@@ -57,10 +57,19 @@ class InfoHandler(object):
         self.events_list = self.__get_events_list(event_names)
         self.metrics_list = self.__get_metrics_list()
 
-    def show_info(self, occurrence_item, all_opt):
+    def show_info(self, occurrence_item, all_events_opt, all_metrics_opt,
+                  all_opt):
         """ Calls the proper function to display event or metric info """
         if all_opt:
             self.__show_all()
+            sys.exit(0)
+
+        if all_events_opt:
+            self.__show_all_events()
+            sys.exit(0)
+
+        if all_metrics_opt:
+            self.__show_all_metrics()
             sys.exit(0)
 
         occurrence = occurrence_item[0]
@@ -73,15 +82,22 @@ class InfoHandler(object):
             sys.exit(1)
         sys.exit(0)
 
-    def __show_all(self):
-        """ Show information of all resources (metrics and events) """
-        for event in self.events_list:
-            self.__print_events_info(event)
-            print "\n"
+    def __show_all_metrics(self):
+        """ Show all metrics supported by CPI """
         for obj in self.metrics_list:
             self.__print_metrics_info(obj.get_name())
             print "\n"
-        return 0
+
+    def __show_all_events(self):
+        """ Show all events supported by CPI """
+        for event in self.events_list:
+            self.__print_events_info(event)
+            print "\n"
+
+    def __show_all(self):
+        """ Show information of all resources (metrics and events) """
+        self.__show_all_events()
+        self.__show_all_metrics()
 
     def __print_events_info(self, occurrence_event):
         """ Print information about events """

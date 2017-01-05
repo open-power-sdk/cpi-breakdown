@@ -38,17 +38,29 @@ class InfoHandlerTest(unittest.TestCase):
     def show_info_test(self):
         """ Test show_info method """
         with self.assertRaises(SystemExit) as cm:
-            self.ih.show_info(self.VALID_METRIC, False)
+            self.ih.show_info(self.VALID_METRIC, False, False, False)
         self.assertEqual(cm.exception.code, 0)
 
         with self.assertRaises(SystemExit) as cm:
-            self.ih.show_info(self.INVALID_METRIC, False)
+            self.ih.show_info(self.INVALID_METRIC, False, False, False)
         self.assertEqual(cm.exception.code, 1)
+
+    def show_all_events_test(self):
+        """ Test show_all_events method """
+        with self.assertRaises(SystemExit) as cm:
+            self.ih.show_info(self.VALID_METRIC, True, False, True)
+        self.assertEqual(cm.exception.code, 0)
+
+    def show_all_metrics_test(self):
+        """ Test show_all_metrics method """
+        with self.assertRaises(SystemExit) as cm:
+            self.ih.show_info(self.VALID_METRIC, False, True, True)
+        self.assertEqual(cm.exception.code, 0)
 
     def show_all_test(self):
         """ Test show_all method """
         with self.assertRaises(SystemExit) as cm:
-            self.ih.show_info(self.VALID_METRIC, True)
+            self.ih.show_info(self.VALID_METRIC, False, False, True)
         self.assertEqual(cm.exception.code, 0)
 
     def get_metric_name_test(self):
