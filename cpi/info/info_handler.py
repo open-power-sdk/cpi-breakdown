@@ -59,7 +59,14 @@ class InfoHandler(object):
 
     def show_info(self, occurrence_item, all_events_opt, all_metrics_opt,
                   all_opt):
-        """ Calls the proper function to display event or metric info """
+        """ Calls the proper function to display event or metric info
+
+        Parameters:
+            occurrence - the event or metric to be displayed.
+            all_opt - if should display all ocurrences
+            all_events_opt - if should display all events only
+            all_metrics_opt - if should display all metrics only
+        """
         if all_opt:
             self.__show_all()
             sys.exit(0)
