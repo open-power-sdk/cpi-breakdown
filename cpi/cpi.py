@@ -82,7 +82,6 @@ def main(argv=None):
             dest='output_path',
             type=str,
             default='',
-            nargs=1,
             help="specify the directory to save the output of the execution")
         parser_execution.add_argument(
             '-t', '--table',
