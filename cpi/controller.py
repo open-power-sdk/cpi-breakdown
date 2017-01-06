@@ -77,10 +77,11 @@ class Controller(object):
         # Run breakdown
         else:
             self.__run_cpi(args.output_path, True, args.table_format,
-                           args.show_events, args.hot_spots, args.quiet)
+                           args.show_events, args.hot_spots, args.quiet,
+                           args.hide_bar)
 
     def __run_cpi(self, output_location, show_breakdown, table_format,
-                  show_events, hot_spots, quiet):
+                  show_events, hot_spots, quiet, hide_bar=False):
         """ Run the breakdown feature and return a formatted events file
         with .cpi extension
 
@@ -91,6 +92,7 @@ class Controller(object):
             show_events - if should show the events values
             hot_spots - if should show hot spots for top 'n' events and metrics
             quiet - if should suppress the bar and breakdown output during run
+            hide_bar - if should suppress the bar only from cpi run.
         """
         processor = core.get_processor()
         ocount = "ocount"
@@ -129,7 +131,7 @@ class Controller(object):
             ocount_cmd = ocount + " -b -f " + ocount_out
             for item in event:
                 ocount_cmd += " -e " + item
-            if not quiet:
+            if not quiet and not hide_bar:
                 sys.stdout.write("\r    Executing CPI Breakdown: %d/%d "
                                  "iterations (elapsed time: %d seconds)"
                                  % (exec_counter, len(reader.get_events()),
@@ -211,7 +213,8 @@ class Controller(object):
 
         # Running autodrilldown generating a .cpi file
         if autodrilldown and not autodrilldown_file:
-            events_file = self.__run_cpi(None, False, False, False, None, False)
+            events_file = self.__run_cpi(None, False, False, False, None,
+                                         False)
         # Running autodrilldown using an already created file
         elif autodrilldown and autodrilldown_file:
             events_file = autodrilldown_file
