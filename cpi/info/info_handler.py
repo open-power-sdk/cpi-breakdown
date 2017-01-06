@@ -165,17 +165,6 @@ class InfoHandler(object):
         except IndexError:
             return None
 
-    def get_metric_components(self, occurrence_metric):
-        """ Return metric components """
-        try:
-            metric = self.__get_object_from_metric_list(occurrence_metric)[0]
-            if metric.get_components():
-                return ", ".join(metric.get_components())
-            else:
-                return "N/A"
-        except IndexError:
-            return None
-
     def get_metric_description(self, occurrence_metric):
         """ Return metric description """
         try:
