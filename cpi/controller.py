@@ -77,10 +77,10 @@ class Controller(object):
         # Run breakdown
         else:
             self.__run_cpi(args.output_path, True, args.table_format,
-                           args.show_events, args.hot_spots)
+                           args.show_events, args.hot_spots, args.quiet)
 
     def __run_cpi(self, output_location, show_breakdown, table_format,
-                  show_events, hot_spots):
+                  show_events, hot_spots, quiet):
         """ Run the breakdown feature and return a formatted events file
         with .cpi extension
 
@@ -90,6 +90,7 @@ class Controller(object):
             table_format - if should show the breakdown in a table format
             show_events - if should show the events values
             hot_spots - if should show hot spots for top 'n' events and metrics
+            quiet - if should suppress the bar and breakdown output during run
         """
         processor = core.get_processor()
         ocount = "ocount"
@@ -121,7 +122,6 @@ class Controller(object):
         results_file_name = output_location + "/" + binary_name + "_" + timestamp + ".cpi"
         start_time = time.time()
         exec_counter = 0
-        sys.stdout.write("\n")
 
         # Run ocount for all events groups
         for event in reader.get_events():
@@ -129,11 +129,12 @@ class Controller(object):
             ocount_cmd = ocount + " -b -f " + ocount_out
             for item in event:
                 ocount_cmd += " -e " + item
-            sys.stdout.write("\r    Executing CPI Breakdown: %d/%d iterations \
-                             (elapsed time: %d seconds)"
-                             % (exec_counter, len(reader.get_events()),
-                                (time.time() - start_time)))
-            sys.stdout.flush()
+            if not quiet:
+                sys.stdout.write("\r    Executing CPI Breakdown: %d/%d "
+                                 "iterations (elapsed time: %d seconds)"
+                                 % (exec_counter, len(reader.get_events()),
+                                    (time.time() - start_time)))
+                sys.stdout.flush()
             status, output = core.execute_stdout(ocount_cmd + ' ' +
                                                  self.__binary_path + ' ' +
                                                  self.__binary_args)
@@ -142,7 +143,6 @@ class Controller(object):
                                  format(ocount) + "\n" + output + "\n")
                 sys.exit(1)
             core.parse_file(ocount_out, results_file_name)
-        sys.stdout.write("\n\n")
         core.execute("rm " + ocount_out)
 
         try:
@@ -162,7 +162,9 @@ class Controller(object):
         metrics_value = metrics_calc.calculate_metrics(events)
 
         # Show breakdown model
+        show_breakdown = False if quiet else show_breakdown
         if show_breakdown:
+            sys.stdout.write("\n\n")
             if table_format:
                 table = MetricsTable(metrics_value)
                 table.print_table()
@@ -209,7 +211,7 @@ class Controller(object):
 
         # Running autodrilldown generating a .cpi file
         if autodrilldown and not autodrilldown_file:
-            events_file = self.__run_cpi(None, False, False, False, None)
+            events_file = self.__run_cpi(None, False, False, False, None, False)
         # Running autodrilldown using an already created file
         elif autodrilldown and autodrilldown_file:
             events_file = autodrilldown_file

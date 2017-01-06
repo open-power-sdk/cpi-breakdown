@@ -78,11 +78,16 @@ def main(argv=None):
                  "e.g: cpi execute -b <binary> '<binary_args>'\n"
                  "see cpi execute --help\n\n")
         parser_execution.add_argument(
+            '-q', '--quiet',
+            dest='quiet',
+            action='store_true',
+            help='supress output when running cpi execute'
+        )
+        parser_execution.add_argument(
             '-o', '--output',
             dest='output_path',
             type=str,
             default='',
-            nargs=1,
             help="specify the directory to save the output of the execution")
         parser_execution.add_argument(
             '-t', '--table',
