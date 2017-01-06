@@ -60,10 +60,22 @@ class Comparator:
                 percentage = float(0.00)
             else:
                 percentage = "n/a"
-            final_array.append([key, init_value, final_value,
-                                float(percentage)])
+
+            try:
+                percentage = float(percentage)
+                # If the number is negative and too small, round to zero
+                if percentage == -0.00:
+                    percentage = float(0.00)
+            except ValueError:
+                # Do nothing, the percentage is the "n/a" string
+                pass
+
+            final_array.append([key, init_value, final_value, percentage])
 
         # If should short the final list
         if sort:
-            final_array = sorted(final_array, key=lambda x: x[3], reverse=True)
+            # Sort the list and move the n/a percentages to the end
+            final_array = sorted(final_array, key=lambda x:
+                                 (not isinstance(x[3], str), x[3]),
+                                 reverse=True)
         return final_array
