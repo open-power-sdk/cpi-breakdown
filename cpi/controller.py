@@ -275,7 +275,14 @@ class Controller(object):
 
     def __show_info(self, occurrence, all_events_opt,
                     all_metrics_opt, all_opt):
-        """ Display information about an ocurrence (event or metric) """
+        """ Display information about an ocurrence (event or metric)
+
+        Parameters:
+            occurrence - the event or metric to be displayed.
+            all_opt - if should display all ocurrences
+            all_events_opt - if should display all events only
+            all_metrics_opt - if should display all metrics only
+        """
         ih = InfoHandler()
         ih.show_info(occurrence, all_events_opt, all_metrics_opt, all_opt)
         return 0
