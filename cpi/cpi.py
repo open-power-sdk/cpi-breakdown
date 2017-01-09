@@ -195,13 +195,14 @@ def main(argv=None):
         info_group = parser_info.add_mutually_exclusive_group(
             required=True)
         info_group.add_argument(
-            '-e', '--element',
+            '-c', '--component',
             dest='occurrence_info',
             type=str,
             metavar='EVENT/METRIC',
             default='',
             nargs=1,
-            help='display information about <EVENT|METRIC>')
+            help="display information about CPI components which\n"
+            	 "can be either metrics or events")
         info_group.add_argument(
             '-a', '--all',
             dest='all_opt',
