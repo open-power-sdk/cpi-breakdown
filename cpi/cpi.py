@@ -68,7 +68,7 @@ def main(argv=None):
         parser.add_argument('-V', '--version',
                             action='version',
                             version=program_version_message)
-        subparsers = parser.add_subparsers(help="list of common CPI commands\n\n")
+        subparsers = parser.add_subparsers(help="list of CPI commands\n\n")
 
         # Execution
         parser_execution = subparsers.add_parser(
