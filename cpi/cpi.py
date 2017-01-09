@@ -165,7 +165,7 @@ def main(argv=None):
             formatter_class=argparse.RawTextHelpFormatter,
             help="compare the collected results of two CPI executions and\n"
                  "provide feedback on performance variations\n"
-                 "e.g: cpi compare -f file_1 file_2\n"
+                 "e.g: cpi compare -f file_1.cpi file_2.cpi\n"
                  "see cpi compare --help\n\n")
         parser_compare.add_argument(
             '-f', '--files',
@@ -175,7 +175,8 @@ def main(argv=None):
             nargs=2,
             required=True,
             metavar=('FILE_1', 'FILE_2'),
-            help="specify the files to execute the comparation")
+            help="specify the files to execute the comparison\n"
+            	 "e.g: cpi compare -f file_1.cpi file_2.cpi")
         parser_compare.add_argument(
             '-s', '--sort',
             dest="sort_opt",
