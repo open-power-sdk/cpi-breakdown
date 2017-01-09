@@ -74,7 +74,7 @@ def main(argv=None):
         parser_execution = subparsers.add_parser(
             'execute',
             formatter_class=RawTextHelpFormatter,
-            help="collect the value of the events used in the breakdown\n"
+            help="collect the events used in the breakdown\n"
                  "e.g: cpi execute -b <binary> '<binary_args>'\n"
                  "see cpi execute --help\n\n")
         parser_execution.add_argument(
