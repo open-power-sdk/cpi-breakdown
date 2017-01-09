@@ -48,13 +48,12 @@ class Metric(object):
 
 class InfoHandler(object):
     """Display information about event or metric (occurrences)."""
-    PROCESSOR = core.get_processor()
-    EVENTS_LIST = events_reader.EventsReader(PROCESSOR)
-    METRICS = metrics_calculator.MetricsCalculator(PROCESSOR)
 
     def __init__(self):
-        event_names = self.EVENTS_LIST.get_events()
-        self.events_list = self.__get_events_list(event_names)
+        self.processor = core.get_processor()
+        self.e_reader = events_reader.EventsReader(self.processor)
+
+        self.events_list = self.__get_events_list(self.e_reader.get_events())
         self.metrics_list = self.__get_metrics_list()
 
     def show_info(self, occurrence_item, all_events_opt, all_metrics_opt,
@@ -111,7 +110,7 @@ class InfoHandler(object):
         print "    Event Name:\t", occurrence_event
         print "    Type:\tEvent"
         print "    Description:", \
-            self.EVENTS_LIST.get_event_description(occurrence_event)
+            self.e_reader.get_event_description(occurrence_event)
         return 0
 
     def __print_metrics_info(self, occurrence_metric):
@@ -134,12 +133,13 @@ class InfoHandler(object):
 
     def __get_metrics_list(self):
         """ Return a list of metrics objects """
+        metrics = metrics_calculator.MetricsCalculator(self.processor)
         metric_list = []
         # Populate the list
-        for key in self.METRICS.get_raw_metrics().keys():
-            name = self.METRICS.get_raw_metrics()[key]["NAME"]
-            formula = self.METRICS.get_raw_metrics()[key]["FORMULA"]
-            description = self.METRICS.get_raw_metrics()[key]["DESCRIPTION"]
+        for key in metrics.get_raw_metrics().keys():
+            name = metrics.get_raw_metrics()[key]["NAME"]
+            formula = metrics.get_raw_metrics()[key]["FORMULA"]
+            description = metrics.get_raw_metrics()[key]["DESCRIPTION"]
             metric = Metric(name, formula, description)
             metric_list.append(metric)
         return metric_list

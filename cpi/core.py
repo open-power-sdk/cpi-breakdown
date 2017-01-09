@@ -27,6 +27,7 @@ import commands
 import time
 import re
 import csv
+import sys
 
 # List with supported processors for hardware dependent cpi features
 SUPPORTED_PROCESSORS = ["POWER8"]
@@ -73,7 +74,7 @@ def supported_feature(processor, feature_name):
     """Check whether a feature is supported. If it is not supported,
     force the execution to finish"""
     if not supported_processor(processor):
-        sys.stderr.write("{} feature is not supported in processor: {}\n"
+        sys.stderr.write("{} feature is not supported on {}\n"
                          .format(feature_name, processor))
         sys.exit(1)
 
