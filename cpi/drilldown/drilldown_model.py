@@ -114,6 +114,7 @@ class UiBinModule:
         return text
 
     def get_percentage(self):
+        """ Get the bin/module percentage """
         return self.percentage
 
     def __lt__(self, other):
@@ -130,7 +131,7 @@ class UiSymbol:
         self.samples_list = []
 
     def get_samples_list(self):
-        """ Get a list of samp;es that are part of this symbol """
+        """ Get a list of samples that are part of this symbol """
         return self.samples_list
 
     def add_sample(self, sample):
@@ -146,6 +147,10 @@ class UiSymbol:
         text = str(self.percentage) + "% in " + self.name
         text += " [" + self.file_name + "]"
         return text
+
+    def get_percentage(self):
+        """ Get the symbol percentage """
+        return self.percentage
 
     def __lt__(self, other):
         """ Sort list ascending by percentage """

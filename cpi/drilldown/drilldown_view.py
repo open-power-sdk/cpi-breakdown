@@ -38,23 +38,32 @@ class DrilldownView:
         border = self.__get_border(title)
         self.__print_logo(title, border)
 
+        # For each binModule
         for ui_binmodule in ui_binmodule_list:
             # Do not print values smaller than the threshold value
             if ui_binmodule.get_percentage() < threshold:
                 continue
-            # If not the first element, print a new line
-            if ui_binmodule is not ui_binmodule_list[0]:
-                print ""
-            print ui_binmodule.get_text()
+            print_binmodule = True
+            # For each symbol
             for ui_symbol in ui_binmodule.get_symbols_list():
+                # Do not print values smaller than the threshold value
+                if ui_symbol.get_percentage() < threshold:
+                    continue
+                if print_binmodule:
+                    # If not the first element, print a new line
+                    if ui_binmodule is not ui_binmodule_list[0]:
+                        print ""
+                    print ui_binmodule.get_text()
+                    print_binmodule = False
                 print TABULATION + ui_symbol.get_text()
+                # For each sample
                 for ui_sample in ui_symbol.get_samples_list():
                     print TABULATION + TABULATION + ui_sample.get_text()
         print border + "\n"
 
     def __print_logo(self, title, border):
         """ Print the drilldown logo """
-        print "\n\n"
+        print ""
         print border
         print title
         print border
