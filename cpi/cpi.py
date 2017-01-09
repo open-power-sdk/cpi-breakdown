@@ -189,7 +189,7 @@ def main(argv=None):
         parser_info = subparsers.add_parser(
             'info',
             formatter_class=argparse.RawTextHelpFormatter,
-            help='show information about <EVENT|METRIC>.\nsee cpi info --help')
+            help='show information about events and metrics\nsee cpi info --help')
         info_group = parser_info.add_mutually_exclusive_group(
             required=True)
         info_group.add_argument(
