@@ -78,10 +78,10 @@ class Controller(object):
         else:
             self.__run_cpi(args.output_path, True, args.table_format,
                            args.show_events, args.hot_spots, args.quiet,
-                           args.hide_bar)
+                           args.no_progress)
 
     def __run_cpi(self, output_location, show_breakdown, table_format,
-                  show_events, hot_spots, quiet, hide_bar=False):
+                  show_events, hot_spots, quiet, no_progress=False):
         """ Run the breakdown feature and return a formatted events file
         with .cpi extension
 
@@ -92,7 +92,8 @@ class Controller(object):
             show_events - if should show the events values
             hot_spots - if should show hot spots for top 'n' events and metrics
             quiet - if should suppress the bar and breakdown output during run
-            hide_bar - if should suppress the bar only from cpi run.
+            no_progress - if should suppress progress information only from cpi
+            run.
         """
         processor = core.get_processor()
         ocount = "ocount"
@@ -131,7 +132,7 @@ class Controller(object):
             ocount_cmd = ocount + " -b -f " + ocount_out
             for item in event:
                 ocount_cmd += " -e " + item
-            if not quiet and not hide_bar:
+            if not quiet and not no_progress:
                 sys.stdout.write("\r    Executing CPI Breakdown: %d/%d "
                                  "iterations (elapsed time: %d seconds)"
                                  % (exec_counter, len(reader.get_events()),

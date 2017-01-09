@@ -84,10 +84,10 @@ def main(argv=None):
             help='suppress output when running cpi execute'
         )
         parser_execution.add_argument(
-            '--hide-bar',
-            dest='hide_bar',
+            '--no-progress',
+            dest='no_progress',
             action='store_true',
-            help='supress progress bar when running cpi execute'
+            help='suppress progress information when running cpi execute'
         )
         parser_execution.add_argument(
             '-o', '--output',
