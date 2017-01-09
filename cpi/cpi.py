@@ -81,7 +81,7 @@ def main(argv=None):
             '-q', '--quiet',
             dest='quiet',
             action='store_true',
-            help='supress output when running cpi execute'
+            help='suppress output when running cpi execute'
         )
         parser_execution.add_argument(
             '--hide-bar',
