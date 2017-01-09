@@ -210,7 +210,7 @@ def main(argv=None):
             '-a', '--all',
             dest='all_opt',
             action='store_true',
-            help='show information for all ocurrences supported by CPI')
+            help='show information for all occurrences supported by CPI')
         info_group.add_argument(
             '--all-events',
             dest='all_events_opt',
