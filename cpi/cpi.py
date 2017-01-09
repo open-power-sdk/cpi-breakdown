@@ -115,10 +115,11 @@ def main(argv=None):
         parser_execution.add_argument(
             '-b', '--binary',
             dest='binary_path',
+            metavar='COMMAND',
             type=str, default='',
             required=True,
             help="path to the application binary and its arguments \n"
-                 "inside quotes")
+                 "inside quotes. e.g: cpi execute -b /usr/bin/ls \'-la\'")
 
         # Drilldown
         parser_drilldown = subparsers.add_parser(
@@ -153,9 +154,11 @@ def main(argv=None):
             dest='binary_path',
             type=str,
             default='',
+            metavar='COMMAND',
             required=True,
-            help="path to the application binary and its arguments \n"
-                 "inside quotes")
+            help="path to the application binary and its arguments \n"\
+                 "inside quotes\n"\
+                 "e.g: cpi drilldown -e EVENT_NAME -b /usr/bin/ls \'-la\'")
 
         # Compare
         parser_compare = subparsers.add_parser(
