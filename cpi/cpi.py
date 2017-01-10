@@ -152,9 +152,8 @@ def main(argv=None):
             '-t', '--threshold',
             dest='threshold',
             metavar='VALUE',
-            type=int,
-            help="do not display drilldown for first-level groups less \n"
-                  "than x%%")
+            type=float,
+            help="do not display drilldown for groups less than VALUE%%")
         parser_drilldown.add_argument(
             '-b', '--binary',
             dest='binary_path',
