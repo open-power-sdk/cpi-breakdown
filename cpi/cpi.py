@@ -70,56 +70,63 @@ def main(argv=None):
                             version=program_version_message)
         subparsers = parser.add_subparsers(help="list of CPI commands\n\n")
 
-        # Execution
-        parser_execution = subparsers.add_parser(
-            'execute',
+        # Data Record
+        parser_record = subparsers.add_parser(
+            'record',
             formatter_class=RawTextHelpFormatter,
-            help="collect the events used in the breakdown\n"
-                 "e.g: cpi execute -b <binary> '<binary_args>'\n"
-                 "see cpi execute --help\n\n")
-        parser_execution.add_argument(
+            help="collect and record the events used in the breakdown\n"
+                 "e.g: cpi record -b <binary> '<binary_args>'\n"
+                 "see cpi record --help\n\n")
+        parser_record.add_argument(
             '-q', '--quiet',
             dest='quiet',
             action='store_true',
-            help='suppress output when running cpi execute'
+            help='suppress the progress indicator when running cpi record'
         )
-        parser_execution.add_argument(
-            '--no-progress',
-            dest='no_progress',
-            action='store_true',
-            help='suppress progress information when running cpi execute'
-        )
-        parser_execution.add_argument(
+        parser_record.add_argument(
             '-o', '--output',
             dest='output_path',
             type=str,
             default='',
             help="specify the directory to save the output of the execution")
-        parser_execution.add_argument(
-            '-t', '--table',
-            dest='table_format',
-            action='store_true',
-            help="show the breakdown model in a table format")
-        parser_execution.add_argument(
-            '--events-values',
-            dest='show_events',
-            action='store_true',
-            help="show the events used to calculate the breakdown model and \n"
-                 "its values")
-        parser_execution.add_argument(
-            '-H', '--hot-spots',
-            dest='hot_spots',
-            metavar='VALUE',
-            type=int,
-            help="show top 'n' events and metrics values")
-        parser_execution.add_argument(
+        parser_record.add_argument(
             '-b', '--binary',
             dest='binary_path',
             metavar='COMMAND',
             type=str, default='',
             required=True,
-            help="path to the application binary and its arguments \n"
-                 "inside quotes. e.g: cpi execute -b /usr/bin/ls \'-la\'")
+            help="the application binary and its arguments inside quotes.\n"
+                 "e.g: cpi record -b /usr/bin/ls \'-la\'")
+
+        # Data Display
+        parser_display = subparsers.add_parser(
+            'display',
+            formatter_class=RawTextHelpFormatter,
+            help="display the result of the data collected during the recording step\n"
+                 "e.g: cpi display -f file.cpi\n"
+                 "see cpi display --help\n\n")
+        parser_display.add_argument(
+            '-t', '--table',
+            dest='table_format',
+            action='store_true',
+            help="display the result of the data collected during the record\n"
+                 "step in the format of a table\n"
+                 "e.g: cpi display -t -f file.cpi")
+        parser_display.add_argument(
+            '--hot-spots',
+            dest='hot_spots',
+            metavar='N',
+            type=int,
+            help="show the 'N' highest events and metrics values\n"
+                 "e.g: cpi display --hot-spots -f file.cpi")
+        parser_display.add_argument(
+            '-f', '--file',
+            dest='display_file',
+            metavar='CPI_FILE',
+            required=True,
+            type=str,
+            help="the .cpi files that contens the events values\n"
+                 "e.g: cpi display -f file.cpi")
 
         # Drilldown
         parser_drilldown = subparsers.add_parser(

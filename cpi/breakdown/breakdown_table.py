@@ -36,22 +36,3 @@ class MetricsTable(object):
         met_tab = AsciiTable(met_table)
         met_tab.justify_columns = {1: 'right', 2: 'right'}
         print met_tab.table
-
-
-class EventsTable(object):
-    """ Print the events values in table format """
-
-    def __init__(self, events_values_dict):
-        self.events_values_dict = events_values_dict
-
-    def print_table(self):
-        title = "Events Values"
-        event_table = [['Event', 'Value']]
-
-        events_values = self.events_values_dict.items()
-        for row in events_values:
-            event_table.append(row)
-        e_table = AsciiTable(event_table, title)
-        e_table.justify_columns = {1: 'right'}
-        print "\n"
-        print e_table.table
