@@ -33,7 +33,6 @@ import metrics_calculator
 from info.info_handler import InfoHandler
 from breakdown.breakdown_tree import BreakdownTree
 from breakdown.breakdown_table import MetricsTable
-from breakdown.breakdown_table import EventsTable
 from breakdown.breakdown_hotspots import HotSpots
 from drilldown.drilldown_view import DrilldownView
 import drilldown.drilldown_core as drilldown_core
@@ -64,8 +63,11 @@ class Controller(object):
         if application_args:
             self.__binary_args = application_args[0]
 
+        # Run display
+        if 'display_file' in args:
+            self.__display(args.display_file, args.table_format, args.hot_spots)
         # Run compare
-        if 'cpi_files' in args:
+        elif 'cpi_files' in args:
             self.__run_compare(args.cpi_files, args.sort_opt, args.csv)
         # Run drilldown
         elif 'event_name' in args:
@@ -75,30 +77,20 @@ class Controller(object):
         elif 'occurrence_info' in args:
             self.__show_info(args.occurrence_info, args.all_events_opt,
                              args.all_metrics_opt, args.all_opt)
-        # Run breakdown
+        # Run recorder
         else:
-            self.__run_cpi(args.output_path, True, args.table_format,
-                           args.show_events, args.hot_spots, args.quiet,
-                           args.no_progress)
+            self.__run_cpi(args.output_path, args.quiet)
 
-    def __run_cpi(self, output_location, show_breakdown, table_format,
-                  show_events, hot_spots, quiet, no_progress=False):
+    def __run_cpi(self, output_location, quiet=False):
         """ Run the breakdown feature and return a formatted events file
         with .cpi extension
 
         Parameters:
             output_location - the path where the cpi file will be generated
-            show_breakdown - if should show the breakdown model
-            table_format - if should show the breakdown in a table format
-            show_events - if should show the events values
-            hot_spots - if should show hot spots for top 'n' events and metrics
-            quiet - if should suppress the bar and breakdown output during run
-            no_progress - if should suppress progress information only from cpi
-            run.
+            quiet - if should suppress any message during the recording step
         """
-        processor = core.get_processor()
         ocount = "ocount"
-        core.supported_feature(processor, "Breakdown")
+        core.supported_feature(core.get_processor(), "Breakdown")
         if not os.path.isfile(self.__binary_path):
             sys.stderr.write(self.__binary_path + ' binary file not found\n')
             sys.exit(1)
@@ -122,7 +114,7 @@ class Controller(object):
                              "Install oprofile before continue." + "\n")
             sys.exit(2)
 
-        reader = events_reader.EventsReader(processor)
+        reader = events_reader.EventsReader(core.get_processor())
         results_file_name = output_location + "/" + binary_name + "_" + timestamp + ".cpi"
         start_time = time.time()
         exec_counter = 0
@@ -133,8 +125,8 @@ class Controller(object):
             ocount_cmd = ocount + " -b -f " + ocount_out
             for item in event:
                 ocount_cmd += " -e " + item
-            if not quiet and not no_progress:
-                sys.stdout.write("\r    Executing CPI Breakdown: %d/%d "
+            if not quiet:
+                sys.stdout.write("\r    Recording CPI Events: %d/%d "
                                  "iterations (elapsed time: %d seconds)"
                                  % (exec_counter, len(reader.get_events()),
                                     (time.time() - start_time)))
@@ -147,47 +139,46 @@ class Controller(object):
                                  format(ocount) + "\n" + output + "\n")
                 sys.exit(1)
             core.parse_file(ocount_out, results_file_name)
+        print
         core.execute("rm " + ocount_out)
+        return results_file_name
 
+    def __display(self, cpi_file, table_format=False, hot_spots=False):
+        """
+        Show the output of CPI recording
+
+        Parameters:
+            cpi_file: the file where the value of the recorded events was saved
+            table_format: show the breakdown in a table format
+            hot_spots: show hot spots for top 'n' events and metrics
+        """
         try:
-            events = core.file_to_dict(results_file_name)
+            events = core.file_to_dict(cpi_file)
         except IOError:
-            sys.stderr.write(results_file_name + " file not found\n")
+            sys.stderr.write(cpi_file + " file not found\n")
             sys.exit(1)
         except ValueError:
             sys.stderr.write("File {} was not correctly formatted.\n"
                              "{} may have failed when generating the report "
                              "file. Try to run breakdown feature again\n"
-                             .format(results_file_name, ocount))
+                             .format(cpi_file, ocount))
             sys.exit(1)
 
         # Calculate metrics values
-        metrics_calc = metrics_calculator.MetricsCalculator(processor)
+        metrics_calc = metrics_calculator.MetricsCalculator(core.get_processor())
         metrics_value = metrics_calc.calculate_metrics(events)
-
-        # Show breakdown model
-        show_breakdown = False if quiet else show_breakdown
-        if show_breakdown:
-            sys.stdout.write("\n\n")
-            if table_format:
-                table = MetricsTable(metrics_value)
-                table.print_table()
-            else:
-                tree = BreakdownTree(metrics_calc.get_raw_metrics(),
-                                     metrics_value)
-                tree.print_tree()
-
-        # Show events values
-        if show_events:
-            events_table = EventsTable(events)
-            events_table.print_table()
-
+        sys.stdout.write("\n")
         # Show events and metrics hot spots
         if hot_spots:
             hs = HotSpots(hot_spots, metrics_value, events)
             hs.print_hotspots()
-
-        return results_file_name
+        elif table_format:
+            table = MetricsTable(metrics_value)
+            table.print_table()
+        else:
+            tree = BreakdownTree(metrics_calc.get_raw_metrics(),
+                                 metrics_value)
+            tree.print_tree()
 
     def __run_drilldown(self, event, autodrilldown, autodrilldown_file,
                         threshold):
@@ -200,8 +191,7 @@ class Controller(object):
                                 generated file
             threshold - the threshold value to show groups
         """
-        processor = core.get_processor()
-        core.supported_feature(processor, "Drilldown")
+        core.supported_feature(core.get_processor(), "Drilldown")
 
         if not os.path.isfile(self.__binary_path):
             sys.stderr.write(self.__binary_path + ' binary file not found\n')
@@ -215,8 +205,7 @@ class Controller(object):
 
         # Running autodrilldown generating a .cpi file
         if autodrilldown and not autodrilldown_file:
-            events_file = self.__run_cpi(None, False, False, False, None,
-                                         False)
+            events_file = self.__run_cpi(None, False)
         # Running autodrilldown using an already created file
         elif autodrilldown and autodrilldown_file:
             events_file = autodrilldown_file
@@ -241,7 +230,7 @@ class Controller(object):
             # Use the 'n' first elements
             events = events[:autodrilldown]
 
-        reader = events_reader.EventsReader(processor)
+        reader = events_reader.EventsReader(core.get_processor())
         # Run drilldown with chosen events
         for element in events:
             event = element[0]
