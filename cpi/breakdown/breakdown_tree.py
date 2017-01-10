@@ -46,6 +46,7 @@ class BreakdownTree(object):
         contains RUN_CPI
         '''
         identation_size = 1
+        print ""
         print "RUN_CPI" + ': ' + self.metrics_value_dict["RUN_CPI"]
         level1 = self.metric_components['RUN_CPI']
         for level2 in level1:

@@ -66,7 +66,7 @@ class Controller(object):
         # Run display
         if 'display_file' in args:
             self.__display(args.display_file, args.breakdown_format,
-                           args.hot_spots)
+                           args.top_events, args.top_metrics)
         # Run compare
         elif 'cpi_files' in args:
             self.__run_compare(args.cpi_files, args.sort_opt, args.csv)
@@ -146,14 +146,15 @@ class Controller(object):
         print
         return cpi_file_name
 
-    def __display(self, cpi_file, breakdown_format, hot_spots):
+    def __display(self, cpi_file, breakdown_format, top_events, top_metrics):
         """
         Show the output of CPI recording
 
         Parameters:
-            cpi_file: the file where the value of the recorded events was saved
+            cpi_file - the file where the value of the recorded events is saved
             breakdown_format - the format the breakdown output will be printed
-            hot_spots: show hot spots for top 'n' events and metrics
+            top_events - show top 'n' events
+            top_metrics - show top 'n' metrics
         """
         try:
             events = core.file_to_dict(cpi_file)
@@ -170,11 +171,14 @@ class Controller(object):
         # Calculate metrics values
         metrics_calc = metrics_calculator.MetricsCalculator(core.get_processor())
         metrics_value = metrics_calc.calculate_metrics(events)
-        sys.stdout.write("\n")
+
         # Show events and metrics hot spots
-        if hot_spots:
-            hs = HotSpots(hot_spots, metrics_value, events)
-            hs.print_hotspots()
+        if top_metrics is not None or top_events is not None:
+            hs = HotSpots()
+            if top_metrics:
+                hs.print_metrics_hotspots(top_metrics, metrics_value)
+            if top_events:
+                hs.print_events_hotspots(top_events, events.items())
         # Show breakdown output
         else:
             if breakdown_format == 'table':

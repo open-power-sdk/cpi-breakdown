@@ -113,12 +113,19 @@ def main(argv=None):
             help="specify the format of the breakdown output.\n"
                  "The default is tree")
         parser_display.add_argument(
-            '--hot-spots',
-            dest='hot_spots',
+            '--top-events',
+            dest='top_events',
             metavar='N',
             type=int,
-            help="show the 'N' highest events and metrics values\n"
-                 "e.g: cpi display --hot-spots -f file.cpi")
+            help="show the N highest events. This option suppress \n"
+                 "the breakdown output")
+        parser_display.add_argument(
+            '--top-metrics',
+            dest='top_metrics',
+            metavar='N',
+            type=int,
+            help="show the N highest metrics. This option suppress \n"
+            "the breakdown output")
         parser_display.add_argument(
             '-f', '--file',
             dest='display_file',

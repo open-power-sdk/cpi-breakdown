@@ -24,36 +24,36 @@ class HotSpots:
     """ Deals with metrics and events hot spots (higher values) """
     TABULATION = "    "
 
-    def __init__(self, hotspot_value, metrics_list, events_dict):
-        self.hotspot_value = hotspot_value
-        self.metrics_value = metrics_list
-        # Convert to list
-        self.events_value = events_dict.items()
+    def print_metrics_hotspots(self, top_metrics, metrics_list):
+        """ Print metrics hot spots """
+        if top_metrics <= 0:
+            return 0
+        self.__print_logo("Metrics")
+        self.__print_info(metrics_list, top_metrics)
 
-    def print_hotspots(self):
-        """ Print both events and metrics hot spots """
-        self.__print_logo()
-        print "Metrics:"
-        self.__print_info(self.metrics_value)
-        print "\nEvents:"
-        self.__print_info(self.events_value)
+    def print_events_hotspots(self, top_events, events_list):
+        """ Print events hot spots """
+        if top_events <= 0:
+            return 0
+        self.__print_logo("Events")
+        self.__print_info(events_list, top_events)
 
-    def __print_logo(self):
+    def __print_logo(self, element_name):
         """ Print the hot spots logo """
-        title = "Hot Spots"
+        title = element_name + " Hot Spots"
         border = "=" * len(title)
-        print "\n"
+        print ""
         print border
         print title
         print border
 
-    def __print_info(self, values_list):
+    def __print_info(self, values_list, top_value):
         """ Print hot spot information """
         values_list = sorted(values_list, key=lambda x: float(x[1]),
                              reverse=True)
 
         # Use the 'n' first elements
-        values_list = values_list[:self.hotspot_value]
+        values_list = values_list[:top_value]
 
         for element in values_list:
             name = element[0]
