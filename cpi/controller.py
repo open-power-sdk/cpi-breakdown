@@ -65,7 +65,8 @@ class Controller(object):
 
         # Run display
         if 'display_file' in args:
-            self.__display(args.display_file, args.table_format, args.hot_spots)
+            self.__display(args.display_file, args.breakdown_format,
+                           args.hot_spots)
         # Run compare
         elif 'cpi_files' in args:
             self.__run_compare(args.cpi_files, args.sort_opt, args.csv)
@@ -143,13 +144,13 @@ class Controller(object):
         core.execute("rm " + ocount_out)
         return results_file_name
 
-    def __display(self, cpi_file, table_format=False, hot_spots=False):
+    def __display(self, cpi_file, breakdown_format, hot_spots):
         """
         Show the output of CPI recording
 
         Parameters:
             cpi_file: the file where the value of the recorded events was saved
-            table_format: show the breakdown in a table format
+            breakdown_format - the format the breakdown output will be printed
             hot_spots: show hot spots for top 'n' events and metrics
         """
         try:
@@ -172,13 +173,15 @@ class Controller(object):
         if hot_spots:
             hs = HotSpots(hot_spots, metrics_value, events)
             hs.print_hotspots()
-        elif table_format:
-            table = MetricsTable(metrics_value)
-            table.print_table()
+        # Show breakdown output
         else:
-            tree = BreakdownTree(metrics_calc.get_raw_metrics(),
-                                 metrics_value)
-            tree.print_tree()
+            if breakdown_format == 'table':
+                table = MetricsTable(metrics_value)
+                table.print_table()
+            elif breakdown_format == 'tree':
+                tree = BreakdownTree(metrics_calc.get_raw_metrics(),
+                                     metrics_value)
+                tree.print_tree()
 
     def __run_drilldown(self, event, autodrilldown, autodrilldown_file,
                         threshold):

@@ -106,12 +106,12 @@ def main(argv=None):
                  "e.g: cpi display -f file.cpi\n"
                  "see cpi display --help\n\n")
         parser_display.add_argument(
-            '-t', '--table',
-            dest='table_format',
-            action='store_true',
-            help="display the result of the data collected during the record\n"
-                 "step in the format of a table\n"
-                 "e.g: cpi display -t -f file.cpi")
+            '--format',
+            dest='breakdown_format',
+            type=str,
+            choices=['tree', 'table'], default='tree',
+            help="specify the format of the breakdown output.\n"
+                 "The default is tree")
         parser_display.add_argument(
             '--hot-spots',
             dest='hot_spots',
