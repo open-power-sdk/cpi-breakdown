@@ -79,14 +79,14 @@ class Controller(object):
                              args.all_metrics_opt, args.all_opt)
         # Run recorder
         else:
-            self.__run_cpi(args.output_path, args.quiet)
+            self.__run_cpi(args.output_file, args.quiet)
 
-    def __run_cpi(self, output_location, quiet=False):
+    def __run_cpi(self, cpi_file_name, quiet=False):
         """ Run the breakdown feature and return a formatted events file
         with .cpi extension
 
         Parameters:
-            output_location - the path where the cpi file will be generated
+            cpi_file_name - the path where the cpi file will be generated
             quiet - if should suppress any message during the recording step
         """
         ocount = "ocount"
@@ -95,19 +95,10 @@ class Controller(object):
             sys.stderr.write(self.__binary_path + ' binary file not found\n')
             sys.exit(1)
 
-        if not output_location:
-            output_location = os.getcwd()
-        else:
-            try:
-                if not os.path.isdir(output_location):
-                    os.makedirs(output_location)
-            except OSError as exception:
-                if exception.errno != errno.EEXIST:
-                    raise sys.exit(1)
-
         timestamp = core.get_timestamp()
         binary_name = self.__binary_path.split("/").pop(-1)
-        ocount_out = output_location + "/output"
+        dir_current = os.getcwd()
+        ocount_out = dir_current + "/output"
 
         if not core.cmdexists(ocount):
             sys.stderr.write(ocount + " is not installed in the system. " +
@@ -115,7 +106,18 @@ class Controller(object):
             sys.exit(2)
 
         reader = events_reader.EventsReader(core.get_processor())
-        results_file_name = output_location + "/" + binary_name + "_" + timestamp + ".cpi"
+
+        if not cpi_file_name:
+            cpi_file_name = dir_current + "/" + binary_name + "_" + timestamp + ".cpi"
+        else:
+            dir_file = os.path.dirname(os.path.realpath(cpi_file_name))
+            if not os.path.exists(dir_file):
+                sys.stderr.write(dir_file +  " directory not found\n")
+                return 1
+            elif os.path.isdir(cpi_file_name):
+                sys.stderr.write(cpi_file_name +  " is not a file\n")
+                return 1
+
         start_time = time.time()
         exec_counter = 0
 
@@ -138,10 +140,10 @@ class Controller(object):
                 sys.stderr.write("\n\nFailed to run {0} command.".
                                  format(ocount) + "\n" + output + "\n")
                 sys.exit(1)
-            core.parse_file(ocount_out, results_file_name)
-        print
+            core.parse_file(ocount_out, cpi_file_name)
         core.execute("rm " + ocount_out)
-        return results_file_name
+        print
+        return cpi_file_name
 
     def __display(self, cpi_file, breakdown_format, hot_spots):
         """
@@ -161,7 +163,7 @@ class Controller(object):
             sys.stderr.write("File {} was not correctly formatted.\n"
                              "{} may have failed when generating the report "
                              "file. Try to run breakdown feature again\n"
-                             .format(cpi_file, ocount))
+                             .format(cpi_file, "ocount"))
             sys.exit(1)
 
         # Calculate metrics values

@@ -85,10 +85,10 @@ def main(argv=None):
         )
         parser_record.add_argument(
             '-o', '--output',
-            dest='output_path',
+            dest='output_file',
             type=str,
             default='',
-            help="specify the directory to save the output of the execution")
+            help="specify output file of the execution")
         parser_record.add_argument(
             '-b', '--binary',
             dest='binary_path',
