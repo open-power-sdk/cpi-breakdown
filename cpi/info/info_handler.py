@@ -92,13 +92,13 @@ class InfoHandler(object):
         """ Show all metrics supported by CPI """
         for obj in self.metrics_list:
             self.__print_metrics_info(obj.get_name())
-            print "\n"
+            print ""
 
     def __show_all_events(self):
         """ Show all events supported by CPI """
         for event in self.events_list:
             self.__print_events_info(event)
-            print "\n"
+            print ""
 
     def __show_all(self):
         """ Show information of all resources (metrics and events) """
@@ -107,7 +107,7 @@ class InfoHandler(object):
 
     def __print_events_info(self, occurrence_event):
         """ Print information about events """
-        print "    Event Name:\t", occurrence_event
+        print "    Name:\t", occurrence_event
         print "    Type:\tEvent"
         print "    Description:", \
             self.e_reader.get_event_description(occurrence_event)
@@ -118,9 +118,9 @@ class InfoHandler(object):
            metrics_list."""
         print "    Name:\t", self.get_metric_name(occurrence_metric)
         print "    Type:\tMetric"
-        print "    Formula:\t", self.get_metric_formula(occurrence_metric)
         print "    Description:",\
             self.get_metric_description(occurrence_metric)
+        print "    Formula:\t", self.get_metric_formula(occurrence_metric)
         return 0
 
     def __get_events_list(self, event_names):
