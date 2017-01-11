@@ -211,10 +211,13 @@ class Controller(object):
             event = element[0]
             # Event is not supported with drilldown feature
             if not reader.valid_event(event):
-                sys.stderr.write("Event {0} is not supported by drilldown \
-                                 feature.".format(event) +
+                sys.stderr.write("Event {0} is not supported by drilldown "
+                                 "feature.".format(event) +
                                  "\nChoose a supported event and try again\n")
                 sys.exit(1)
+
+            sys.stdout.write("\r    Running drilldown with event: %s \n"
+                             % (event))
 
             # Run operf
             min_count = str(reader.get_event_mincount(event))

@@ -47,11 +47,10 @@ def run_operf(binary_path, binary_args, event, min_count):
     """ Run operf and exit if an error happens """
     operf_cmd = OPERF + " -e {0}:{1} {2} {3}".format(event, min_count,
                                                      binary_path, binary_args)
-    status = core.execute(operf_cmd)
+    status, output = core.execute_stdout(operf_cmd)
     if status != 0:
         sys.stderr.write("Failed to run {0} command.\n".format(OPERF) +
-                         "For more information check the error message "
-                         "above\n")
+                         "\n" + output)
         sys.exit(1)
 
 
@@ -59,9 +58,9 @@ def run_opreport(event, report_file):
     """ Run opreport and exit if an error happens """
     opreport_cmd = OPREPORT + " --debug-info --symbols --details "
     opreport_cmd += "--xml event:{0} -o {1}".format(event, report_file)
-    status = core.execute(opreport_cmd)
+
+    status, output = core.execute_stdout(opreport_cmd)
     if status != 0:
         sys.stderr.write("Failed to run {0} command.\n".format(OPREPORT) +
-                         "For more information check the error message "
-                         "above\n")
+                         "\n" + output)
         sys.exit(1)
