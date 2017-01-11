@@ -78,18 +78,21 @@ def supported_feature(processor, feature_name):
                          .format(feature_name, processor))
         sys.exit(1)
 
-
-def parse_file(output_stream_file, parsed_file):
-    """Read lines from output_stream_file and writes it into another file as
-    a dictionary. The output_stream_file should be in format:
-        event_name,event_value,percentage
-    """
-    with open(output_stream_file, "r") as f:
-        for line in f:
+def parse_file(output_stream, event_values):
+    """Parse the ocount output file to get events and values"""
+    with open(output_stream, "r") as infile:
+        for line in infile:
             if not line.isspace():
-                with open(parsed_file, "a+") as ff:
-                    ff.write(line.split(",")[0] + " : ")
-                    ff.write(line.split(",")[1] + "\n")
+                key_val = line.split(",")[0].strip()
+                val = line.split(",")[1].strip()
+                event_values[key_val] = val
+    return event_values
+
+def save_events(events, file_name):
+    """Save events values into file"""
+    with open(file_name, "w") as ev_file:
+        for key in events:
+            ev_file.write(key + " : "+ events[key] + "\n")
 
 
 def create_csv_file(file_name, values_list):
