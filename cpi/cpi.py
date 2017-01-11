@@ -68,106 +68,115 @@ def main(argv=None):
         parser.add_argument('-V', '--version',
                             action='version',
                             version=program_version_message)
-        subparsers = parser.add_subparsers(help="list of CPI commands\n\n")
+        subparsers = parser.add_subparsers(help='\nCPI commands\n\n')
 
         # Data Record
         parser_record = subparsers.add_parser(
             'record',
             formatter_class=RawTextHelpFormatter,
-            help="collect and record the events used in the breakdown\n"
-                 "e.g: cpi record -b <binary> '<binary_args>'\n"
-                 "see cpi record --help\n\n")
+            help='collect and record the events used in the breakdown\n'
+                 'see cpi record --help\n\n')
         parser_record.add_argument(
             '-q', '--quiet',
             dest='quiet',
             action='store_true',
-            help='suppress the progress indicator when running cpi record'
-        )
+            help='suppress the progress indicator during the\n'
+                 'recording step\n'
+                 'e.g: cpi record -q -b <binary>')
         parser_record.add_argument(
             '-o', '--output',
             dest='output_file',
             type=str,
             default='',
-            help="specify output file of the execution")
+            help='specify the name of the output file which is created\n'
+                 'during the recording step\n'
+                 'e.g: cpi record -o <output_file> -b <binary>')
         parser_record.add_argument(
             '-b', '--binary',
             dest='binary_path',
             metavar='COMMAND',
             type=str, default='',
             required=True,
-            help="the application binary and its arguments inside quotes.\n"
-                 "e.g: cpi record -b /usr/bin/ls \'-la\'")
+            help='the application binary and its arguments inside quotes\n'
+                 'e.g: cpi record -b <binary>\n'
+                 '     cpi record -b /usr/bin/ls \'-la\'')
 
         # Data Display
         parser_display = subparsers.add_parser(
             'display',
             formatter_class=RawTextHelpFormatter,
-            help="display the result of the data collected during the recording step\n"
-                 "e.g: cpi display -f file.cpi\n"
-                 "see cpi display --help\n\n")
+            help='display the result of the data collected during the \n'
+                 'recording step\n'
+                 'see cpi display --help\n\n')
         parser_display.add_argument(
             '--format',
             dest='breakdown_format',
             type=str,
             choices=['tree', 'table'], default='tree',
-            help="specify the format of the breakdown output.\n"
-                 "The default is tree")
+            help='specify the format of the breakdown output (default is tree)\n'
+                 'e.g: cpi display --format=table -f <file.cpi>')
         parser_display.add_argument(
             '--top-events',
             dest='top_events',
             metavar='N',
             type=int,
-            help="show the N highest events. This option suppress \n"
-                 "the breakdown output")
+            help='show the N highest events. This option suppress \n'
+                 'the breakdown output\n'
+                 'e.g: cpi display --top-events=3 -f <file.cpi>')
         parser_display.add_argument(
             '--top-metrics',
             dest='top_metrics',
             metavar='N',
             type=int,
-            help="show the N highest metrics. This option suppress \n"
-            "the breakdown output")
+            help='show the N highest metrics. This option suppress \n'
+                 'the breakdown output\n'
+                 'e.g: cpi display --top-metrics=3 -f <file.cpi>')
         parser_display.add_argument(
             '-f', '--file',
             dest='display_file',
             metavar='CPI_FILE',
             required=True,
             type=str,
-            help="the .cpi files that contens the events values\n"
-                 "e.g: cpi display -f file.cpi")
+            help='the .cpi files that contains the events values\n'
+                 'e.g: cpi display -f <file.cpi>')
 
         # Drilldown
         parser_drilldown = subparsers.add_parser(
             'drilldown',
             formatter_class=argparse.RawTextHelpFormatter,
-            help="perform a drilldown execution for a specific event\n"
-                 "e.g: cpi drilldown -e <event> -b <binary> '<binary_args>'\n"
-                 "see cpi drilldown --help\n\n")
+            help='perform a drilldown execution for a specific event\n'
+                 'see cpi drilldown --help\n\n')
         drilldown_group = parser_drilldown.add_mutually_exclusive_group(
             required=True)
         drilldown_group.add_argument(
             '-e', '--event',
             dest='event_name',
             type=str,
-            help="specify the event that will be used for drilldown")
+            help='specify the event that will be used for drilldown\n'
+                 'e.g: cpi drilldown -e <EVENT_NAME> -b <binary>')
         drilldown_group.add_argument(
             '-a', '--auto-drilldown',
             dest='autodrilldown',
-            metavar='EVENTS_AMOUNT',
+            metavar='N',
             type=int,
-            help="perform drilldown on the top 'n' events")
+            help='perform drilldown on the N highest events\n'
+                 'e.g: cpi drilldown -a 5 -b <binary>')
         parser_drilldown.add_argument(
             '-f', '--file',
             dest='autodrilldown_file',
             metavar='CPI_FILE',
             type=str,
-            help="allow auto-drilldown to consume events from a previously\n"
-                 "generated .cpi file")
+            help='allow auto-drilldown to consume events from a previously\n'
+                 'generated .cpi file\n'
+                 'e.g: cpi drilldown -a 5 -f <file.cpi> -b <binary>')
         parser_drilldown.add_argument(
             '-t', '--threshold',
             dest='threshold',
-            metavar='VALUE',
+            metavar='N',
             type=float,
-            help="do not display drilldown for groups less than VALUE%%")
+            help='do not display drilldown for groups less than N%%\n'
+                 'e.g: cpi drilldown -t 5.5 -e <EVENT_NAME> -b <binary>\n'
+                 '     cpi drilldown -t 6 -a 4 -f <file.cpi> -b <binary>')
         parser_drilldown.add_argument(
             '-b', '--binary',
             dest='binary_path',
@@ -175,44 +184,46 @@ def main(argv=None):
             default='',
             metavar='COMMAND',
             required=True,
-            help="path to the application binary and its arguments \n"\
-                 "inside quotes\n"\
-                 "e.g: cpi drilldown -e EVENT_NAME -b /usr/bin/ls \'-la\'")
+            help='the application binary and its arguments inside quotes\n'
+                 'e.g: cpi drilldown -b <binary>\n'
+                 '     cpi drilldown -b /usr/bin/ls \'-la\'')
 
         # Compare
         parser_compare = subparsers.add_parser(
             'compare',
             formatter_class=argparse.RawTextHelpFormatter,
-            help="compare the collected results of two CPI executions and\n"
-                 "provide feedback on performance variations\n"
-                 "e.g: cpi compare -f file_1.cpi file_2.cpi\n"
-                 "see cpi compare --help\n\n")
+            help='compare the collected results of two CPI executions and\n'
+                 'provide feedback on performance variations\n'
+                 'see cpi compare --help\n\n')
         parser_compare.add_argument(
             '-f', '--files',
-            dest="cpi_files",
+            dest='cpi_files',
             default='',
             type=str,
             nargs=2,
             required=True,
-            metavar=('FILE_1', 'FILE_2'),
-            help="specify the files to execute the comparison\n"
-            	 "e.g: cpi compare -f file_1.cpi file_2.cpi")
+            metavar=('file_1.cpi', 'file_2.cpi'),
+            help='specify the files to execute the comparison\n'
+                 'e.g: cpi compare -f <file_1.cpi> <file_2.cpi>')
         parser_compare.add_argument(
             '-s', '--sort',
-            dest="sort_opt",
+            dest='sort_opt',
             action='store_true',
-            help="sort values by percentage")
+            help='sort values by percentage\n'
+                 'e.g: cpi compare -s -f <file_1.cpi> <file_2.cpi>')
         parser_compare.add_argument(
             '-c', '--csv',
-            dest="csv",
+            dest='csv',
             action='store_true',
-            help="save the compare output in a csv file")
+            help='save the compare output in a csv file\n'
+                 'e.g: cpi compare -c -f <file_1.cpi> <file_2.cpi>')
 
         # Show_info
         parser_info = subparsers.add_parser(
             'info',
             formatter_class=argparse.RawTextHelpFormatter,
-            help='show information about events and metrics\nsee cpi info --help')
+            help='show information about events and metrics\n'
+                 'see cpi info --help')
         info_group = parser_info.add_mutually_exclusive_group(
             required=True)
         info_group.add_argument(
@@ -222,23 +233,28 @@ def main(argv=None):
             metavar='EVENT/METRIC',
             default='',
             nargs=1,
-            help="display information about CPI components which\n"
-            	 "can be either metrics or events")
+            help='display information about CPI components which\n'
+                 'can be either metrics or events\n'
+                 'e.g: cpi info -c <EVENT_NAME>\n'
+                 '     cpi info -c <METRIC_NAME>')
         info_group.add_argument(
             '-a', '--all',
             dest='all_opt',
             action='store_true',
-            help='show information for all occurrences supported by CPI')
+            help='show information for all occurrences supported by CPI\n'
+                 'e.g: cpi info --all')
         info_group.add_argument(
             '--all-events',
             dest='all_events_opt',
             action='store_true',
-            help='show all events supported by cpi')
+            help='show all events supported by cpi\n'
+                 'e.g: cpi info --all-events')
         info_group.add_argument(
             '--all-metrics',
             dest='all_metrics_opt',
             action='store_true',
-            help='show all metrics supported by cpi')
+            help='show all metrics supported by cpi\n'
+                 'e.g: cpi info --all-metrics')
 
         # Process arguments
         args, application_args = parser.parse_known_args()
