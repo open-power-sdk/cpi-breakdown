@@ -120,6 +120,7 @@ class Controller(object):
 
         start_time = time.time()
         exec_counter = 0
+        events = {}
 
         # Run ocount for all events groups
         for event in reader.get_events():
@@ -140,10 +141,12 @@ class Controller(object):
                 sys.stderr.write("\n\nFailed to run {0} command.".
                                  format(ocount) + "\n" + output + "\n")
                 sys.exit(1)
-            core.parse_file(ocount_out, cpi_file_name)
+            core.parse_file(ocount_out, events)
         core.execute("rm " + ocount_out)
         print
-        return cpi_file_name
+
+        core.save_events(events, cpi_file_name)
+        return events
 
     def __display(self, cpi_file, breakdown_format, top_events, top_metrics):
         """
@@ -155,17 +158,7 @@ class Controller(object):
             top_events - show top 'n' events
             top_metrics - show top 'n' metrics
         """
-        try:
-            events = core.file_to_dict(cpi_file)
-        except IOError:
-            sys.stderr.write(cpi_file + " file not found\n")
-            sys.exit(1)
-        except ValueError:
-            sys.stderr.write("File {} was not correctly formatted.\n"
-                             "{} may have failed when generating the report "
-                             "file. Try to run breakdown feature again\n"
-                             .format(cpi_file, "ocount"))
-            sys.exit(1)
+        events = self.__get_events_from_file(cpi_file)
 
         # Calculate metrics values
         metrics_calc = metrics_calculator.MetricsCalculator(core.get_processor())
@@ -249,18 +242,8 @@ class Controller(object):
 
         # Create a list with two dictionaries containing "event:value" pairs
         for file_name in file_names:
-            try:
-                dict_i = core.file_to_dict(file_name)
-                dict_list.append(dict_i)
-            except IOError:
-                sys.stderr.write(file_name + " file not found")
-                sys.exit(1)
-            except ValueError:
-                sys.stderr.write("Could not parse {} file.\n"
-                                 "Select a properly formatted file and run "
-                                 "the compare feature again\n".format(
-                                     file_name))
-                sys.exit(1)
+            dict_i = self.__get_events_from_file(file_name)
+            dict_list.append(dict_i)
 
         try:
             comparator = Comparator(dict_list)
@@ -277,7 +260,8 @@ class Controller(object):
         else:
             compare_view.create_table(file_names)
 
-    def __show_info(self, occurrence, all_events_opt,
+    @classmethod
+    def __show_info(cls, occurrence, all_events_opt,
                     all_metrics_opt, all_opt):
         """ Display information about an ocurrence (event or metric)
 
@@ -290,6 +274,26 @@ class Controller(object):
         processor = core.get_processor()
         core.supported_feature(processor, "Info")
 
-        ih = InfoHandler()
-        ih.show_info(occurrence, all_events_opt, all_metrics_opt, all_opt)
+        inf_h = InfoHandler()
+        inf_h.show_info(occurrence, all_events_opt, all_metrics_opt, all_opt)
         return 0
+
+    @classmethod
+    def __get_events_from_file(cls, cpi_file):
+        """ Reads events from CPI file
+
+        Parameters:
+            cpi_file - Cpi file name """
+        events = {}
+        try:
+            events = core.file_to_dict(cpi_file)
+        except IOError:
+            sys.stderr.write(cpi_file + " file not found\n")
+            sys.exit(1)
+        except ValueError:
+            sys.stderr.write("Could not parse {} file.\n"
+                             "Select a properly formatted file "
+                             "and run again\n".format(cpi_file))
+            sys.exit(1)
+
+        return events
