@@ -177,7 +177,11 @@ class Controller(object):
         # Show breakdown output
         else:
             if breakdown_format == 'table':
-                table = MetricsTable(metrics_value)
+                sorted_metrics = sorted(metrics_value,
+                                        key=lambda x:
+                                        float(x[2]),
+                                        reverse=True)
+                table = MetricsTable(sorted_metrics)
                 table.print_table()
             elif breakdown_format == 'tree':
                 tree = BreakdownTree(metrics_calc.get_raw_metrics(),
