@@ -11,13 +11,23 @@ approach provides a complete view of how the application behaves concerning proc
 Because each processor architecture has different performance counters, POWER and Intel have different
 CPI breakdown models. Even within Power Systems servers, differences exist between each version of the
 processor. Processor performance can be measured by profiling the application with tools such as OProfile or Perf.
-The CPI breakdown plug-in automates this process, enabling you to access the CPI breakdown model of
+The CPI breakdown tool automates this process, enabling you to access the CPI breakdown model of
 any C/C++ application without manually tracking the events and calculating the metrics.
 
+CPI commands:
 
-Exit Status
+    * record: collect and record the events used in the breakdown
+    * display: display the result of the data collected during the recording step
+    * drilldown: perform a drilldown execution for a specific event
+    * compare: compare the collected results of two CPI executions and provide feedback on performance variations
+    * info: show information about events and metrics
+
+    For details about the usage of each command, see cpi <command> --help
+
+Note for Integrators:
+
     CPI may return one of several error codes if it encounters problems.
 
-    0 No problems occurred.
-    1 Generic error code.
-    2 Some dependency tool is missing
+    * 0: no problems occurred.
+    * 1: generic error code.
+    * 2: some dependency tool is missing
