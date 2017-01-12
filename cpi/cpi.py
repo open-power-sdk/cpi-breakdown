@@ -143,6 +143,8 @@ def main(argv=None):
         # Drilldown
         parser_drilldown = subparsers.add_parser(
             'drilldown',
+            epilog='One of the arguments -e/--event or -a/--auto is required '
+                   'to run drilldown.',
             formatter_class=argparse.RawTextHelpFormatter,
             help='perform a drilldown execution for a specific event\n'
                  'see cpi drilldown --help\n\n')
@@ -185,8 +187,8 @@ def main(argv=None):
             metavar='COMMAND',
             required=True,
             help='the application binary and its arguments inside quotes\n'
-                 'e.g: cpi drilldown -b <binary>\n'
-                 '     cpi drilldown -b /usr/bin/ls \'-la\'')
+                 'e.g: cpi drilldown -e <EVENT_NAME> -b <binary>\n'
+                 '     cpi drilldown -e <EVENT_NAME> -b /usr/bin/ls \'-la\'')
 
         # Compare
         parser_compare = subparsers.add_parser(
