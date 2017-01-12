@@ -21,12 +21,9 @@ limitations under the License.
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
 """
-import os
 import subprocess
 import commands
 import time
-import re
-import csv
 import sys
 
 # List with supported processors for hardware dependent cpi features
@@ -38,8 +35,8 @@ def execute(command):
     try:
         return subprocess.check_call([command], stderr=subprocess.STDOUT,
                                      shell=True)
-    except subprocess.CalledProcessError as e:
-        return e.returncode
+    except subprocess.CalledProcessError as excp:
+        return excp.returncode
 
 
 def execute_stdout(command):
@@ -49,8 +46,8 @@ def execute_stdout(command):
         subprocess.check_output([command], stderr=subprocess.STDOUT,
                                 shell=True)
         return 0, ""
-    except subprocess.CalledProcessError as e:
-        return e.returncode, e.output
+    except subprocess.CalledProcessError as excp:
+        return excp.returncode, excp.output
 
 
 def cmdexists(command):
@@ -62,7 +59,7 @@ def cmdexists(command):
 
 def get_processor():
     """Check the system processor"""
-    return commands.getoutput("grep -io 'power[[:digit:]]\+' -m 1 /proc/cpuinfo")
+    return commands.getoutput("grep -io 'power[[:digit:]]\\+' -m 1 /proc/cpuinfo")
 
 
 def supported_processor(processor_version):
@@ -78,6 +75,16 @@ def supported_feature(processor, feature_name):
                          .format(feature_name, processor))
         sys.exit(1)
 
+def check_supported_feat(feature_name):
+    """Check whether a feature is supported. If it is not supported,
+    force the execution to finish"""
+    ret_val = True
+    processor = get_processor()
+    if not supported_processor(processor):
+        sys.stderr.write("{} feature is not supported on {}\n"
+                         .format(feature_name, processor))
+        ret_val = False
+    return ret_val
 
 def parse_file(output_stream, event_values):
     """Parse the ocount output file to get events and values"""
@@ -88,7 +95,6 @@ def parse_file(output_stream, event_values):
                 val = line.split(",")[1].strip()
                 event_values[key_val] = val
     return event_values
-
 
 def save_events(events, file_name):
     """Save events values into file"""
@@ -108,10 +114,10 @@ def file_to_dict(filename):
     """
     dictionary = {}
     try:
-        with open(filename, "r") as f:
-            for line in f:
-                k, v = line.strip().split(" : ")
-                dictionary[k] = v
+        with open(filename, "r") as infile:
+            for line in infile:
+                k, val = line.strip().split(" : ")
+                dictionary[k] = val
     except ValueError:
         raise ValueError
     except IOError:
@@ -123,3 +129,22 @@ def percentage(init_val, final_val):
     """Calculate a percentage relative to the initial amount of two values"""
     value = 100 * (final_val - init_val) / float(init_val)
     return "%.2f" % value
+
+def get_events_from_file(cpi_file):
+    """ Reads events from CPI file
+
+    Parameters:
+        cpi_file - Cpi file name """
+    events = {}
+    try:
+        events = file_to_dict(cpi_file)
+    except IOError:
+        sys.stderr.write(cpi_file + " file not found\n")
+        sys.exit(1)
+    except ValueError:
+        sys.stderr.write("Could not parse {} file.\n"
+                         "Select a properly formatted file "
+                         "and run again\n".format(cpi_file))
+        sys.exit(1)
+
+    return events

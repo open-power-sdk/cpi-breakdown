@@ -20,6 +20,7 @@ limitations under the License.
         * Rafael Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
 """
 
 import sys
@@ -28,8 +29,7 @@ from argparse import ArgumentParser
 from argparse import RawTextHelpFormatter
 import pkg_resources
 
-from controller import *
-
+from controller import Controller
 
 __all__ = []
 __version__ = pkg_resources.require("cpi")[0].version
@@ -199,11 +199,12 @@ def main(argv=None):
             help='specify the files on which to execute the comparison\n'
                  'e.g: cpi compare -f <file_1.cpi> <file_2.cpi>')
         parser_compare.add_argument(
-            '-s', '--sort',
-            dest='sort_opt',
-            action='store_true',
-            help='sort values by percentage\n'
-                 'e.g: cpi compare -s -f <file_1.cpi> <file_2.cpi>')
+            '-t', '--type',
+            dest='type_opt',
+            type=str,
+            choices=['event', 'metric'], default='event',
+            help='choose between metric or event to compare (default is event)\n'
+                 'e.g: cpi compare -t=metric -f <file_1.cpi> <file_2.cpi>')
         parser_compare.add_argument(
             '-c', '--csv',
             dest='csv',

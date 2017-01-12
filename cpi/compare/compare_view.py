@@ -18,31 +18,39 @@ limitations under the License.
     Contributors:
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
 """
 
 
 from terminaltables import AsciiTable
 
-from cpi import core
-
-
-class CompareView:
+class CompareView(object):
     """ Handles the display of the comparison results """
 
-    def __init__(self, results_list):
+    def __init__(self, results_list, comparison_type, file_names):
         self.results_list = results_list
+        self.comparison_type = comparison_type
+        self.file_names = file_names
 
-    def create_table(self, file_names):
+    def create_table(self):
         """ Create a table with comparison two output files """
-        title = "Comparison Table"
+        title = ""
         print "\nComparing file names:"
-        print "FILE 1 = %s\nFILE 2 = %s" % (file_names[0], file_names[1])
-        print "\nNOTE:\nA raise in number of all events represent a decrease in "\
+        print "File 1 = %s\nFile 2 = %s" % (self.file_names[0], self.file_names[1])
+        print "\nNOTE:\nA raise in number of all elements represent a decrease in "\
               "the \nperformance of the application. Therefore, the smallest the "\
               "\npercentage, the better the application performance.\n"
 
+        elem_name = ''
+        if self.comparison_type == 'event':
+            elem_name = 'Event Name'
+            title = "----- Comparison Table for Events"
+        elif self.comparison_type == 'metric':
+            elem_name = 'Metric Name'
+            title = "----- Comparison Table for Metrics"
+
         table_data = [
-            ['Event Name', 'File 1', 'File 2', 'Percentage']
+            [elem_name, 'File 1', 'File 2', 'Percentage']
         ]
 
         for entry in self.results_list:
@@ -59,3 +67,10 @@ class CompareView:
         """ Print the results in a csv format """
         for element in self.results_list:
             print ','.join(map(str, element))
+
+    def show(self, cvs_format=None):
+        """ Show comparison results metrics or events"""
+        if cvs_format:
+            self.print_csv_format()
+        else:
+            self.create_table()

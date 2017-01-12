@@ -25,7 +25,6 @@ limitations under the License.
 import os
 import sys
 import time
-import errno
 
 import core
 import events_reader
@@ -69,7 +68,7 @@ class Controller(object):
                            args.top_events, args.top_metrics)
         # Run compare
         elif 'cpi_files' in args:
-            self.__run_compare(args.cpi_files, args.sort_opt, args.csv)
+            self.__run_compare(args.type_opt, args.cpi_files, args.csv)
         # Run drilldown
         elif 'event_name' in args:
             self.__run_drilldown(args.event_name)
@@ -148,7 +147,8 @@ class Controller(object):
         core.save_events(events, cpi_file_name)
         return events
 
-    def __display(self, cpi_file, breakdown_format, top_events, top_metrics):
+    @classmethod
+    def __display(cls, cpi_file, breakdown_format, top_events, top_metrics):
         """
         Show the output of CPI recording
 
@@ -158,7 +158,7 @@ class Controller(object):
             top_events - show top 'n' events
             top_metrics - show top 'n' metrics
         """
-        events = self.__get_events_from_file(cpi_file)
+        events = core.get_events_from_file(cpi_file)
 
         # Calculate metrics values
         metrics_calc = metrics_calculator.MetricsCalculator(core.get_processor())
@@ -166,11 +166,11 @@ class Controller(object):
 
         # Show events and metrics hot spots
         if top_metrics is not None or top_events is not None:
-            hs = HotSpots()
+            hot_s = HotSpots()
             if top_metrics:
-                hs.print_metrics_hotspots(top_metrics, metrics_value)
+                hot_s.print_metrics_hotspots(top_metrics, metrics_value)
             if top_events:
-                hs.print_events_hotspots(top_events, events.items())
+                hot_s.print_events_hotspots(top_events, events.items())
         # Show breakdown output
         else:
             if breakdown_format == 'table':
@@ -231,37 +231,24 @@ class Controller(object):
             drilldown_view = DrilldownView()
             drilldown_view.print_drilldown(event, report_file, threshold)
 
-    def __run_compare(self, file_names, sort_opt, csv_format):
+    @classmethod
+    def __run_compare(cls, comparison_type, file_names, format_type):
         """ Get the contents of two ocount output files, compare their results
         and display in a table
 
         Parameters:
             file_names - cpi formatted file names
-            sort_opt - if should sort the compare
+            comparison_type - choose between event or metric
             csv_format - if should display the result in a csv format
         """
-        dict_list = []
-        final_array = []
 
-        # Create a list with two dictionaries containing "event:value" pairs
-        for file_name in file_names:
-            dict_i = self.__get_events_from_file(file_name)
-            dict_list.append(dict_i)
-
-        try:
-            comparator = Comparator(dict_list)
-            final_array = comparator.compare(sort_opt)
-        except (KeyError, ValueError):
-            sys.stderr.write("Could not perform the comparison between files."
-                             "\nSelect properly formatted files and run the "
-                             "compare feature again.\n")
+        if comparison_type == 'metric' and  not core.check_supported_feat("Compare metrics"):
             sys.exit(1)
 
-        compare_view = CompareView(final_array)
-        if csv_format:
-            compare_view.print_csv_format()
-        else:
-            compare_view.create_table(file_names)
+        comparator = Comparator()
+        final_array = comparator.make_comparison(comparison_type, file_names)
+        compare_view = CompareView(final_array, comparison_type, file_names)
+        compare_view.show(format_type)
 
     @classmethod
     def __show_info(cls, occurrence, all_events_opt,
@@ -280,23 +267,3 @@ class Controller(object):
         inf_h = InfoHandler()
         inf_h.show_info(occurrence, all_events_opt, all_metrics_opt, all_opt)
         return 0
-
-    @classmethod
-    def __get_events_from_file(cls, cpi_file):
-        """ Reads events from CPI file
-
-        Parameters:
-            cpi_file - Cpi file name """
-        events = {}
-        try:
-            events = core.file_to_dict(cpi_file)
-        except IOError:
-            sys.stderr.write(cpi_file + " file not found\n")
-            sys.exit(1)
-        except ValueError:
-            sys.stderr.write("Could not parse {} file.\n"
-                             "Select a properly formatted file "
-                             "and run again\n".format(cpi_file))
-            sys.exit(1)
-
-        return events
