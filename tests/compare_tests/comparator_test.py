@@ -17,6 +17,7 @@ limitations under the License.
 
     Contributors:
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
 """
 
 import unittest
@@ -44,43 +45,28 @@ class ComparatorTests(unittest.TestCase):
     def test_create_dict(self):
         comparator = Comparator(self.dict_list1)
 
-        # Test with invalid event match
-        with self.assertRaises(KeyError):
-            comparator = Comparator(self.dict_list2)
-
     def test_compare(self):
         comparator = Comparator(self.dict_list1)
 
         # Test events
-        list1 = comparator.compare(False)
+        print "test len(self.dict_list1):" + str(len(self.dict_list1))
+        list1 = comparator.make_comparison('event')
+        print "test len(list1):" + str(len(list1))
         self.assertEqual(4, len(list1))
         # Get first internal list
         l = list1[0]
         self.assertEqual(4, len(l))
-        self.assertEqual("event4", l[0])
-        self.assertEqual(0, l[1])
-        self.assertEqual(10, l[2])
-        self.assertEqual("n/a", l[3])
+        self.assertEqual("event3", l[0])
+        self.assertEqual(100, l[1])
+        self.assertEqual(1000, l[2])
+        self.assertEqual(900, l[3])
         # Get second internal list
         l = list1[1]
         self.assertEqual(4, len(l))
-        self.assertEqual("event2", l[0])
-        self.assertEqual(300, l[1])
-        self.assertEqual(400, l[2])
-        self.assertEqual(33.33, l[3])
-
-        # Test with events sorted
-        list1 = comparator.compare(True)
-        self.assertEqual(4, len(list1))
-        self.assertEqual("event3", list1[0][0])
-        self.assertEqual("event1", list1[1][0])
-        self.assertEqual("event2", list1[2][0])
-        self.assertEqual("event4", list1[3][0])
-
-        # Test with invalid value
-        with self.assertRaises(ValueError):
-            comparator = Comparator(self.dict_list3)
-            comparator.compare(False)
+        self.assertEqual("event1", l[0])
+        self.assertEqual(100, l[1])
+        self.assertEqual(200, l[2])
+        self.assertEqual(100, l[3])
 
 if __name__ == '__main__':
     unittest.main()
