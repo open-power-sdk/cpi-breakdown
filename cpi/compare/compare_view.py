@@ -55,7 +55,7 @@ class CompareView:
         compare_table.justify_columns = {1: 'right', 2: 'right', 3: 'right'}
         print compare_table.table
 
-    def save_to_file(self, file_name):
-        """ Save the results of compare in a file """
-        core.create_csv_file(file_name, self.results_list)
-        print "\n Compare report was saved in file: " + file_name
+    def print_csv_format(self):
+        """ Print the results in a csv format """
+        for element in self.results_list:
+            print ','.join(map(str, element))

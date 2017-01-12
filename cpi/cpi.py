@@ -215,7 +215,7 @@ def main(argv=None):
             '-c', '--csv',
             dest='csv',
             action='store_true',
-            help='save the compare output in a csv file\n'
+            help='show the compare output in a csv format\n'
                  'e.g: cpi compare -c -f <file_1.cpi> <file_2.cpi>')
 
         # Show_info

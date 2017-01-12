@@ -78,6 +78,7 @@ def supported_feature(processor, feature_name):
                          .format(feature_name, processor))
         sys.exit(1)
 
+
 def parse_file(output_stream, event_values):
     """Parse the ocount output file to get events and values"""
     with open(output_stream, "r") as infile:
@@ -88,22 +89,12 @@ def parse_file(output_stream, event_values):
                 event_values[key_val] = val
     return event_values
 
+
 def save_events(events, file_name):
     """Save events values into file"""
     with open(file_name, "w") as ev_file:
         for key in events:
-            ev_file.write(key + " : "+ events[key] + "\n")
-
-
-def create_csv_file(file_name, values_list):
-    """ Create a csv file using values from a list of lists and return the
-    path where file was created """
-    with open(file_name, 'w') as csvfile:
-        path = os.path.realpath(csvfile.name)
-        writer = csv.writer(csvfile)
-        for item in values_list:
-            writer.writerow(item)
-    return path
+            ev_file.write(key + " : " + events[key] + "\n")
 
 
 def get_timestamp():
