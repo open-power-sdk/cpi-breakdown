@@ -80,11 +80,10 @@ class Controller(object):
                              args.all_metrics_opt, args.all_opt)
         # Run recorder
         else:
-            self.__run_cpi(args.output_file, args.quiet)
+            self.__record(args.output_file, args.quiet)
 
-    def __run_cpi(self, cpi_file_name, quiet=False):
-        """ Run the breakdown feature and return a formatted events file
-        with .cpi extension
+    def __record(self, cpi_file_name, quiet=False):
+        """ Record the events and their values in a .cpi file
 
         Parameters:
             cpi_file_name - the path where the cpi file will be generated
@@ -144,7 +143,8 @@ class Controller(object):
                 sys.exit(1)
             core.parse_file(ocount_out, events)
         core.execute("rm " + ocount_out)
-        print
+        if not quiet:
+            print ""
 
         core.save_events(events, cpi_file_name)
         return events
@@ -212,7 +212,7 @@ class Controller(object):
         if autodrilldown:
             # Running autodrilldown generating a .cpi file
             if not autodrilldown_file:
-                events = self.__run_cpi(None, False)
+                events = self.__record(None, False)
             # Running autodrilldown using an already created file
             elif autodrilldown_file:
                 events = self.__get_events_from_file(autodrilldown_file)
