@@ -53,18 +53,6 @@ class CoreTests(unittest.TestCase):
         assert False == core.supported_processor("POWER7")
         assert True == core.supported_processor("POWER8")
 
-    def test_create_csv_file(self):
-        values = [['element1', '20'], ['element2', '30']]
-        file_path = core.create_csv_file("my_file", values)
-        with open(file_path, 'r') as csvfile:
-            file_content = []
-            reader = csv.reader(csvfile)
-            for row in reader:
-                file_content.append(row)
-            self.assertEqual(2, len(file_content))
-            self.assertEqual(values[0], file_content[0])
-            self.assertEqual(values[1], file_content[1])
-
     def test_percentage(self):
         self.assertEqual("100.00", core.percentage(10, 20))
         self.assertEqual("-50.00", core.percentage(20, 10))
