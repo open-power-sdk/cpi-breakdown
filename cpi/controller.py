@@ -231,14 +231,14 @@ class Controller(object):
             drilldown_view = DrilldownView()
             drilldown_view.print_drilldown(event, report_file, threshold)
 
-    def __run_compare(self, file_names, sort_opt, csv_file):
+    def __run_compare(self, file_names, sort_opt, csv_format):
         """ Get the contents of two ocount output files, compare their results
         and display in a table
 
         Parameters:
             file_names - cpi formatted file names
             sort_opt - if should sort the compare
-            csv_file - if should redirect the comparison result to a csv file
+            csv_format - if should display the result in a csv format
         """
         dict_list = []
         final_array = []
@@ -258,8 +258,8 @@ class Controller(object):
             sys.exit(1)
 
         compare_view = CompareView(final_array)
-        if csv_file:
-            compare_view.save_to_file("cpi_compare.csv")
+        if csv_format:
+            compare_view.print_csv_format()
         else:
             compare_view.create_table(file_names)
 
