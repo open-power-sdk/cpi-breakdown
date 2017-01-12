@@ -102,13 +102,15 @@ class InfoHandler(object):
 
     def __show_all(self):
         """ Show information of all resources (metrics and events) """
+        print "\nEvents:\n"
         self.__show_all_events()
+        print "\nMetrics:\n"
         self.__show_all_metrics()
 
     def __print_events_info(self, occurrence_event):
         """ Print information about events """
-        print "    Name:\t", occurrence_event
-        print "    Type:\tEvent"
+        print "    Name:       ", occurrence_event
+        print "    Type:        Event"
         print "    Description:", \
             self.e_reader.get_event_description(occurrence_event)
         return 0
@@ -116,11 +118,11 @@ class InfoHandler(object):
     def __print_metrics_info(self, occurrence_metric):
         """ Display information about metric_name if it is in the
            metrics_list."""
-        print "    Name:\t", self.get_metric_name(occurrence_metric)
-        print "    Type:\tMetric"
+        print "    Name:       ", self.get_metric_name(occurrence_metric)
+        print "    Type:        Metric"
         print "    Description:",\
             self.get_metric_description(occurrence_metric)
-        print "    Formula:\t", self.get_metric_formula(occurrence_metric)
+        print "    Formula:    ", self.get_metric_formula(occurrence_metric)
         return 0
 
     def __get_events_list(self, event_names):

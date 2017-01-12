@@ -120,7 +120,7 @@ def main(argv=None):
             dest='top_events',
             metavar='N',
             type=int,
-            help='show the N highest events. This option suppress \n'
+            help='show the N highest events. This option suppresses \n'
                  'the breakdown output\n'
                  'e.g: cpi display --top-events=3 -f <file.cpi>')
         parser_display.add_argument(
@@ -128,7 +128,7 @@ def main(argv=None):
             dest='top_metrics',
             metavar='N',
             type=int,
-            help='show the N highest metrics. This option suppress \n'
+            help='show the N highest metrics. This option suppresses \n'
                  'the breakdown output\n'
                  'e.g: cpi display --top-metrics=3 -f <file.cpi>')
         parser_display.add_argument(
@@ -155,7 +155,7 @@ def main(argv=None):
             help='specify the event that will be used for drilldown\n'
                  'e.g: cpi drilldown -e <EVENT_NAME> -b <binary>')
         drilldown_group.add_argument(
-            '-a', '--auto-drilldown',
+            '-a', '--auto',
             dest='autodrilldown',
             metavar='N',
             type=int,
@@ -174,7 +174,7 @@ def main(argv=None):
             dest='threshold',
             metavar='N',
             type=float,
-            help='do not display drilldown for groups less than N%%\n'
+            help='do not display drilldown for symbols less than N%%\n'
                  'e.g: cpi drilldown -t 5.5 -e <EVENT_NAME> -b <binary>\n'
                  '     cpi drilldown -t 6 -a 4 -f <file.cpi> -b <binary>')
         parser_drilldown.add_argument(
@@ -203,7 +203,7 @@ def main(argv=None):
             nargs=2,
             required=True,
             metavar=('file_1.cpi', 'file_2.cpi'),
-            help='specify the files to execute the comparison\n'
+            help='specify the files on which to execute the comparison\n'
                  'e.g: cpi compare -f <file_1.cpi> <file_2.cpi>')
         parser_compare.add_argument(
             '-s', '--sort',
@@ -241,7 +241,7 @@ def main(argv=None):
             '-a', '--all',
             dest='all_opt',
             action='store_true',
-            help='show information for all occurrences supported by CPI\n'
+            help='show information for all events and metrics\n'
                  'e.g: cpi info --all')
         info_group.add_argument(
             '--all-events',
