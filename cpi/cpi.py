@@ -82,7 +82,7 @@ def main(argv=None):
             action='store_true',
             help='suppress the progress indicator during the\n'
                  'recording step\n'
-                 'e.g: cpi record -q -b <binary>')
+                 'e.g: cpi record -q <command>')
         parser_record.add_argument(
             '-o', '--output',
             dest='output_file',
@@ -90,16 +90,22 @@ def main(argv=None):
             default='',
             help='specify the name of the output file which is created\n'
                  'during the recording step\n'
-                 'e.g: cpi record -o <output_file> -b <binary>')
+                 'e.g: cpi record -o <output_file> <command>')
         parser_record.add_argument(
-            '-b', '--binary',
-            dest='binary_path',
+            dest='cmd',
+            type=str,
+            default=None,
             metavar='COMMAND',
-            type=str, default='',
-            required=True,
-            help='the application binary and its arguments inside quotes\n'
-                 'e.g: cpi record -b <binary>\n'
-                 '     cpi record -b /usr/bin/ls \'-la\'')
+            nargs=1,
+            help='the application and its arguments\n'
+                 'e.g: cpi record <command>\n'
+                 '     cpi record /usr/bin/ls -la')
+        parser_record.add_argument(
+            dest='cmd_args',
+            type=str,
+            default=None,
+            nargs=argparse.REMAINDER,
+            help=argparse.SUPPRESS)
 
         # Data Display
         parser_display = subparsers.add_parser(
@@ -168,18 +174,23 @@ def main(argv=None):
             metavar='N',
             type=float,
             help='do not display drilldown for symbols less than N%%\n'
-                 'e.g: cpi drilldown -t 5.5 -e <EVENT_NAME> -b <binary>\n'
-                 '     cpi drilldown -t 6 -a 4 -f <file.cpi> -b <binary>')
+                 'e.g: cpi drilldown -t 5.5 -e <EVENT_NAME> <command>\n'
+                 '     cpi drilldown -t 6 -a 4 -f <file.cpi> <command>')
         parser_drilldown.add_argument(
-            '-b', '--binary',
-            dest='binary_path',
+            dest='cmd',
             type=str,
-            default='',
+            default=None,
             metavar='COMMAND',
-            required=True,
-            help='the application binary and its arguments inside quotes\n'
-                 'e.g: cpi drilldown -e <EVENT_NAME> -b <binary>\n'
-                 '     cpi drilldown -e <EVENT_NAME> -b /usr/bin/ls \'-la\'')
+            nargs=1,
+            help='the application and its arguments\n'
+                 'e.g: cpi drilldown <command>\n'
+                 '     cpi drilldown /usr/bin/ls -la')
+        parser_drilldown.add_argument(
+            dest='cmd_args',
+            type=str,
+            default=None,
+            nargs=argparse.REMAINDER,
+            help=argparse.SUPPRESS)
 
         # Compare
         parser_compare = subparsers.add_parser(
@@ -251,9 +262,9 @@ def main(argv=None):
                  'e.g: cpi info --all-metrics')
 
         # Process arguments
-        args, application_args = parser.parse_known_args()
+        args = parser.parse_args()
         ctrller = Controller()
-        ctrller.run(args, application_args)
+        ctrller.run(args)
     except KeyboardInterrupt:
         return 1
 
