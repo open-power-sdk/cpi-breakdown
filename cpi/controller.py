@@ -47,20 +47,22 @@ class Controller(object):
         self.__binary_path = ''
         self.__binary_args = ''
 
-    def run(self, args, application_args):
+    def run(self, args):
         """
         Executes the correct action according the user input.
 
         Parameters:
             args - arguments collected by argparser
-            application_args - the application binary arguments
         """
         try:
-            self.__binary_path = args.binary_path
-        except AttributeError:
+            self.__binary_path = args.cmd[0]
+        except (IndexError, AttributeError):
             self.__binary_path = ''
-        if application_args:
-            self.__binary_args = application_args[0]
+        try:
+            self.__binary_args = ' '.join(("'" + i + "'")
+                                          for i in args.cmd_args)
+        except (IndexError, AttributeError):
+            self.__binary_args = ''
 
         # Run display
         if 'display_file' in args:
