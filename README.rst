@@ -35,26 +35,10 @@ If you intend to integrate CPI with any other you should be aware of the followi
 Building and Testing
 ========================
 
-Requirements:
+Requirements: python-pip, python-pylint, python-virtualenv, python-docsutil, oprofile
 
-* python-pip
-	
-* python-pylint
-	
-* python-virtualenv
-	
-* python-docsutil
-	
-* oprofile
+Testing: ./dev cpi tests
 
-Testing
+Build: ./dev cpi release
 
-	./dev cpi tests
-
-Build
-
-	./dev cpi release
-
-Build and install
-
-	./dev cpi install
+Build and install: ./dev cpi install
