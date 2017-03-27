@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2016 IBM Corporation
+Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -43,20 +43,21 @@ class CoreTests(unittest.TestCase):
         self.assertIn("No such file or directory", output)
 
     def test_cmdexist(self):
-        assert True == core.cmdexists("cd")
-        assert False == core.cmdexists("foo_bar")
+        assert core.cmdexists("cd") is True
+        assert core.cmdexists("foo_bar") is False
 
     def test_get_processor(self):
         self.assertEqual("POWER8", core.get_processor())
 
     def test_supported_processor(self):
-        assert False == core.supported_processor("POWER7")
-        assert True == core.supported_processor("POWER8")
+        assert core.supported_processor("POWER7") is False
+        assert core.supported_processor("POWER8") is True
 
     def test_percentage(self):
         self.assertEqual("100.00", core.percentage(10, 20))
         self.assertEqual("-50.00", core.percentage(20, 10))
         self.assertEqual("0.00", core.percentage(10, 10))
+
 
 if __name__ == '__main__':
     unittest.main()

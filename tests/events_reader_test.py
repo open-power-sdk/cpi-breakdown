@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2016 IBM Corporation
+Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -33,18 +33,19 @@ systems use the run latch to indicate when they are doing useful work. The \
 run latch is typically cleared in the OS idle loop. Gating by the run latch \
 filters out the idle loop."
 
+
 class EventsReaderTests(unittest.TestCase):
     """ Class to run tests from events_reader """
     reader = events_reader.EventsReader(PROCESSOR_VERSION)
 
     def test_get_events(self):
         events_list = self.reader.get_events()
-        assert not None == events_list
+        assert events_list is not None
         self.assertEqual(20, len(events_list))
 
     def test_valid_event(self):
-        assert True == self.reader.valid_event(VALID_EVENT)
-        assert False == self.reader.valid_event(INVALID_EVENT)
+        assert self.reader.valid_event(VALID_EVENT) is True
+        assert self.reader.valid_event(INVALID_EVENT) is False
 
     def test_get_event_mincount(self):
         self.assertEquals(100000, self.reader.get_event_mincount(VALID_EVENT))

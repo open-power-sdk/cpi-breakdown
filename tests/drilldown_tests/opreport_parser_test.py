@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2016 IBM Corporation
+Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -82,6 +82,7 @@ class OpreportParserTest(unittest.TestCase):
         detaildata = symboldetails.get_detaildata_list()[-1]
         self.assertEqual("30", detaildata.get_line())
         self.assertEqual(547, detaildata.get_count())
+
 
 if __name__ == '__main__':
     unittest.main()

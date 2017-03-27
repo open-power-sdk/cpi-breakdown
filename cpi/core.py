@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2016 IBM Corporation
+Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -75,6 +75,7 @@ def supported_feature(processor, feature_name):
                          .format(feature_name, processor))
         sys.exit(1)
 
+
 def check_supported_feat(feature_name):
     """Check whether a feature is supported. If it is not supported,
     force the execution to finish"""
@@ -86,6 +87,7 @@ def check_supported_feat(feature_name):
         ret_val = False
     return ret_val
 
+
 def parse_file(output_stream, event_values):
     """Parse the ocount output file to get events and values"""
     with open(output_stream, "r") as infile:
@@ -95,6 +97,7 @@ def parse_file(output_stream, event_values):
                 val = line.split(",")[1].strip()
                 event_values[key_val] = val
     return event_values
+
 
 def save_events(events, file_name):
     """Save events values into file"""
@@ -130,9 +133,9 @@ def percentage(init_val, final_val):
     value = 100 * (final_val - init_val) / float(init_val)
     return "%.2f" % value
 
+
 def get_events_from_file(cpi_file):
     """ Reads events from CPI file
-
     Parameters:
         cpi_file - Cpi file name """
     events = {}
@@ -146,5 +149,4 @@ def get_events_from_file(cpi_file):
                          "Select a properly formatted file "
                          "and run again\n".format(cpi_file))
         sys.exit(1)
-
     return events

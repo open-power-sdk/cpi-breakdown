@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2016 IBM Corporation
+Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ limitations under the License.
         * Daniel Kreling <dbkreling@br.ibm.com>
 """
 import unittest
-
-
 from cpi.info.info_handler import InfoHandler
 
 
@@ -84,6 +82,7 @@ class InfoHandlerTest(unittest.TestCase):
         self.assertEquals(None,
                           self.ih.get_metric_description(self.INVALID_METRIC[0]
                                                          ))
+
 
 if __name__ == '__main__':
     unittest.main()
