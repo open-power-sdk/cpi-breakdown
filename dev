@@ -96,8 +96,8 @@ buildRPM(){
 }
 
 #read the inputs
-if [ $# -ne 2 ]; then
-    echo "usage: dev <project> [ build | tests | release | run | clean | rpm | -h or --help ]"
+if [ $# -ne 1 ]; then
+    echo "usage: dev [ build | tests | release | run | clean | rpm | -h or --help ]"
     exit 1
 fi
 
@@ -107,19 +107,19 @@ sed -i -e "s/timestamp/$buildtime/g" setup.py
 tool=${PWD##*/}
 
 
-if [[ "$2" == "build" ]]; then
+if [[ "$1" == "build" ]]; then
     buildClean
-elif [[ "$2" == "tests" ]]; then
+elif [[ "$1" == "tests" ]]; then
     buildTests
-elif [[ "$2" == "install" ]]; then
+elif [[ "$1" == "install" ]]; then
     buildInstall
-elif [[ "$2" == "run" ]]; then
+elif [[ "$1" == "run" ]]; then
     buildRun $tool
-elif [[ "$2" == "clean" ]]; then
+elif [[ "$1" == "clean" ]]; then
     buildCleanAll
-elif [[ "$2" == "release" ]]; then
+elif [[ "$1" == "release" ]]; then
     buildRelease
-elif [[ "$2" == "rpm" ]]; then
+elif [[ "$1" == "rpm" ]]; then
     buildRPM
 elif [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
     echo "usage: dev [clean | tests | release]"
@@ -129,5 +129,5 @@ elif [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
 	echo "	* run: creates a virtual environment where the application is installed and executed"
 else
 	echo "Please, enter the correct command."
-	echo "usage: dev <project> [ build | tests | install | release | run | clean | -h or --help ]"
+	echo "usage: dev [ build | tests | install | release | run | clean | -h or --help ]"
 fi
