@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2016 IBM Corporation
+Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import sys
 from cpi import core
 from cpi import metrics_calculator
 
+
 class Comparator(object):
     """ Class responsible for dealing with file comparison """
 
@@ -36,12 +37,10 @@ class Comparator(object):
         if profile_list is not None:
             self.profile_list = profile_list
 
-
     def make_comparison(self, comparison_type, file_names=None):
         """ Make profiles comparison and return a list
         of lists composed by: event_name, init_value, final_value and
         percentage"""
-
         comparison_list = []
         if file_names is None:
             comparison_list = self.__compare_from_lists(comparison_type)
@@ -61,7 +60,6 @@ class Comparator(object):
         try:
             for key in dict_list[0]:
                 self.dict_vals[key] = tuple(d[key] for d in dict_list)
-
         except KeyError:
             sys.stderr.write("Could not create values dictionary."
                              "\nSelect properly formatted files and run the "
@@ -88,7 +86,6 @@ class Comparator(object):
         """ Calculate the percentage from dictionary values and return a list
         of lists composed by: event_name, init_value, final_value and
         percentage"""
-
         final_array = []
         for key in dict_vals:
             try:
@@ -127,7 +124,6 @@ class Comparator(object):
     def load_profiling_list(self, file_names, comparison_type):
         """ Create a list with two dictionaries containing
         "event|metric:value" pairs """
-
         dict_list = []
         for file_name in file_names:
             events = core.get_events_from_file(file_name)

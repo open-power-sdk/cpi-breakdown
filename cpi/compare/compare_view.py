@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2016 IBM Corporation
+Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ limitations under the License.
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
 """
 
-
 from terminaltables import AsciiTable
+
 
 class CompareView(object):
     """ Handles the display of the comparison results """

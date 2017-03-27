@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2016 IBM Corporation
+Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
     Contributors:
-        * rafael Peria de Sene <rpsene@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
 import unittest
@@ -33,7 +33,6 @@ class MetricsCalculationTests(unittest.TestCase):
     '''
     Test cases for metrics calculation structure
     '''
-
     metric_pattern = re.compile("(\(?[-+]?[0-9]*\.?[0-9]+[\/\+\-\*]\)?)+")
 
     def test_eval_add_sub(self):
@@ -86,6 +85,7 @@ class MetricsCalculationTests(unittest.TestCase):
         with self.assertRaises(SystemExit) as exit_status:
             metrics = MetricsCalculator("POWER7")
         self.assertEqual(exit_status.exception.code, 1)
+
 
 if __name__ == '__main__':
     unittest.main()
