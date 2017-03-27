@@ -36,21 +36,25 @@ Building and Testing
 ========================
 
 Requirements:
-	python-pip
+
+* python-pip
 	
-	python-pylint
+* python-pylint
 	
-	python-virtualenv
+* python-virtualenv
 	
-	python-docsutil
+* python-docsutil
 	
-	oprofile
+* oprofile
 
 Testing
+
 	./dev cpi tests
 
 Build
+
 	./dev cpi release
 
 Build and install
+
 	./dev cpi install
