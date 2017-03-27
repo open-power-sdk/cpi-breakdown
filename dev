@@ -52,7 +52,7 @@ buildTests(){
 buildRun(){
 	createVirtEnv
 	python ./setup.py install
-	$1 -h
+	cpi -h
 	destroyVirtEnv
 	clean
 	return $TRUE
@@ -62,7 +62,7 @@ buildInstall(){
 	clean
 	python ./setup.py sdist
 	python ./setup.py check -m
-    sudo pip install --upgrade ./$1/dist/*.tar.gz
+        sudo pip install --upgrade ./dist/*.tar.gz
 	return $TRUE
 }
 
@@ -101,16 +101,11 @@ if [ $# -ne 2 ]; then
     exit 1
 fi
 
-if [[ -n "$1" ]]; then
-	cd $1
-	tool=${PWD##*/}
-else
-	echo "Please select the project where to run it."
-fi
-
 # overwrite timestamp in setup.py file
 buildtime=$(date +%Y%m%d%H%M%S)
 sed -i -e "s/timestamp/$buildtime/g" setup.py
+tool=${PWD##*/}
+
 
 if [[ "$2" == "build" ]]; then
     buildClean
