@@ -7,35 +7,43 @@ CPI refers to how many processor cycles are needed to complete an instruction. A
 CPI commands:
 
 	record: collect and record the events used in the breakdown
+
 	display: display the result of the data collected during the recording step
+
 	drilldown: perform a drilldown execution for a specific event
+
 	compare: compare the collected results of two CPI executions and provide feedback on performance variations
+
 	info: show information about events and metrics
 
-    For details about the usage of each command, see cpi <command> --help
+	For details about the usage of each command, see cpi <command> --help
+
 
 Note for Integrators:
 
-    CPI may return one of several error codes if it encounters problems.
+	CPI may return one of several error codes if it encounters problems.
 
 	0: no problems occurred.
+
 	1: generic error code.
+
 	2: some dependency tool is missing
+
 
 Building and Testing
 
-	#Requirements
+Requirements:
 	python-pip
 	python-pylint
 	python-virtualenv
 	python-docsutil
 	oprofile
 
-	#Testing
+Testing
 	./dev cpi tests
 
-	#Build
+Build
 	./dev cpi release
 
-	#Build and install
+Build and install
 	./dev cpi install
