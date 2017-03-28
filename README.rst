@@ -37,8 +37,8 @@ Building and Testing
 
 Requirements: python-pip, python-pylint, python-virtualenv, python-docsutil, oprofile
 
-Testing: ./dev cpi tests
+Testing: ./dev tests
 
-Build: ./dev cpi release
+Build: ./dev release
 
-Build and install: ./dev cpi install
+Build and install: ./dev install
