@@ -23,7 +23,7 @@ For details about the usage of each command, see cpi <command> --help
 Integrators
 ========================
 
-If you intend to integrate CPI with any other you should be aware of the following error codes:
+If you intend to integrate CPI within your development environment you should be aware of the following error codes:
 
 * 0: no problems occurred.
 
