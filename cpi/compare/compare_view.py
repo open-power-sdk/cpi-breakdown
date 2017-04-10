@@ -19,6 +19,7 @@ limitations under the License.
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
 from terminaltables import AsciiTable
@@ -36,10 +37,12 @@ class CompareView(object):
         """ Create a table with comparison two output files """
         title = ""
         print "\nComparing file names:"
-        print "File 1 = %s\nFile 2 = %s" % (self.file_names[0], self.file_names[1])
-        print "\nNOTE:\nA raise in number of all elements represent a decrease in "\
-              "the \nperformance of the application. Therefore, the smallest the "\
-              "\npercentage, the better the application performance.\n"
+        print "File 1 = %s\nFile 2 = %s" % (self.file_names[0],
+                                            self.file_names[1])
+        print "\nNOTE:\nA raise in number of all elements represent"
+        print "\na decrease in the performance of the application."
+        print "\nTherefore, the smallest the percentage, the better"
+        print "\nthe application performance."
 
         elem_name = ''
         if self.comparison_type == 'event':
@@ -48,10 +51,7 @@ class CompareView(object):
         elif self.comparison_type == 'metric':
             elem_name = 'Metric Name'
             title = "----- Comparison Table for Metrics"
-
-        table_data = [
-            [elem_name, 'File 1', 'File 2', 'Percentage']
-        ]
+        table_data = [[elem_name, 'File 1', 'File 2', 'Percentage']]
 
         for entry in self.results_list:
             # if float, convert to string so to display two decimal points

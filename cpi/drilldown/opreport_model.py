@@ -17,10 +17,11 @@ limitations under the License.
 
     Contributors:
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
 
-class BinModule:
+class BinModule(object):
     """ Class to hold both binary and module tags """
     def __init__(self, name, count, symbol_list):
         self.name = name
@@ -37,7 +38,7 @@ class BinModule:
         return self.symbol_list
 
 
-class Symbol:
+class Symbol(object):
     """ Class to hold symbol tag """
     def __init__(self, idref, count, symboldata):
         # The 'idref' reference the 'i' from SymbolData class
@@ -60,7 +61,7 @@ class Symbol:
         return self.idref == other.idref
 
 
-class SymbolData:
+class SymbolData(object):
     """ Class to hold symboldata tag """
     def __init__(self, i, name, file_name, line, symboldetails):
         # The 'i' from this class reference the 'i' from
@@ -87,7 +88,7 @@ class SymbolData:
         return self.symboldetails
 
 
-class SymbolDetails:
+class SymbolDetails(object):
     """ Class to hold symboldetais tag """
     def __init__(self, i, detaildata_list):
         self.i = i
@@ -100,7 +101,7 @@ class SymbolDetails:
         return self.detaildata_list
 
 
-class DetailData:
+class DetailData(object):
     """ Class to hold detaildata tag """
     def __init__(self, line, count):
         self.line = line

@@ -17,6 +17,7 @@ limitations under the License.
 
     Contributors:
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
 from decimal import Decimal
@@ -24,7 +25,7 @@ from opreport_model import *
 from opreport_parser import *
 
 
-class DrilldownModel:
+class DrilldownModel(object):
     """ Class to create the model of drilldown """
     def __init__(self):
         self.binmodule_list = []
@@ -88,7 +89,7 @@ class DrilldownModel:
         return percentage
 
 
-class UiBinModule:
+class UiBinModule(object):
     """ Class to hold info about the binary that was profiled """
     def __init__(self, name, percentage):
         self.name = name
@@ -121,7 +122,7 @@ class UiBinModule:
         return self.percentage > other.percentage
 
 
-class UiSymbol:
+class UiSymbol(object):
     """ Class to hold info about symbols """
     def __init__(self, name, file_name, percentage):
         self.name = name
@@ -156,7 +157,7 @@ class UiSymbol:
         return self.percentage > other.percentage
 
 
-class UiSample:
+class UiSample(object):
     """ Class to hold info about samples """
     def __init__(self, line, percentage):
         self.line = line

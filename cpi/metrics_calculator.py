@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
     Contributors:
-        * Rafael Sene <rpsene@br.ibm.com>
+        * Rafael Peria Sene <rpsene@br.ibm.com>
 """
 
 import os
@@ -98,7 +98,8 @@ class MetricsCalculator(object):
                         replaced by its value.
                         '''
                         if parameter in parsed_output:
-                            calc_function[calc_function.index(parameter)] = 'float(' + parsed_output.get(parameter) + ')'
+                            prm = 'float(' + parsed_output.get(parameter) + ')'
+                            calc_function[calc_function.index(parameter)] = prm
                     '''
                     Once the events are replaced by its values in the metric,
                     we put it all togheter again and calculate the metric
@@ -108,7 +109,10 @@ class MetricsCalculator(object):
                     result_tmp.append(group["NAME"])
                     if metric_result > 0:
                         result_tmp.append("%.3f" % metric_result)
-                        result_tmp.append("%.2f" % eval('(float(metric_result) / (float(parsed_output.get(\'PM_RUN_CYC\'))/float(parsed_output.get(\'PM_RUN_INST_CMPL\'))))*100'))
+                        cmd = ('(float(metric_result)/(float(parsed_output.get'
+                               '(\'PM_RUN_CYC\'))/float(parsed_output.get'
+                               '(\'PM_RUN_INST_CMPL\'))))*100')
+                        result_tmp.append("%.2f" % eval(cmd))
                     else:
                         result_tmp.append(0)
                         result_tmp.append(fabs(0))

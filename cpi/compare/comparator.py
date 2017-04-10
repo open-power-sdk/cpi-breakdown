@@ -19,6 +19,7 @@ limitations under the License.
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
 import sys
@@ -45,7 +46,8 @@ class Comparator(object):
         if file_names is None:
             comparison_list = self.__compare_from_lists(comparison_type)
         else:
-            comparison_list = self.__compare_from_files(file_names, comparison_type)
+            comparison_list = self.__compare_from_files(file_names,
+                                                        comparison_type)
         return comparison_list
 
     def __compare_from_files(self, file_names, comparison_type):
@@ -71,7 +73,8 @@ class Comparator(object):
         if comparison_type == 'metric':
             metrics = {}
             # Calculate metrics values
-            metrics_calc = metrics_calculator.MetricsCalculator(core.get_processor())
+            processor = core.get_processor()
+            metrics_calc = metrics_calculator.MetricsCalculator(processor)
             for events in self.profile_list:
                 metrics_values = metrics_calc.calculate_metrics(events)
                 for values in metrics_values:
@@ -93,8 +96,8 @@ class Comparator(object):
                 final_value = float(dict_vals[key][1])
             except ValueError:
                 sys.stderr.write("Could not perform the comparison."
-                                 "\nSelect properly formatted files and run the "
-                                 "compare feature again.\n")
+                                 "\nSelect properly formatted files and "
+                                 "run the compare feature again.\n")
                 sys.exit(1)
 
             if init_value != 0:
@@ -112,9 +115,7 @@ class Comparator(object):
             except ValueError:
                 # Do nothing, the percentage is the "n/a" string
                 pass
-
             final_array.append([key, init_value, final_value, percentage])
-
         # Sort the list and move the n/a percentages to the end
         final_array = sorted(final_array, key=lambda x:
                              (not isinstance(x[3], str), x[3]),
@@ -132,7 +133,8 @@ class Comparator(object):
             elif comparison_type == 'metric':
                 metrics = {}
                 # Calculate metrics values
-                metrics_calc = metrics_calculator.MetricsCalculator(core.get_processor())
+                processor = core.get_processor()
+                metrics_calc = metrics_calculator.MetricsCalculator(processor)
                 metrics_values = metrics_calc.calculate_metrics(events)
                 for values in metrics_values:
                     metrics[str(values[0])] = values[1]

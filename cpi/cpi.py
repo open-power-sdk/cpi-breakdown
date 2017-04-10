@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
+'''
 Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
@@ -17,11 +17,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
     Contributors:
-        * Rafael Sene <rpsene@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
-"""
+'''
 
 import sys
 import argparse
@@ -36,7 +36,7 @@ __version__ = pkg_resources.require("cpi")[0].version
 
 
 class CLIError(Exception):
-    """Error treatment"""
+    '''Error treatment'''
     def __init__(self, msg):
         super(CLIError).__init__(type(self))
         self.msg = "E: %s" % msg
@@ -49,7 +49,7 @@ class CLIError(Exception):
 
 
 def main(argv=None):
-    """CPI main function"""
+    '''CPI main function'''
     if argv is None:
         argv = sys.argv
     else:
@@ -59,8 +59,8 @@ def main(argv=None):
     program_version_message = '%%(prog)s %s ' % (program_version)
     program_shortdesc = '''
     --- Cycles Per Instruction (CPI) ---
-    Profiles C/C++ applications with the CPI (cycles per instruction) breakdown
-    model for POWER8.'''
+    Profiles C/C++ applications with the CPI (cycles per instruction)
+    breakdown model for POWER8.'''
 
     try:
         parser = ArgumentParser(description=program_shortdesc,

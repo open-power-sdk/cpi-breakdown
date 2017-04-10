@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
     Contributors:
-        * Rafael Sene <rpsene@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
 """
 
