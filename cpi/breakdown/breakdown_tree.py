@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
     Contributors:
-        * Rafael Sene <rpsene@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
 
@@ -38,7 +38,8 @@ class BreakdownTree(object):
         # Get all breakdown components
         for group in metrics.values():
             if group['COMPONENTS']:
-                self.metric_components[str(group['NAME'])] = group['COMPONENTS']
+                group_name = str(group['NAME'])
+                self.metric_components[group_name] = group['COMPONENTS']
 
     def print_tree(self):
         '''
@@ -50,7 +51,8 @@ class BreakdownTree(object):
         print "RUN_CPI" + ': ' + self.metrics_value_dict["RUN_CPI"]
         level1 = self.metric_components['RUN_CPI']
         for level2 in level1:
-            print self.IDENTATION + level2 + ': ' + self.metrics_value_dict[level2]
+            msg = self.IDENTATION + level2 + ': '
+            print msg + self.metrics_value_dict[level2]
             self.print_level(level2, identation_size)
 
     def print_level(self, current_level, identation):

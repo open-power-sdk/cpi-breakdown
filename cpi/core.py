@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""
+'''
 Copyright (C) 2017 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
@@ -16,11 +16,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
     Contributors:
-        * Rafael Sene <rpsene@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
-"""
+'''
 import subprocess
 import commands
 import time
@@ -31,7 +31,7 @@ SUPPORTED_PROCESSORS = ["POWER8"]
 
 
 def execute(command):
-    """ Execute a command with its parameters and return the exit code """
+    ''' Execute a command with its parameters and return the exit code '''
     try:
         return subprocess.check_call([command], stderr=subprocess.STDOUT,
                                      shell=True)
@@ -40,8 +40,8 @@ def execute(command):
 
 
 def execute_stdout(command):
-    """ Execute a command with its parameter and return the exit code
-    and the command output """
+    ''' Execute a command with its parameter and return the exit code
+    and the command output '''
     try:
         subprocess.check_output([command], stderr=subprocess.STDOUT,
                                 shell=True)
@@ -51,25 +51,26 @@ def execute_stdout(command):
 
 
 def cmdexists(command):
-    """Check if a command exists"""
+    '''Check if a command exists'''
     subp = subprocess.call("type " + command, shell=True,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return subp == 0
 
 
 def get_processor():
-    """Check the system processor"""
-    return commands.getoutput("grep -io 'power[[:digit:]]\\+' -m 1 /proc/cpuinfo")
+    '''Check the system processor'''
+    cmd = "grep -io 'power[[:digit:]]\\+' -m 1 /proc/cpuinfo"
+    return commands.getoutput(cmd)
 
 
 def supported_processor(processor_version):
-    """Check if processor is supported"""
+    '''Check if processor is supported'''
     return processor_version in SUPPORTED_PROCESSORS
 
 
 def supported_feature(processor, feature_name):
-    """Check whether a feature is supported. If it is not supported,
-    force the execution to finish"""
+    '''Check whether a feature is supported. If it is not supported,
+    force the execution to finish'''
     if not supported_processor(processor):
         sys.stderr.write("{} feature is not supported on {}\n"
                          .format(feature_name, processor))
@@ -77,8 +78,8 @@ def supported_feature(processor, feature_name):
 
 
 def check_supported_feat(feature_name):
-    """Check whether a feature is supported. If it is not supported,
-    force the execution to finish"""
+    '''Check whether a feature is supported. If it is not supported,
+    force the execution to finish'''
     ret_val = True
     processor = get_processor()
     if not supported_processor(processor):
@@ -89,7 +90,7 @@ def check_supported_feat(feature_name):
 
 
 def parse_file(output_stream, event_values):
-    """Parse the ocount output file to get events and values"""
+    '''Parse the ocount output file to get events and values'''
     with open(output_stream, "r") as infile:
         for line in infile:
             if not line.isspace():
@@ -100,21 +101,21 @@ def parse_file(output_stream, event_values):
 
 
 def save_events(events, file_name):
-    """Save events values into file"""
+    '''Save events values into file'''
     with open(file_name, "w") as ev_file:
         for key in events:
             ev_file.write(key + " : " + events[key] + "\n")
 
 
 def get_timestamp():
-    """Return the current timestamp"""
+    '''Return the current timestamp'''
     return time.strftime("%Y%m%d_%H%M%S")
 
 
 def file_to_dict(filename):
-    """Read contents of a file and return it as a dictionary.
+    '''Read contents of a file and return it as a dictionary.
     The file should be in format: event_name : envent_value
-    """
+    '''
     dictionary = {}
     try:
         with open(filename, "r") as infile:
@@ -129,15 +130,15 @@ def file_to_dict(filename):
 
 
 def percentage(init_val, final_val):
-    """Calculate a percentage relative to the initial amount of two values"""
+    '''Calculate a percentage relative to the initial amount of two values'''
     value = 100 * (final_val - init_val) / float(init_val)
     return "%.2f" % value
 
 
 def get_events_from_file(cpi_file):
-    """ Reads events from CPI file
+    ''' Reads events from CPI file
     Parameters:
-        cpi_file - Cpi file name """
+        cpi_file - Cpi file name '''
     events = {}
     try:
         events = file_to_dict(cpi_file)

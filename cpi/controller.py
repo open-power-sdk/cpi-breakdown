@@ -16,7 +16,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
     Contributors:
-        * Rafael Sene <rpsene@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
@@ -109,14 +109,15 @@ class Controller(object):
         reader = events_reader.EventsReader(core.get_processor())
 
         if not cpi_file_name:
-            cpi_file_name = dir_current + "/" + binary_name + "_" + timestamp + ".cpi"
+            fname = dir_current + "/" + binary_name + "_" + timestamp + ".cpi"
+            cpi_file_name = fname
         else:
             dir_file = os.path.dirname(os.path.realpath(cpi_file_name))
             if not os.path.exists(dir_file):
-                sys.stderr.write(dir_file +  " directory not found\n")
+                sys.stderr.write(dir_file + " directory not found\n")
                 return 1
             elif os.path.isdir(cpi_file_name):
-                sys.stderr.write(cpi_file_name +  " is not a file\n")
+                sys.stderr.write(cpi_file_name + " is not a file\n")
                 return 1
 
         start_time = time.time()
@@ -164,7 +165,8 @@ class Controller(object):
         events = core.get_events_from_file(cpi_file)
 
         # Calculate metrics values
-        metrics_calc = metrics_calculator.MetricsCalculator(core.get_processor())
+        processor = core.get_processor()
+        metrics_calc = metrics_calculator.MetricsCalculator(processor)
         metrics_value = metrics_calc.calculate_metrics(events)
 
         # Show events and metrics hot spots
@@ -242,7 +244,8 @@ class Controller(object):
 
             # Run operf
             min_count = str(reader.get_event_mincount(event))
-            drilldown_core.run_operf(self.__binary_path, self.__binary_args,
+            drilldown_core.run_operf(self.__binary_path,
+                                     self.__binary_args,
                                      event, min_count)
             # Run opreport
             report_file = "opreport.xml"
@@ -262,8 +265,8 @@ class Controller(object):
             comparison_type - choose between event or metric
             csv_format - if should display the result in a csv format
         """
-
-        if comparison_type == 'metric' and  not core.check_supported_feat("Compare metrics"):
+        suported_feature = core.check_supported_feat("Compare metrics")
+        if comparison_type == 'metric' and not suported_feature:
             sys.exit(1)
 
         comparator = Comparator()
