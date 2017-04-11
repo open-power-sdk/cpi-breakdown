@@ -2,3 +2,5 @@ include requirements.txt
 recursive-include data *
 include cpi/events/power8.yaml
 include cpi/metrics/power8.yaml
+include README.md
+include LICENSE
