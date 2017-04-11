@@ -27,23 +27,24 @@ from setuptools import setup, find_packages
 from pip.req import parse_requirements
 
 with open('README.rst') as f:
-    readme = f.read()
+    README = f.read()
 
-requirements_list = parse_requirements('./requirements.txt', session=False)
-requirements = [str(required.req) for required in requirements_list]
+REQUIREMENTS_LIST = parse_requirements('./requirements.txt', session=False)
+REQUIREMENTS = [str(required.req) for required in REQUIREMENTS_LIST]
 
 setup(
     name='cpi',
     version='1.0.timestamp',
-    description='Profiles C/C++ applications with the CPI (cycles per instruction) breakdown model for POWER8',
-    long_description=readme,
+    description='Profiles C/C++ applications with the CPI (cycles per \
+instruction) breakdown model for POWER8',
+    long_description=README,
     author='Rafael Peria de Sene, Roberto Guimarães Dutra de Oliveira, \
 Daniel Battaiola Kreling, Diego Fernandez Merjildo',
     author_email='rpsene@br.ibm.com, rdutra@br.ibm.com, \
 dbkreling@br.ibm.com, merjildo@br.ibm.com',
     url='https://www-304.ibm.com/webapp/set2/sas/f/lopdiags/sdklop.html',
     license='Apache Software License 2.0',
-    install_requires=requirements,
+    install_requires=REQUIREMENTS,
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
     test_suite='nose.collector',
@@ -59,5 +60,5 @@ dbkreling@br.ibm.com, merjildo@br.ibm.com',
         'Programming Language :: C++',
         'Topic :: Software Development :: Build Tools',
         'License :: OSI Approved :: Apache Software License 2.0',
-          ],
+        ],
 )

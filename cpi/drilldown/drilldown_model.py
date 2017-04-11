@@ -21,8 +21,7 @@ limitations under the License.
 """
 
 from decimal import Decimal
-from opreport_model import *
-from opreport_parser import *
+import opreport_parser
 
 
 class DrilldownModel(object):
@@ -32,7 +31,7 @@ class DrilldownModel(object):
 
     def create_drilldown_model(self, report_file):
         """ Create the drilldown model object and return it """
-        parser = OpreportParser()
+        parser = opreport_parser.OpreportParser()
         self.binmodule_list = parser.parse(report_file)
 
         binmodule_total_count = self.get_binmodule_total_count()
@@ -81,7 +80,8 @@ class DrilldownModel(object):
             count += binmodule.get_count()
         return count
 
-    def calc_percentage(self, count, total_count, percent_factor=100):
+    @staticmethod
+    def calc_percentage(count, total_count, percent_factor=100):
         """ Calculate the percentage for a specific count
         in proportion to the total, using the percent factor """
         percentage = Decimal(float(count) * percent_factor / total_count)

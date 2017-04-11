@@ -30,6 +30,10 @@ class MetricsTable(object):
         self.metrics_values = metrics_values
 
     def print_table(self):
+        '''
+        Pretty print the table with metric, value and
+        percentage
+        '''
         met_table = [['Metric', 'Value', 'Percentage']]
         for row in self.metrics_values:
             met_table.append(row)

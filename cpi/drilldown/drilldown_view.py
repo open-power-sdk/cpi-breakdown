@@ -17,15 +17,15 @@ limitations under the License.
 
     Contributors:
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
 from drilldown_model import DrilldownModel
-from opreport_model import *
 
 TABULATION = "    "
 
 
-class DrilldownView:
+class DrilldownView(object):
     """ This class represents the drilldown view """
 
     def print_drilldown(self, event, report_file, threshold):
@@ -60,13 +60,15 @@ class DrilldownView:
                     print TABULATION + TABULATION + ui_sample.get_text()
         print border + "\n"
 
-    def __print_logo(self, title, border):
+    @staticmethod
+    def __print_logo(title, border):
         """ Print the drilldown logo """
         print ""
         print border
         print title
         print border
 
-    def __get_border(self, title):
+    @staticmethod
+    def __get_border(title):
         """ Get the border """
         return "=" * len(title)

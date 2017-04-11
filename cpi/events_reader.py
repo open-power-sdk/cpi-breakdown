@@ -74,14 +74,15 @@ class EventsReader(object):
         except TypeError:
             return None
 
-    def __read_events(self, events_file):
+    @staticmethod
+    def __read_events(events_file):
         '''Read the events from the respective file'''
         try:
-            with open(events_file, "r") as f:
-                groups = yaml.load(f)
+            with open(events_file, "r") as efile:
+                groups = yaml.load(efile)
                 events_dic = []
-                for i in groups.values():
-                    events_dic.append(i)
+                for value in groups.values():
+                    events_dic.append(value)
                 return events_dic
         except IOError:
             sys.stderr.write("Could not find file '{}'. Check if your "
