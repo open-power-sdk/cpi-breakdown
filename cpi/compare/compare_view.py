@@ -40,9 +40,9 @@ class CompareView(object):
         print "File 1 = %s\nFile 2 = %s" % (self.file_names[0],
                                             self.file_names[1])
         print "\nNOTE:\nA raise in number of all elements represent"
-        print "\na decrease in the performance of the application."
-        print "\nTherefore, the smallest the percentage, the better"
-        print "\nthe application performance."
+        print "a decrease in the performance of the application."
+        print "Therefore, the smallest the percentage, the better"
+        print "the application performance.\n"
 
         elem_name = ''
         if self.comparison_type == 'event':
