@@ -24,7 +24,6 @@ import re
 import sys
 from collections import defaultdict
 from math import fabs
-import parser
 import yaml
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -40,7 +39,8 @@ class MetricsCalculator(object):
         metrics_file = DIR_PATH + "/metrics/" + str.lower(processor) + ".yaml"
         self.metrics_groups = self.__read_metrics(metrics_file)
 
-    def __read_metrics(self, metrics_file):
+    @staticmethod
+    def __read_metrics(metrics_file):
         """ Get the metrics based on the processor version. They are located
         at /metrics/<processor_model>.yaml. It returns a dictionary which
         contains the NAME an the EQUATION """
@@ -54,6 +54,7 @@ class MetricsCalculator(object):
             sys.exit(1)
 
     def get_raw_metrics(self):
+        '''Return the raw metrics collect from its file'''
         return self.metrics_groups
 
     def calculate_metrics(self, parsed_output_dict):
@@ -75,56 +76,45 @@ class MetricsCalculator(object):
         parsed_output = defaultdict(list)
         parsed_output = parsed_output_dict
         metrics_results = []
-        try:
-            if int(parsed_output.get('PM_RUN_INST_CMPL')[0]) > 0:
-                for group in self.metrics_groups.values():
-                    result_tmp = []
-                    '''
-                    Split the metrics in all components to allow replacing the
-                    events with the calculated values.
-                    For example, the metric:
-                    PM_CMPLU_STALL_DMISS_L3MISS - (PM_CMPLU_STALL_DMISS_LMEM + \
-                    PM_CMPLU_STALL_DMISS_L21_L31 + PM_CMPLU_STALL_DMISS_REMOTE)
-                    Becomes:
-                    [PM_CMPLU_STALL_DMISS_L3MISS, -, (, PM_CMPLU_STALL_DMISS_LMEM,\
-                     +, PM_CMPLU_STALL_DMISS_L21_L31, +, \
-                     PM_CMPLU_STALL_DMISS_REMOTE, )]
-                    '''
-                    calc_function = re.split("([+-/*/(/)//])",
-                                             group['FORMULA'].replace(" ", ""))
-                    for parameter in calc_function:
-                        '''
-                        If we find the event in the parsed output, it is
-                        replaced by its value.
-                        '''
-                        if parameter in parsed_output:
-                            prm = 'float(' + parsed_output.get(parameter) + ')'
-                            calc_function[calc_function.index(parameter)] = prm
-                    '''
-                    Once the events are replaced by its values in the metric,
-                    we put it all togheter again and calculate the metric
-                    '''
-                    metric = ''.join(calc_function)
-                    metric_result = eval(metric)
-                    result_tmp.append(group["NAME"])
-                    if metric_result > 0:
-                        result_tmp.append("%.3f" % metric_result)
-                        cmd = ('(float(metric_result)/(float(parsed_output.get'
-                               '(\'PM_RUN_CYC\'))/float(parsed_output.get'
-                               '(\'PM_RUN_INST_CMPL\'))))*100')
-                        result_tmp.append("%.2f" % eval(cmd))
-                    else:
-                        result_tmp.append(0)
-                        result_tmp.append(fabs(0))
-                    metrics_results.append(result_tmp)
-                return metrics_results
-            else:
-                sys.stderr.write("PM_RUN_INST_CMPL is 0.")
-                sys.stderr.write("As it is the base divisor for all metrics \
-                                 calculation it can not be 0. \
-                                 Please run CPI again.")
-                sys.exit(0)
-        except Exception as ecx:
-            sys.stderr.write(str(type(ecx)))
-            sys.stderr.write(str(ecx.args))
-            sys.stderr.write(str(ecx))
+        if int(parsed_output.get('PM_RUN_INST_CMPL')[0]) > 0:
+            for group in self.metrics_groups.values():
+                result_tmp = []
+                # Split the metrics in all components to allow replacing
+                # the events with the calculated values.
+                # For example, the metric:
+                # PM_CMPLU_STALL_DMISS_L3MISS - (PM_CMPLU_STALL_DMISS_LMEM + \
+                # PM_CMPLU_STALL_DMISS_L21_L31 + PM_CMPLU_STALL_DMISS_REMOTE)
+                # Becomes:
+                # [PM_CMPLU_STALL_DMISS_L3MISS, -, (, PM_CMPLU_STALL_DMISS_LMEM,\
+                # +, PM_CMPLU_STALL_DMISS_L21_L31, +, \
+                # PM_CMPLU_STALL_DMISS_REMOTE, )]
+                calc_function = re.split("([+-/*/(/)//])",
+                                         group['FORMULA'].replace(" ", ""))
+                for parameter in calc_function:
+                    # If we find the event in the parsed output, it is
+                    # replaced by its value.
+                    if parameter in parsed_output:
+                        prm = 'float(' + parsed_output.get(parameter) + ')'
+                        calc_function[calc_function.index(parameter)] = prm
+                # Once the events are replaced by its values in the metric,
+                # we put it all togheter again and calculate the metric
+                metric = ''.join(calc_function)
+                metric_result = eval(metric)
+                result_tmp.append(group["NAME"])
+                if metric_result > 0:
+                    result_tmp.append("%.3f" % metric_result)
+                    cmd = ('(float(metric_result)/(float(parsed_output.get'
+                           '(\'PM_RUN_CYC\'))/float(parsed_output.get'
+                           '(\'PM_RUN_INST_CMPL\'))))*100')
+                    result_tmp.append("%.2f" % eval(cmd))
+                else:
+                    result_tmp.append(0)
+                    result_tmp.append(fabs(0))
+                metrics_results.append(result_tmp)
+            return metrics_results
+        else:
+            sys.stderr.write("PM_RUN_INST_CMPL is 0.")
+            sys.stderr.write("As it is the base divisor for all metrics \
+                             calculation it can not be 0. \
+                             Please run CPI again.")
+            sys.exit(1)

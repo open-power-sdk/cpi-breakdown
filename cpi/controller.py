@@ -50,7 +50,6 @@ class Controller(object):
     def run(self, args):
         """
         Executes the correct action according the user input.
-
         Parameters:
             args - arguments collected by argparser
         """

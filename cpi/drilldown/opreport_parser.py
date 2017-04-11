@@ -21,7 +21,7 @@ limitations under the License.
 """
 
 import xml.etree.ElementTree as elemTree
-from opreport_model import *
+import opreport_model
 
 
 class OpreportParser(object):
@@ -61,8 +61,8 @@ class OpreportParser(object):
                 count = int(count.text)
 
             symbol_list = self.parse_symbol(binmodule)
-            b = BinModule(name, count, symbol_list)
-            self.binmodule_list.append(b)
+            bmodule = opreport_model.BinModule(name, count, symbol_list)
+            self.binmodule_list.append(bmodule)
 
     def parse_symbol(self, binmodule):
         """ Parse 'symbol' tag from opreport xml """
@@ -75,13 +75,13 @@ class OpreportParser(object):
 
             # Get the corresponding symboldata for the current symbol
             symboldata = None
-            for s in self.symboldata_list:
-                if idref == s.get_id():
-                    symboldata = s
+            for sdata in self.symboldata_list:
+                if idref == sdata.get_id():
+                    symboldata = sdata
 
-            s = Symbol(idref, count, symboldata)
-            if not self.check_symbol(s):
-                symbol_list.append(s)
+            sbl = opreport_model.Symbol(idref, count, symboldata)
+            if not self.check_symbol(sbl):
+                symbol_list.append(sbl)
         return symbol_list
 
     def check_symbol(self, symbol):
@@ -90,8 +90,8 @@ class OpreportParser(object):
         because the original 'binary' is parent for all symbols, so to not
         add duplicated symbols we need to check if symbol is already added.
         """
-        for b in self.binmodule_list:
-            if symbol in b.get_symbol_list():
+        for bmodule in self.binmodule_list:
+            if symbol in bmodule.get_symbol_list():
                 return True
         return False
 
@@ -113,11 +113,12 @@ class OpreportParser(object):
 
             # Get the corresponding symboldetails for the current symboldata
             symboldetails = None
-            for s in self.symboldetail_list:
-                if i == s.get_id():
-                    symboldetails = s
+            for sdetail in self.symboldetail_list:
+                if i == sdetail.get_id():
+                    symboldetails = sdetail
 
-            sym_data = SymbolData(i, name, file_name, line, symboldetails)
+            sym_data = opreport_model.SymbolData(i, name, file_name, line,
+                                                 symboldetails)
             self.symboldata_list.append(sym_data)
 
     def parse_symboldetail(self):
@@ -134,7 +135,7 @@ class OpreportParser(object):
                     line = "0"
                 count = ddata.find('count')
                 count = int(count.text)
-                detaildata = DetailData(line, count)
+                detaildata = opreport_model.DetailData(line, count)
 
                 # If the element is aleady in the list, increment the
                 # current count for the line
@@ -143,7 +144,8 @@ class OpreportParser(object):
                     ddata = detaildata_list[index]
                     detaildata.set_count(count + ddata.get_count())
                     del detaildata_list[index]
-                detaildata_list.append(detaildata)
-            else:
-                symbol_details = SymbolDetails(i, detaildata_list)
-                self.symboldetail_list.append(symbol_details)
+                    detaildata_list.append(detaildata)
+                else:
+                    symbol_details = opreport_model.SymbolDetails(i,
+                                                                  detaildata_list)
+                    self.symboldetail_list.append(symbol_details)

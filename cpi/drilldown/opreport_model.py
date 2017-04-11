@@ -22,19 +22,22 @@ limitations under the License.
 
 
 class BinModule(object):
-    """ Class to hold both binary and module tags """
+    '''Class to hold both binary and module tags'''
     def __init__(self, name, count, symbol_list):
         self.name = name
         self.count = count
         self.symbol_list = symbol_list
 
     def get_name(self):
+        '''return name'''
         return self.name
 
     def get_count(self):
+        '''return count'''
         return self.count
 
     def get_symbol_list(self):
+        '''return symbol list'''
         return self.symbol_list
 
 
@@ -47,22 +50,25 @@ class Symbol(object):
         self.symboldata = symboldata
 
     def get_idref(self):
+        '''return idref'''
         return self.idref
 
     def get_count(self):
+        '''return count'''
         return self.count
 
     def get_symboldata(self):
+        '''return symboldata'''
         return self.symboldata
 
     def __eq__(self, other):
-        """ Objects of this class are equals if
-        the idref attribute of both objects are equal """
+        '''Objects of this class are equals if
+        the idref attribute of both objects are equal'''
         return self.idref == other.idref
 
 
 class SymbolData(object):
-    """ Class to hold symboldata tag """
+    '''Class to hold symboldata tag'''
     def __init__(self, i, name, file_name, line, symboldetails):
         # The 'i' from this class reference the 'i' from
         # SymbolDetails class
@@ -73,18 +79,23 @@ class SymbolData(object):
         self.symboldetails = symboldetails
 
     def get_id(self):
+        '''return id'''
         return self.i
 
     def get_name(self):
+        '''return name'''
         return self.name
 
     def get_file_name(self):
+        '''return file name'''
         return self.file_name
 
     def get_line(self):
+        '''return line'''
         return self.line
 
     def get_symboldetails(self):
+        '''return symbol details'''
         return self.symboldetails
 
 
@@ -95,9 +106,11 @@ class SymbolDetails(object):
         self.detaildata_list = detaildata_list
 
     def get_id(self):
+        '''return if'''
         return self.i
 
     def get_detaildata_list(self):
+        ''' return detaildata'''
         return self.detaildata_list
 
 
@@ -108,15 +121,18 @@ class DetailData(object):
         self.count = count
 
     def get_line(self):
+        '''return line'''
         return self.line
 
     def get_count(self):
+        '''return count'''
         return self.count
 
     def set_count(self, count):
+        '''set count'''
         self.count = count
 
     def __eq__(self, other):
-        """ Objects of this class are equals if
-        the line attribute of both objects are equal """
+        '''Objects of this class are equals if
+        the line attribute of both objects are equal'''
         return self.line == other.line

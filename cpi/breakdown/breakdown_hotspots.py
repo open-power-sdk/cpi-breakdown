@@ -17,10 +17,11 @@ limitations under the License.
 
     Contributors:
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
 
-class HotSpots:
+class HotSpots(object):
     """ Deals with metrics and events hot spots (higher values) """
     TABULATION = "    "
 
@@ -38,7 +39,8 @@ class HotSpots:
         self.__print_logo("Events")
         self.__print_info(events_list, top_events)
 
-    def __print_logo(self, element_name):
+    @staticmethod
+    def __print_logo(element_name):
         """ Print the hot spots logo """
         title = element_name + " Hot Spots"
         border = "=" * len(title)
