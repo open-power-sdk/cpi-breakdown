@@ -72,7 +72,7 @@ class Controller(object):
             self.__run_compare(args.type_opt, args.cpi_files, args.csv)
         # Run drilldown
         elif 'event_name' in args:
-            self.__run_drilldown(args.event_name)
+            self.__run_drilldown(args.event_name, args.threshold)
         # Run info
         elif 'occurrence_info' in args:
             self.__show_info(args.occurrence_info, args.all_events_opt,
@@ -188,11 +188,12 @@ class Controller(object):
                                      metrics_value)
                 tree.print_tree()
 
-    def __run_drilldown(self, event):
+    def __run_drilldown(self, event, threshold):
         """ Run the drilldown feature
 
         Parameters:
             event - the event to be used in drilldown
+            threshold - the threshold value to show groups
         """
         core.supported_feature(core.get_processor(), "Drilldown")
 
@@ -208,7 +209,7 @@ class Controller(object):
 
         events = {event: '0'}
         events = drilldown_core.sort_events(events)
-        reader = events_reader.EventsReader(processor)
+        reader = events_reader.EventsReader(core.get_processor())
         # Run drilldown with chosen events
         for element in events:
             event = element[0]

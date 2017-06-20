@@ -164,18 +164,10 @@ def main(argv=None):
         parser_drilldown.add_argument(
             '-t', '--threshold',
             dest='threshold',
-            metavar='VALUE',
-            type=int,
-            help="do not display drilldown for first-level groups less \n"
-                  "than x%%")
-        parser_drilldown.add_argument(
-            '-t', '--threshold',
-            dest='threshold',
             metavar='N',
             type=float,
             help='do not display drilldown for symbols less than N%%\n'
-                 'e.g: cpi drilldown -t 5.5 -e <EVENT_NAME> <command>\n'
-                 '     cpi drilldown -t 6 -a 4 -f <file.cpi> <command>')
+                 'e.g: cpi drilldown -t 5.5 -e <EVENT_NAME> <command>'
         parser_drilldown.add_argument(
             dest='cmd',
             type=str,

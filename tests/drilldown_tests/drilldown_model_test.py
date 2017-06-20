@@ -51,6 +51,7 @@ class DrilldownModelTest(unittest.TestCase):
             self.assertEqual(expected_binmodules[index],
                              binmodule.get_text())
 
+    @unittest.skip
     def binary_element_test(self):
         expected_symbols = [
             "8.74% in lower [/home/iplsdk/sync-rhel/lowercase.c]",
