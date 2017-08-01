@@ -1,0 +1,106 @@
+1 :
+    PM_RUN_CYC_ST_MODE : [100000, "Description"]
+    PM_RUN_CYC : [100000, "Description"]
+    PM_RUN_CYC_SMT2_MODE : [100000, "Description"]
+    PM_RUN_INST_CMPL : [100000, "Description"]
+2 :
+    PM_CMPLU_STALL : [100000, "Description"]
+    PM_RUN_CYC_SMT4_MODE : [100000, "Description"]
+    PM_CMPLU_STALL_DMISS_LMEM : [100000, "Description"]
+    PM_CMPLU_STALL_BRU : [100000, "Description"]
+3 :
+    PM_CMPLU_STALL_ANY_SYNC : [100000, "Description"]
+    PM_CMPLU_STALL_DCACHE_MISS : [100000, "Description"]
+    PM_CMPLU_STALL_DPLONG : [100000, "Description"]
+    PM_CMPLU_STALL_CRYPTO : [100000, "Description"]
+4 :
+    PM_CMPLU_STALL_DFLONG : [100000, "Description"]
+    PM_CMPLU_STALL_DFU : [100000, "Description"]
+    PM_CMPLU_STALL_EMQ_FULL : [100000, "Description"]
+    PM_CMPLU_STALL_DMISS_L2L3_CONFLICT : [100000, "Description"]
+5 :
+    PM_CMPLU_STALL_DMISS_L2L3 : [100000, "Description"]
+    PM_CMPLU_STALL_DMISS_L21_L31 : [100000, "Description"]
+    PM_CMPLU_STALL_EXCEPTION : [100000, "Description"]
+    PM_CMPLU_STALL_DMISS_L3MISS : [100000, "Description"]
+6 :
+    PM_CMPLU_STALL_DP : [100000, "Description"]
+    PM_CMPLU_STALL_DMISS_REMOTE : [100000, "Description"]
+    PM_CMPLU_STALL_HWSYNC : [100000, "Description"]
+    PM_CMPLU_STALL_EIEIO : [100000, "Description"]
+7 :
+    PM_CMPLU_STALL_FLUSH_ANY_THREAD : [100000, "Description"]
+    PM_CMPLU_STALL_EXEC_UNIT : [100000, "Description"]
+    PM_CMPLU_STALL_LSU_MFSPR : [100000, "Description"]
+    PM_CMPLU_STALL_ERAT_MISS : [100000, "Description"]
+8 :
+    PM_CMPLU_STALL_LARX : [100000, "Description"]
+    PM_CMPLU_STALL_FXU : [100000, "Description"]
+    PM_CMPLU_STALL_NESTED_TEND : [100000, "Description"]
+    PM_CMPLU_STALL_FXLONG : [100000, "Description"]
+9 :
+    PM_CMPLU_STALL_LRQ_OTHER : [100000, "Description"]
+    PM_CMPLU_STALL_LHS : [100000, "Description"]
+    PM_CMPLU_STALL_OTHER_CMPL : [100000, "Description"]
+    PM_CMPLU_STALL_LMQ_FULL : [100000, "Description"]
+10 :
+    PM_CMPLU_STALL_LSU_FIN : [100000, "Description"]
+    PM_CMPLU_STALL_LRQ_FULL : [100000, "Description"]
+    PM_CMPLU_STALL_PM : [100000, "Description"]
+    PM_CMPLU_STALL_LOAD_FINISH : [100000, "Description"]
+11 :
+    PM_CMPLU_STALL_LWSYNC : [100000, "Description"]
+    PM_CMPLU_STALL_LSU : [100000, "Description"]
+    PM_CMPLU_STALL_SPEC_FINISH : [100000, "Description"]
+    PM_CMPLU_STALL_LSAQ_ARB : [100000, "Description"]
+12 :
+    PM_CMPLU_STALL_NESTED_TBEGIN : [100000, "Description"]
+    PM_CMPLU_STALL_SRQ_FULL : [100000, "Description"]
+    PM_CMPLU_STALL_LSU_FLUSH_NEXT : [100000, "Description"]
+    PM_CMPLU_STALL_MTFPSCR : [100000, "Description"]
+13 :
+    PM_CMPLU_STALL_SLB : [100000, "Description"]
+    PM_CMPLU_STALL_NTC_FLUSH : [100000, "Description"]
+    PM_CMPLU_STALL_STORE_DATA : [100000, "Description"]
+    PM_CMPLU_STALL_NTC_DISP_FIN : [100000, "Description"]
+14 :
+    PM_CMPLU_STALL_TEND : [100000, "Description"]
+    PM_CMPLU_STALL_PASTE : [100000, "Description"]
+    PM_CMPLU_STALL_STORE_FIN_ARB : [100000, "Description"]
+    PM_CMPLU_STALL_ST_FWD : [100000, "Description"]
+15 :
+    PM_CMPLU_STALL_THRD : [100000, "Description"]
+    PM_CMPLU_STALL_STCX : [100000, "Description"]
+    PM_CMPLU_STALL_VDPLONG : [100000, "Description"]
+    PM_CMPLU_STALL_STORE_PIPE_ARB : [100000, "Description"]
+16 :
+    PM_ICT_NOSLOT_CYC : [100000, "Description"]
+    PM_CMPLU_STALL_STORE_FINISH : [100000, "Description"]
+    PM_CMPLU_STALL_VFXU : [100000, "Description"]
+    PM_CMPLU_STALL_VDP : [100000, "Description"]
+17 :
+    PM_ICT_NOSLOT_DISP_HELD_TBEGIN : [100000, "Description"]
+    PM_CMPLU_STALL_TLBIE : [100000, "Description"]
+    PM_ICT_NOSLOT_BR_MPRED_ICMISS : [100000, "Description"]
+    PM_ICT_NOSLOT_IC_L3MISS : [100000, "Description"]
+18 :
+    PM_NTC_ISSUE_HELD_DARQ_FULL : [100000, "Description"]
+    PM_CMPLU_STALL_SYNC_PMU_INT : [100000, "Description"]
+    PM_ICT_NOSLOT_DISP_HELD_HB_FULL : [100000, "Description"]
+19 :
+    PM_RUN_CYC_ST_MODE : [100000, "Description"]
+    PM_CMPLU_STALL_VFXLONG : [100000, "Description"]
+20 :
+    PM_ICT_NOSLOT_DISP_HELD_ISSQ : [100000, "Description"]
+    PM_ICT_NOSLOT_IC_L3 : [100000, "Description"]
+    PM_ICT_NOSLOT_BR_MPRED : [100000, "Description"]
+21 :
+    PM_ICT_NOSLOT_IC_MISS : [100000, "Description"]
+    PM_NTC_ISSUE_HELD_OTHER : [100000, "Description"]
+    PM_ICT_NOSLOT_DISP_HELD : [100000, "Description"]
+22 :
+    PM_NTC_ISSUE_HELD_ARB : [100000, "Description"]
+    PM_RUN_CYC_SMT2_MODE : [100000, "Description"]
+    PM_ICT_NOSLOT_DISP_HELD_SYNC : [100000, "Description"]
+23 :
+    PM_NTC_ALL_FIN : [100000, "Description"]
