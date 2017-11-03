@@ -2,7 +2,7 @@
 
 We welcome contributions to the CPI Breakdown Project in many forms, and there's always plenty to do!
 
-First things first, please review the CPI Breakdown Project's [Code of Conduct](CONDUCT.md) before participating. It is important that we keep things civil.
+First things first, please review the CPI Breakdown Project's [Code of Conduct](CODE_OF_CONDUCT.md) before participating. It is important that we keep things civil.
 
 ### Getting help
 If you are looking for something to work on, or need some expert assistance in debugging a problem or working out a fix to an issue, our community is always eager to help. We hang out on [Slack](https://toolsforpower.slack.com/).
