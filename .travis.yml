@@ -1,0 +1,17 @@
+
+dist: xenial
+
+os: linux-ppc64le
+
+language: python
+
+python:
+  - "2.7"
+
+# command to install dependencies
+install: "pip install pylint virtualenv"
+
+# command to build
+script:
+  - ./dev build
+  - ./dev release
