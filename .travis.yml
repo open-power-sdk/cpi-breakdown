@@ -1,3 +1,5 @@
+sudo: false
+
 os: linux-ppc64le
 
 language: python
