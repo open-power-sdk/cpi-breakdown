@@ -60,7 +60,7 @@ def main(argv=None):
     program_shortdesc = '''
     --- Cycles Per Instruction (CPI) ---
     Profiles C/C++ applications with the CPI (cycles per instruction)
-    breakdown model for POWER8.'''
+    breakdown model for POWER8 and POWER9.'''
 
     try:
         parser = ArgumentParser(description=program_shortdesc,
