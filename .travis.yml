@@ -12,5 +12,4 @@ install: "pip install pylint virtualenv"
 
 # command to build
 script:
-  - ./dev build
   - ./dev release
