@@ -1,9 +1,6 @@
-sudo: false
-
-os: linux-ppc64le
-
 language: python
-
+sudo: false
+os: linux-ppc64le
 python:
   - "2.7"
 
