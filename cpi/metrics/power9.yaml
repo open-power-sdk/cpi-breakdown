@@ -456,7 +456,7 @@
     COMPONENTS : []
 96 :
     NAME : OTHER_CMPL_STALL_CPI
-    DESCRIPTION : Instructions the core completed while this tread was stalled
+    DESCRIPTION : Instructions the core completed while this thread was stalled
     FORMULA : PM_CMPLU_STALL_OTHER_CMPL/PM_RUN_INST_CMPL
     COMPONENTS : []
 97 :
