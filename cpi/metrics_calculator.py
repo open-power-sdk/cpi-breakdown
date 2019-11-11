@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ limitations under the License.
 
     Contributors:
         * Rafael Peria Sene <rpsene@br.ibm.com>
+        * Matheus Castanho <mscastanho@ibm.com>
 """
 
 import os
@@ -46,7 +47,7 @@ class MetricsCalculator(object):
         contains the NAME an the EQUATION """
         try:
             with open(metrics_file, "r") as metrics:
-                return yaml.load(metrics)
+                return yaml.load(metrics, Loader=yaml.FullLoader)
         except IOError:
             sys.stderr.write("Could not find file '{}'. Check if your "
                              "installation is correct or try to install "
