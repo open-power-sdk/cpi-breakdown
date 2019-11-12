@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ limitations under the License.
         * Rafael Peria de Sene <rpsene@br.ibm.com>
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
+        * Matheus Castanho <mscastanho@ibm.com>
 '''
 
 import yaml
@@ -79,7 +80,7 @@ class EventsReader(object):
         '''Read the events from the respective file'''
         try:
             with open(events_file, "r") as efile:
-                groups = yaml.load(efile)
+                groups = yaml.load(efile, Loader=yaml.FullLoader)
                 events_dic = []
                 for value in groups.values():
                     events_dic.append(value)
