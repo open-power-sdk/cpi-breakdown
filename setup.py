@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -21,10 +21,14 @@ limitations under the License.
         * Daniel Kreling <dbkreling@br.ibm.com>
         * Roberto Oliveira <rdutra@br.ibm.com>
         * Diego Fernandez-Merjildo <merjildo@br.ibm.com>
+        * Matheus Castanho <mscastanho@ibm.com>
 """
 
 from setuptools import setup, find_packages
-from pip.req import parse_requirements
+try:
+    from pip._internal.req import parse_requirements
+except ImportError:
+    from pip.req import parse_requirements
 
 with open('README.md') as f:
     README = f.read()
