@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 """
@@ -38,7 +38,7 @@ REQUIREMENTS = [str(required.req) for required in REQUIREMENTS_LIST]
 
 setup(
     name='cpi',
-    version='1.0.timestamp',
+    version='1.1.timestamp' ,
     description='Profiles C/C++ applications with the CPI (cycles per \
 instruction) breakdown model for POWER8',
     long_description=README,

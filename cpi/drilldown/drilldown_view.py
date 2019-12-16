@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ limitations under the License.
         * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
-from drilldown_model import DrilldownModel
+from .drilldown_model import DrilldownModel
 
 TABULATION = "    "
 
@@ -51,22 +51,22 @@ class DrilldownView(object):
                 if print_binmodule:
                     # If not the first element, print a new line
                     if ui_binmodule is not ui_binmodule_list[0]:
-                        print ""
-                    print ui_binmodule.get_text()
+                        print("")
+                    print(ui_binmodule.get_text())
                     print_binmodule = False
-                print TABULATION + ui_symbol.get_text()
+                print(TABULATION + ui_symbol.get_text())
                 # For each sample
                 for ui_sample in ui_symbol.get_samples_list():
-                    print TABULATION + TABULATION + ui_sample.get_text()
-        print border + "\n"
+                    print(TABULATION + TABULATION + ui_sample.get_text())
+        print(border + "\n")
 
     @staticmethod
     def __print_logo(title, border):
         """ Print the drilldown logo """
-        print ""
-        print border
-        print title
-        print border
+        print("")
+        print(border)
+        print(title)
+        print(border)
 
     @staticmethod
     def __get_border(title):

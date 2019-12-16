@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -26,17 +26,17 @@ import os
 import sys
 import time
 
-import core
-import events_reader
-import metrics_calculator
-from info.info_handler import InfoHandler
-from breakdown.breakdown_tree import BreakdownTree
-from breakdown.breakdown_table import MetricsTable
-from breakdown.breakdown_hotspots import HotSpots
-from drilldown.drilldown_view import DrilldownView
-import drilldown.drilldown_core as drilldown_core
-from compare.compare_view import CompareView
-from compare.comparator import Comparator
+from . import core
+from . import events_reader
+from . import metrics_calculator
+from .info.info_handler import InfoHandler
+from .breakdown.breakdown_tree import BreakdownTree
+from .breakdown.breakdown_table import MetricsTable
+from .breakdown.breakdown_hotspots import HotSpots
+from .drilldown.drilldown_view import DrilldownView
+from .drilldown import drilldown_core as drilldown_core
+from .compare.compare_view import CompareView
+from .compare.comparator import Comparator
 
 
 class Controller(object):
@@ -145,7 +145,7 @@ class Controller(object):
             core.parse_file(ocount_out, events)
         core.execute("rm " + ocount_out)
         if not quiet:
-            print ""
+            print("")
 
         core.save_events(events, cpi_file_name)
         return events
@@ -174,7 +174,7 @@ class Controller(object):
             if top_metrics:
                 hot_s.print_metrics_hotspots(top_metrics, metrics_value)
             if top_events:
-                hot_s.print_events_hotspots(top_events, events.items())
+                hot_s.print_events_hotspots(top_events, list(events.items()))
         # Show breakdown output
         else:
             if breakdown_format == 'table':

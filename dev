@@ -2,7 +2,7 @@
 set +e
 : '
 
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ clean(){
 
 buildTests(){
 	createVirtEnv
-	python ./setup.py test
+	python3 ./setup.py test
 	destroyVirtEnv
 	clean
 	return $TRUE
@@ -51,7 +51,7 @@ buildTests(){
 
 buildRun(){
 	createVirtEnv
-	python ./setup.py install
+	python3 ./setup.py install
 	cpi -h
 	destroyVirtEnv
 	clean
@@ -60,16 +60,16 @@ buildRun(){
 
 buildInstall(){
 	clean
-	python ./setup.py sdist
-	python ./setup.py check -m
-        sudo pip install --upgrade ./dist/*.tar.gz
+	python3 ./setup.py sdist
+	python3 ./setup.py check -m
+        sudo pip3 install --upgrade ./dist/*.tar.gz
 	return $TRUE
 }
 
 buildClean(){
 	clean
-	python ./setup.py clean --all
-	python ./setup.py build
+	python3 ./setup.py clean --all
+	python3 ./setup.py build
 	return $TRUE
 }
 
@@ -80,8 +80,8 @@ buildCleanAll(){
 
 buildRelease(){
 	clean
-	python ./setup.py sdist
-	python ./setup.py check -m
+	python3 ./setup.py sdist
+	python3 ./setup.py check -m
 	return $TRUE
 }
 
@@ -91,7 +91,7 @@ buildRPM(){
         exit 0
     fi
 	clean
-	python ./setup.py bdist_rpm
+	python3 ./setup.py bdist_rpm
 	return $TRUE
 }
 

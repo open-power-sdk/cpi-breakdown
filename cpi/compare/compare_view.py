@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -36,13 +36,13 @@ class CompareView(object):
     def create_table(self):
         """ Create a table with comparison two output files """
         title = ""
-        print "\nComparing file names:"
-        print "File 1 = %s\nFile 2 = %s" % (self.file_names[0],
-                                            self.file_names[1])
-        print "\nNOTE:\nA raise in number of all elements represent"
-        print "a decrease in the performance of the application."
-        print "Therefore, the smallest the percentage, the better"
-        print "the application performance.\n"
+        print("\nComparing file names:")
+        print("File 1 = %s\nFile 2 = %s" % (self.file_names[0],
+                                            self.file_names[1]))
+        print("\nNOTE:\nA raise in number of all elements represent")
+        print("a decrease in the performance of the application.")
+        print("Therefore, the smallest the percentage, the better")
+        print("the application performance.\n")
 
         elem_name = ''
         if self.comparison_type == 'event':
@@ -61,12 +61,12 @@ class CompareView(object):
 
         compare_table = AsciiTable(table_data, title)
         compare_table.justify_columns = {1: 'right', 2: 'right', 3: 'right'}
-        print compare_table.table
+        print(compare_table.table)
 
     def print_csv_format(self):
         """ Print the results in a csv format """
         for element in self.results_list:
-            print ','.join(map(str, element))
+            print(','.join(map(str, element)))
 
     def show(self, cvs_format=None):
         """ Show comparison results metrics or events"""

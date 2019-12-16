@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ def sort_events(events_dict):
     """ Receive a dictionary of events and their values and return a list
     with the events and values sorted. If it can not sort the events list
     force to exit """
-    events = events_dict.items()
+    events = list(events_dict.items())
     try:
         events = sorted(events, key=lambda x: int(x[1]), reverse=True)
     except ValueError:

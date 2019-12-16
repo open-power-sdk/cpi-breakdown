@@ -1,13 +1,17 @@
 language: python
-sudo: false
-os: linux-ppc64le
+
+sudo: required
+
+os: linux
+
+arch: ppc64le
+
 python:
-  - "2.7"
+  - "3.6"
 
-# command to install dependencies
-install: "pip install pylint virtualenv"
-
-# command to build
 script:
-  - uname -a
-  - ./dev release
+  - sudo apt-get install python3-pip
+  - pip3 install pylint virtualenv
+  - ./dev build
+  - ./dev install
+  - cpi --help

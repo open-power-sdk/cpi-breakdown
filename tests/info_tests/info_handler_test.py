@@ -1,7 +1,7 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -63,23 +63,23 @@ class InfoHandlerTest(unittest.TestCase):
 
     def get_metric_name_test(self):
         """ Test if correctly displaying metric name """
-        self.assertEquals(self.VALID_METRIC[0],
+        self.assertEqual(self.VALID_METRIC[0],
                           self.ih.get_metric_name(self.VALID_METRIC[0]))
-        self.assertEquals(None,
+        self.assertEqual(None,
                           self.ih.get_metric_name(self.INVALID_METRIC[0]))
 
     def get_metric_formula_test(self):
         """ Test if correctly displaying metric formula """
-        self.assertEquals(self.FORMULA,
+        self.assertEqual(self.FORMULA,
                           self.ih.get_metric_formula(self.VALID_METRIC[0]))
-        self.assertEquals(None,
+        self.assertEqual(None,
                           self.ih.get_metric_formula(self.INVALID_METRIC[0]))
 
     def get_metric_description_test(self):
         """ Test if correctly displaying metric description """
-        self.assertEquals(self.DESCRIPTION,
+        self.assertEqual(self.DESCRIPTION,
                           self.ih.get_metric_description(self.VALID_METRIC[0]))
-        self.assertEquals(None,
+        self.assertEqual(None,
                           self.ih.get_metric_description(self.INVALID_METRIC[0]
                                                          ))
 

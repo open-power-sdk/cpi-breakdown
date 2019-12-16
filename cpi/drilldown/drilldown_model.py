@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ limitations under the License.
 """
 
 from decimal import Decimal
-import opreport_parser
+from . import opreport_parser
 
 
 class DrilldownModel(object):

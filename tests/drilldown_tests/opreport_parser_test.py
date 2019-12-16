@@ -1,7 +1,7 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ class OpreportParserTest(unittest.TestCase):
         parser = OpreportParser()
         binmodule_list = parser.parse(self.test_file)
         assert not [] == binmodule_list
-        self.assertEquals(4, len(binmodule_list))
+        self.assertEqual(4, len(binmodule_list))
 
         # First module element
         module = binmodule_list[0]

@@ -1,7 +1,7 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ class DrilldownModelTest(unittest.TestCase):
                                "0.02% in /usr/lib64/ld-2.17.so"]
 
         assert not [] == self.binmodule_list
-        self.assertEquals(4, len(self.binmodule_list))
+        self.assertEqual(4, len(self.binmodule_list))
 
         # Check if all binmodules matches
         for index, binmodule in enumerate(self.binmodule_list):
@@ -63,7 +63,7 @@ class DrilldownModelTest(unittest.TestCase):
 
         # Get symbols from the binary element
         symbols_list = self.binmodule_list[1].get_symbols_list()
-        self.assertEquals(3, len(symbols_list))
+        self.assertEqual(3, len(symbols_list))
 
         # Check if all binary symbols matches
         for index, symbol in enumerate(symbols_list):
@@ -72,7 +72,7 @@ class DrilldownModelTest(unittest.TestCase):
 
         # Get samples from first symbol
         samples_list = symbols_list[0].get_samples_list()
-        self.assertEquals(3, len(samples_list))
+        self.assertEqual(3, len(samples_list))
 
         # Check if all binary samples matches
         for index, samples in enumerate(samples_list):
@@ -93,7 +93,7 @@ class DrilldownModelTest(unittest.TestCase):
 
         # Get symbols from the module element
         symbols_list = self.binmodule_list[0].get_symbols_list()
-        self.assertEquals(9, len(symbols_list))
+        self.assertEqual(9, len(symbols_list))
 
         # Check if all modules symbols matches
         for index, symbol in enumerate(symbols_list):
@@ -101,7 +101,7 @@ class DrilldownModelTest(unittest.TestCase):
 
         # No samples available
         for symbol in symbols_list:
-            self.assertEquals([], symbol.get_samples_list())
+            self.assertEqual([], symbol.get_samples_list())
 
 
 if __name__ == '__main__':

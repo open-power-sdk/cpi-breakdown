@@ -78,7 +78,7 @@ class MetricsCalculator(object):
         parsed_output = parsed_output_dict
         metrics_results = []
         if int(parsed_output.get('PM_RUN_INST_CMPL')[0]) > 0:
-            for group in self.metrics_groups.values():
+            for group in list(self.metrics_groups.values()):
                 result_tmp = []
                 # Split the metrics in all components to allow replacing
                 # the events with the calculated values.

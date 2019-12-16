@@ -45,7 +45,7 @@ class EventsReader(object):
         events_list = []
         for events_dic in self.events:
             # Append dict keys (event name) in list
-            events_list.append(events_dic.keys())
+            events_list.append(list(events_dic.keys()))
         return events_list
 
     def valid_event(self, event_name):
@@ -82,7 +82,7 @@ class EventsReader(object):
             with open(events_file, "r") as efile:
                 groups = yaml.load(efile, Loader=yaml.FullLoader)
                 events_dic = []
-                for value in groups.values():
+                for value in list(groups.values()):
                     events_dic.append(value)
                 return events_dic
         except IOError:

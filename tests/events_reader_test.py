@@ -1,7 +1,7 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -48,13 +48,13 @@ class EventsReaderTests(unittest.TestCase):
         assert self.reader.valid_event(INVALID_EVENT) is False
 
     def test_get_event_mincount(self):
-        self.assertEquals(100000, self.reader.get_event_mincount(VALID_EVENT))
-        self.assertEquals(None, self.reader.get_event_mincount(INVALID_EVENT))
+        self.assertEqual(100000, self.reader.get_event_mincount(VALID_EVENT))
+        self.assertEqual(None, self.reader.get_event_mincount(INVALID_EVENT))
 
     def test_get_event_description(self):
-        self.assertEquals(DESCRIPTION,
+        self.assertEqual(DESCRIPTION,
                           self.reader.get_event_description(VALID_EVENT))
-        self.assertEquals(None, self.reader.get_event_description(INVALID_EVENT))
+        self.assertEqual(None, self.reader.get_event_description(INVALID_EVENT))
 
     def test_read_events(self):
         """ Test with an invalid file """

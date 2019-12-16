@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ class InfoHandler(object):
         elif occurrence in self.metrics_list:
             self.__print_metrics_info(occurrence)
         else:
-            print "Event or Metric \"{}\" not found.".format(occurrence)
+            print("Event or Metric \"{}\" not found.".format(occurrence))
             sys.exit(1)
         sys.exit(0)
 
@@ -93,37 +93,37 @@ class InfoHandler(object):
         """ Show all metrics supported by CPI """
         for obj in self.metrics_list:
             self.__print_metrics_info(obj.get_name())
-            print ""
+            print("")
 
     def __show_all_events(self):
         """ Show all events supported by CPI """
         for event in self.events_list:
             self.__print_events_info(event)
-            print ""
+            print("")
 
     def __show_all(self):
         """ Show information of all resources (metrics and events) """
-        print "\nEvents:\n"
+        print("\nEvents:\n")
         self.__show_all_events()
-        print "\nMetrics:\n"
+        print("\nMetrics:\n")
         self.__show_all_metrics()
 
     def __print_events_info(self, occurrence_event):
         """ Print information about events """
-        print "    Name:       ", occurrence_event
-        print "    Type:        Event"
-        print "    Description:", \
-            self.e_reader.get_event_description(occurrence_event)
+        print("    Name:       ", occurrence_event)
+        print("    Type:        Event")
+        print("    Description:", \
+            self.e_reader.get_event_description(occurrence_event))
         return 0
 
     def __print_metrics_info(self, occurrence_metric):
         """ Display information about metric_name if it is in the
            metrics_list."""
-        print "    Name:       ", self.get_metric_name(occurrence_metric)
-        print "    Type:        Metric"
-        print "    Description:",\
-            self.get_metric_description(occurrence_metric)
-        print "    Formula:    ", self.get_metric_formula(occurrence_metric)
+        print("    Name:       ", self.get_metric_name(occurrence_metric))
+        print("    Type:        Metric")
+        print("    Description:",\
+            self.get_metric_description(occurrence_metric))
+        print("    Formula:    ", self.get_metric_formula(occurrence_metric))
         return 0
 
     def __get_events_list(self, event_names):
@@ -139,7 +139,7 @@ class InfoHandler(object):
         metrics = metrics_calculator.MetricsCalculator(self.processor)
         metric_list = []
         # Populate the list
-        for key in metrics.get_raw_metrics().keys():
+        for key in list(metrics.get_raw_metrics().keys()):
             name = metrics.get_raw_metrics()[key]["NAME"]
             formula = metrics.get_raw_metrics()[key]["FORMULA"]
             description = metrics.get_raw_metrics()[key]["DESCRIPTION"]

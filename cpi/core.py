@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ limitations under the License.
         * Roberto Oliveira <rdutra@br.ibm.com>
 '''
 import subprocess
-import commands
+import subprocess
 import time
 import sys
 
@@ -60,7 +60,7 @@ def cmdexists(command):
 def get_processor():
     '''Check the system processor'''
     cmd = "grep -io 'power[[:digit:]]\\+' -m 1 /proc/cpuinfo"
-    return commands.getoutput(cmd)
+    return subprocess.getoutput(cmd)
 
 
 def supported_processor(processor_version):

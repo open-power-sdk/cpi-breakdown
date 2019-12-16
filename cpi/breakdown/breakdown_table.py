@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2017,2019 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
@@ -39,4 +39,4 @@ class MetricsTable(object):
             met_table.append(row)
         met_tab = AsciiTable(met_table)
         met_tab.justify_columns = {1: 'right', 2: 'right'}
-        print met_tab.table
+        print(met_tab.table)
