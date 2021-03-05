@@ -49,7 +49,7 @@ def run_operf(binary_path, binary_args, event, min_count):
     status, output = core.execute_stdout(operf_cmd)
     if status != 0:
         sys.stderr.write("Failed to run {0} command.\n".format(OPERF) +
-                         "\n" + output)
+                         "\n" + output.decode())
         sys.exit(1)
 
 

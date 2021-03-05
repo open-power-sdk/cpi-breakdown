@@ -49,9 +49,9 @@ class ComparatorTests(unittest.TestCase):
         comparator = Comparator(self.dict_list1)
 
         # Test events
-        print "test len(self.dict_list1):" + str(len(self.dict_list1))
+        print("test len(self.dict_list1):" + str(len(self.dict_list1)))
         list1 = comparator.make_comparison('event')
-        print "test len(list1):" + str(len(list1))
+        print("test len(list1):" + str(len(list1)))
         self.assertEqual(4, len(list1))
         # Get first internal list
         l = list1[0]
