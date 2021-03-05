@@ -105,6 +105,7 @@ class Controller(object):
                              "Install oprofile before continue." + "\n")
             sys.exit(2)
 
+        sys.stderr.write(core.get_processor())
         reader = events_reader.EventsReader(core.get_processor())
 
         if not cpi_file_name:
@@ -227,6 +228,7 @@ class Controller(object):
             # Use the 'n' first elements
             events = events[:autodrilldown]
 
+        sys.stderr.write(core.get_processor())
         reader = events_reader.EventsReader(core.get_processor())
         # Run drilldown with chosen events
         for element in events:

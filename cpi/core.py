@@ -22,7 +22,6 @@ limitations under the License.
         * Roberto Oliveira <rdutra@br.ibm.com>
 '''
 import subprocess
-import commands
 import time
 import sys
 
@@ -59,8 +58,9 @@ def cmdexists(command):
 
 def get_processor():
     '''Check the system processor'''
+    return "POWER8" #For test purposes
     cmd = "grep -io 'power[[:digit:]]\\+' -m 1 /proc/cpuinfo"
-    return commands.getoutput(cmd)
+    return subprocess.getoutput(cmd)
 
 
 def supported_processor(processor_version):
