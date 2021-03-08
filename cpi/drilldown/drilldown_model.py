@@ -21,7 +21,7 @@ limitations under the License.
 """
 
 from decimal import Decimal
-import opreport_parser
+from cpi.drilldown import opreport_parser
 
 
 class DrilldownModel(object):
