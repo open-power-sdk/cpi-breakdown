@@ -1,0 +1,33 @@
+#!/bin/sh
+# operf -e PM_RUN_CYC:100000 /bin/sleep 1
+TEMP=$(getopt -o 'e:' -n 'operf' -- "$@")
+
+if [ $? -ne 0 ]; then
+    echo 'Terminating...' >&2
+    exit 1
+fi
+
+eval set -- "$TEMP"
+unset TEMP
+
+OUTPUT=""
+while true; do
+    case "$1" in
+        '-e')
+            OUTPUT="$2"
+            shift 2
+            continue
+        ;;
+        '--')
+            shift
+            break
+        ;;
+    esac
+done
+
+if [ $# -ge 1 ]; then
+    if [ -x $1 ]; then
+        exit 0
+    fi
+fi
+exit 1
