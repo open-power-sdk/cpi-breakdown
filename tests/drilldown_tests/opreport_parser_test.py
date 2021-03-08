@@ -36,7 +36,7 @@ class OpreportParserTest(unittest.TestCase):
         parser = OpreportParser()
         binmodule_list = parser.parse(self.test_file)
         assert not [] == binmodule_list
-        self.assertEquals(4, len(binmodule_list))
+        self.assertEqual(4, len(binmodule_list))
 
         # First module element
         module = binmodule_list[0]
