@@ -57,9 +57,8 @@ def run_opreport(event, report_file):
     """ Run opreport and exit if an error happens """
     opreport_cmd = OPREPORT + " --debug-info --symbols --details "
     opreport_cmd += "--xml event:{0} -o {1}".format(event, report_file)
-
     status, output = core.execute_stdout(opreport_cmd)
     if status != 0:
         sys.stderr.write("Failed to run {0} command.\n".format(OPREPORT) +
-                         "\n" + output)
+                         "\n" + output.decode())
         sys.exit(1)
