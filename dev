@@ -23,7 +23,7 @@ limitations under the License.
 DIR=$(basename "$PWD")
 
 createVirtEnv(){
-	virtualenv $DIR
+	python3 -m venv $DIR
 	source $DIR/bin/activate
 	return $TRUE
 }
