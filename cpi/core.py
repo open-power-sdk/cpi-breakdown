@@ -58,7 +58,6 @@ def cmdexists(command):
 
 def get_processor():
     '''Check the system processor'''
-    return "POWER8" #For test purposes
     cmd = "grep -io 'power[[:digit:]]\\+' -m 1 /proc/cpuinfo"
     return subprocess.getoutput(cmd)
 
