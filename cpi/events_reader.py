@@ -22,9 +22,9 @@ limitations under the License.
         * Matheus Castanho <mscastanho@ibm.com>
 '''
 
-import yaml
 import os
 import sys
+import yaml
 
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
