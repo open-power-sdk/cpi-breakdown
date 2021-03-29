@@ -39,7 +39,7 @@ from cpi.compare.compare_view import CompareView
 from cpi.compare.comparator import Comparator
 
 
-class Controller(object):
+class Controller():
     """
     Controls the execution of CPI commands
     """

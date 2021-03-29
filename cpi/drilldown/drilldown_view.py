@@ -25,7 +25,7 @@ from cpi.drilldown.drilldown_model import DrilldownModel
 TABULATION = "    "
 
 
-class DrilldownView(object):
+class DrilldownView():
     """ This class represents the drilldown view """
 
     def print_drilldown(self, event, report_file, threshold):

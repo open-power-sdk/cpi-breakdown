@@ -21,7 +21,7 @@ limitations under the License.
 """
 
 
-class BinModule(object):
+class BinModule():
     '''Class to hold both binary and module tags'''
     def __init__(self, name, count, symbol_list):
         self.name = name
@@ -41,7 +41,7 @@ class BinModule(object):
         return self.symbol_list
 
 
-class Symbol(object):
+class Symbol():
     """ Class to hold symbol tag """
     def __init__(self, idref, count, symboldata):
         # The 'idref' reference the 'i' from SymbolData class
@@ -67,7 +67,7 @@ class Symbol(object):
         return self.idref == other.idref
 
 
-class SymbolData(object):
+class SymbolData():
     '''Class to hold symboldata tag'''
     def __init__(self, i, name, file_name, line, symboldetails):
         # The 'i' from this class reference the 'i' from
@@ -99,7 +99,7 @@ class SymbolData(object):
         return self.symboldetails
 
 
-class SymbolDetails(object):
+class SymbolDetails():
     """ Class to hold symboldetais tag """
     def __init__(self, i, detaildata_list):
         self.i = i
@@ -114,7 +114,7 @@ class SymbolDetails(object):
         return self.detaildata_list
 
 
-class DetailData(object):
+class DetailData():
     """ Class to hold detaildata tag """
     def __init__(self, line, count):
         self.line = line

@@ -27,7 +27,7 @@ from cpi import core
 from cpi import metrics_calculator
 
 
-class Comparator(object):
+class Comparator():
     """ Class responsible for dealing with file comparison """
 
     def __init__(self, profile_list=None):

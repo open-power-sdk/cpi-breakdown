@@ -21,7 +21,7 @@ limitations under the License.
 """
 
 
-class HotSpots(object):
+class HotSpots():
     """ Deals with metrics and events hot spots (higher values) """
     TABULATION = "    "
 
