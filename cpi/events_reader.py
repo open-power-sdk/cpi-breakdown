@@ -30,7 +30,7 @@ import sys
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 
 
-class EventsReader(object):
+class EventsReader():
     '''Class to deal with events from yaml files'''
 
     # Hold events from yaml files
