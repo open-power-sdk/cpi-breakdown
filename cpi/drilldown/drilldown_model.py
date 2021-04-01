@@ -84,7 +84,7 @@ class DrilldownModel(object):
     def calc_percentage(count, total_count, percent_factor=100):
         """ Calculate the percentage for a specific count
         in proportion to the total, using the percent factor """
-        percentage = Decimal(float(count) * percent_factor / total_count)
+        percentage = Decimal(float(count) * float(percent_factor) / total_count)
         percentage = round(percentage, 2)
         return percentage
 
