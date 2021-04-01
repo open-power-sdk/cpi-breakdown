@@ -38,8 +38,8 @@ class DrilldownModelTest(unittest.TestCase):
         super(DrilldownModelTest, self).__init__(*args, **kwargs)
 
     def binmodule_test(self):
-        expected_binmodules = ["85.3% in /usr/lib64/power8/libc-2.17.so",
-                               "14.5% in /home/iplsdk/sync-rhel/main.x",
+        expected_binmodules = ["85.30% in /usr/lib64/power8/libc-2.17.so",
+                               "14.50% in /home/iplsdk/sync-rhel/main.x",
                                "0.18% in /no-vmlinux",
                                "0.02% in /usr/lib64/ld-2.17.so"]
 
@@ -58,7 +58,7 @@ class DrilldownModelTest(unittest.TestCase):
             "1.25% in 00000037.plt_call.rand@@GLIBC_2.17 [??]"]
 
         expected_samples = ["3.84% on line 32",
-                            "2.5% on line 30",
+                            "2.50% on line 30",
                             "2.39% on line 31"]
 
         # Get symbols from the binary element

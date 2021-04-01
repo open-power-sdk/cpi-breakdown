@@ -144,8 +144,9 @@ class OpreportParser(object):
                     ddata = detaildata_list[index]
                     detaildata.set_count(count + ddata.get_count())
                     del detaildata_list[index]
-                    detaildata_list.append(detaildata)
                 else:
                     symbol_details = opreport_model.SymbolDetails(i,
                                                                   detaildata_list)
                     self.symboldetail_list.append(symbol_details)
+
+                detaildata_list.append(detaildata)
