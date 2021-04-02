@@ -47,12 +47,12 @@ class BreakdownTree(object):
         contains RUN_CPI
         '''
         identation_size = 1
-        print ""
-        print "RUN_CPI" + ': ' + self.metrics_value_dict["RUN_CPI"]
+        print()
+        print("RUN_CPI" + ': ' + self.metrics_value_dict["RUN_CPI"])
         level1 = self.metric_components['RUN_CPI']
         for level2 in level1:
             msg = self.IDENTATION + level2 + ': '
-            print msg + self.metrics_value_dict[level2]
+            print(msg + self.metrics_value_dict[level2])
             self.print_level(level2, identation_size)
 
     def print_level(self, current_level, identation):
@@ -63,6 +63,6 @@ class BreakdownTree(object):
         if current_level in self.metric_components:
             identation += 2
             for next_level in self.metric_components[current_level]:
-                print self.IDENTATION * identation + next_level + \
-                 ': ' + self.metrics_value_dict[next_level]
+                print(self.IDENTATION * identation + next_level + \
+                 ': ' + self.metrics_value_dict[next_level])
                 self.print_level(next_level, identation)

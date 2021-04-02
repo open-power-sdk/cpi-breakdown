@@ -39,4 +39,4 @@ class MetricsTable(object):
             met_table.append(row)
         met_tab = AsciiTable(met_table)
         met_tab.justify_columns = {1: 'right', 2: 'right'}
-        print met_tab.table
+        print(met_tab.table)

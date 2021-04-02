@@ -44,10 +44,10 @@ class HotSpots(object):
         """ Print the hot spots logo """
         title = element_name + " Hot Spots"
         border = "=" * len(title)
-        print ""
-        print border
-        print title
-        print border
+        print()
+        print(border)
+        print(title)
+        print(border)
 
     def __print_info(self, values_list, top_value):
         """ Print hot spot information """
@@ -60,4 +60,4 @@ class HotSpots(object):
         for element in values_list:
             name = element[0]
             value = element[1]
-            print self.TABULATION + name + " : " + str(value)
+            print(self.TABULATION + name + " : " + str(value))
