@@ -20,7 +20,7 @@ limitations under the License.
         * Rafael Peria de Sene <rpsene@br.ibm.com>
 """
 
-from drilldown_model import DrilldownModel
+from cpi.drilldown.drilldown_model import DrilldownModel
 
 TABULATION = "    "
 
@@ -58,7 +58,7 @@ class DrilldownView(object):
                 # For each sample
                 for ui_sample in ui_symbol.get_samples_list():
                     print(TABULATION + TABULATION + ui_sample.get_text())
-        print border + "\n"
+        print(border + "\n")
 
     @staticmethod
     def __print_logo(title, border):
