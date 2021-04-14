@@ -29,7 +29,7 @@ from argparse import ArgumentParser
 from argparse import RawTextHelpFormatter
 import pkg_resources
 
-from controller import Controller
+from cpi.controller import Controller
 
 __all__ = []
 __version__ = pkg_resources.require("cpi")[0].version

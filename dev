@@ -62,7 +62,7 @@ buildInstall(){
 	clean
 	python3 ./setup.py sdist
 	python3 ./setup.py check -m
-        sudo pip install --upgrade ./dist/*.tar.gz
+        sudo pip3 install --upgrade ./dist/*.tar.gz
 	return $TRUE
 }
 

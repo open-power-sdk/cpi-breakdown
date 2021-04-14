@@ -146,7 +146,7 @@ class Controller(object):
             core.parse_file(ocount_out, events)
         core.execute("rm " + ocount_out)
         if not quiet:
-            print ""
+            print()
 
         core.save_events(events, cpi_file_name)
         return events

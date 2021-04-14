@@ -21,7 +21,7 @@ limitations under the License.
 """
 
 import xml.etree.ElementTree as elemTree
-import opreport_model
+import cpi.drilldown.opreport_model
 
 
 class OpreportParser(object):
