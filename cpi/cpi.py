@@ -272,8 +272,13 @@ def main(argv=None):
 
         # Process arguments
         args = parser.parse_args()
+        if len(vars(args).keys()) == 0:
+            parser.print_usage()
+            return 1
+
         ctrller = Controller()
         ctrller.run(args)
+
     except KeyboardInterrupt:
         return 1
 
