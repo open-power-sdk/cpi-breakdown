@@ -26,17 +26,17 @@ import os
 import sys
 import time
 
-import core
-import events_reader
-import metrics_calculator
-from info.info_handler import InfoHandler
-from breakdown.breakdown_tree import BreakdownTree
-from breakdown.breakdown_table import MetricsTable
-from breakdown.breakdown_hotspots import HotSpots
-from drilldown.drilldown_view import DrilldownView
-import drilldown.drilldown_core as drilldown_core
-from compare.compare_view import CompareView
-from compare.comparator import Comparator
+import cpi.core as core
+import cpi.events_reader as events_reader
+import cpi.metrics_calculator as metrics_calculator
+from cpi.info.info_handler import InfoHandler
+from cpi.breakdown.breakdown_tree import BreakdownTree
+from cpi.breakdown.breakdown_table import MetricsTable
+from cpi.breakdown.breakdown_hotspots import HotSpots
+from cpi.drilldown.drilldown_view import DrilldownView
+import cpi.drilldown.drilldown_core as drilldown_core
+from cpi.compare.compare_view import CompareView
+from cpi.compare.comparator import Comparator
 
 
 class Controller(object):
