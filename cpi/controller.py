@@ -26,9 +26,9 @@ import os
 import sys
 import time
 
-import cpi.core
-import cpi.events_reader
-import cpi.metrics_calculator
+import cpi.core as core
+import cpi.events_reader as events_reader
+import cpi.metrics_calculator as metrics_calculator
 from cpi.info.info_handler import InfoHandler
 from cpi.breakdown.breakdown_tree import BreakdownTree
 from cpi.breakdown.breakdown_table import MetricsTable
