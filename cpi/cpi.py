@@ -180,6 +180,7 @@ def main(argv=None):
         parser_drilldown.add_argument(
             '-t', '--threshold',
             dest='threshold',
+            default=0,
             metavar='N',
             type=float,
             help='do not display drilldown for symbols less than N%%\n'
