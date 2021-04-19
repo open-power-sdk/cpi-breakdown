@@ -93,9 +93,9 @@ def parse_file(output_stream, event_values):
     '''Parse the ocount output file to get events and values'''
     with open(output_stream, "r") as infile:
         for line in infile:
-            if not line.isspace():
-                key_val = line.split(",")[0].strip()
-                val = line.split(",")[1].strip()
+            if not line.isspace() and not line.startswith("#"):
+                key_val = line.split(",")[2].strip()
+                val = line.split(",")[0].strip()
                 event_values[key_val] = val
     return event_values
 
