@@ -26,9 +26,9 @@ import os
 import sys
 import time
 
-import cpi.core
-import cpi.events_reader
-import cpi.metrics_calculator
+import cpi.core as core
+import cpi.events_reader as events_reader
+import cpi.metrics_calculator as metrics_calculator
 from cpi.info.info_handler import InfoHandler
 from cpi.breakdown.breakdown_tree import BreakdownTree
 from cpi.breakdown.breakdown_table import MetricsTable
@@ -89,7 +89,7 @@ class Controller(object):
             cpi_file_name - the path where the cpi file will be generated
             quiet - if should suppress any message during the recording step
         """
-        ocount = "ocount"
+        ocount = "perf"
         core.supported_feature(core.get_processor(), "Breakdown")
         if not os.path.isfile(self.__binary_path):
             sys.stderr.write(self.__binary_path + ' binary file not found\n')
@@ -127,7 +127,7 @@ class Controller(object):
         # Run ocount for all events groups
         for event in reader.get_events():
             exec_counter = exec_counter + 1
-            ocount_cmd = ocount + " -b -f " + ocount_out
+            ocount_cmd = ocount + " stat -x, -o " + ocount_out
             for item in event:
                 ocount_cmd += " -e " + item
             if not quiet:
@@ -141,7 +141,7 @@ class Controller(object):
                                                  self.__binary_args)
             if status != 0:
                 sys.stderr.write("\n\nFailed to run {0} command.".
-                                 format(ocount) + "\n" + output + "\n")
+                                 format(ocount) + "\n" + output.decode() + "\n")
                 sys.exit(1)
             core.parse_file(ocount_out, events)
         core.execute("rm " + ocount_out)
