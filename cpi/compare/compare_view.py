@@ -25,7 +25,7 @@ limitations under the License.
 from terminaltables import AsciiTable
 
 
-class CompareView(object):
+class CompareView():
     """ Handles the display of the comparison results """
 
     def __init__(self, results_list, comparison_type, file_names):

@@ -23,7 +23,7 @@ limitations under the License.
 from terminaltables import AsciiTable
 
 
-class MetricsTable(object):
+class MetricsTable():
     """ Print the CPI Breakdown in table format """
 
     def __init__(self, metrics_values):

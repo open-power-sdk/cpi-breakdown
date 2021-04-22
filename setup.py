@@ -34,7 +34,10 @@ with open('README.md') as f:
     README = f.read()
 
 REQUIREMENTS_LIST = parse_requirements('./requirements.txt', session=False)
-REQUIREMENTS = [str(required.req) for required in REQUIREMENTS_LIST]
+try:
+    REQUIREMENTS = [str(required.req) for required in REQUIREMENTS_LIST]
+except AttributeError:
+    REQUIREMENTS = [str(required.requirement) for required in REQUIREMENTS_LIST]
 
 setup(
     name='cpi',

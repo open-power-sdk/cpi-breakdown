@@ -20,7 +20,7 @@ limitations under the License.
 """
 
 
-class BreakdownTree(object):
+class BreakdownTree():
     '''
     Print the CPI Breakdown Tree using as predefined model according the
     processor where the application is running.

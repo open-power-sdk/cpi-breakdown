@@ -24,7 +24,7 @@ from decimal import Decimal
 import cpi.drilldown.opreport_parser as opreport_parser
 
 
-class DrilldownModel(object):
+class DrilldownModel():
     """ Class to create the model of drilldown """
     def __init__(self):
         self.binmodule_list = []
@@ -89,7 +89,7 @@ class DrilldownModel(object):
         return percentage
 
 
-class UiBinModule(object):
+class UiBinModule():
     """ Class to hold info about the binary that was profiled """
     def __init__(self, name, percentage):
         self.name = name
@@ -122,7 +122,7 @@ class UiBinModule(object):
         return self.percentage > other.percentage
 
 
-class UiSymbol(object):
+class UiSymbol():
     """ Class to hold info about symbols """
     def __init__(self, name, file_name, percentage):
         self.name = name
@@ -157,7 +157,7 @@ class UiSymbol(object):
         return self.percentage > other.percentage
 
 
-class UiSample(object):
+class UiSample():
     """ Class to hold info about samples """
     def __init__(self, line, percentage):
         self.line = line

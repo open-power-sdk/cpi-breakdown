@@ -25,7 +25,7 @@ from cpi import events_reader
 from cpi import metrics_calculator
 
 
-class Metric(object):
+class Metric():
     """ Class used to create metric objects """
     def __init__(self, name, formula, description):
         self.name = name
@@ -47,7 +47,7 @@ class Metric(object):
         return self.name == name
 
 
-class InfoHandler(object):
+class InfoHandler():
     """Display information about event or metric (occurrences)."""
 
     def __init__(self):

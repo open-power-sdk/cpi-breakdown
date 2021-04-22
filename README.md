@@ -17,7 +17,7 @@ We use [Slack](https://toolsforpower.slack.com/) for communication.
 ppc64le: Ubuntu 16.04, CentOS7, RHEL 7.3, SLES12, Fedora 25.
 
 ## Installing
-Requirements: python-pip, python-pylint, python-virtualenv, python-docsutil, oprofile
+Requirements: python-pip, python-pylint, python3-venv, python-docsutil, oprofile
 
 Testing: ./dev tests
 
