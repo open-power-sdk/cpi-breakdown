@@ -18,7 +18,7 @@ This project is committed to maintain a **positive** [work environment](#work-en
 1. With respect to cultural differences, be conservative in what you do and liberal in what you accept from others, but not to the point of accepting disrespectful, unprofessional or unfair or [unwelcome behavior](#unwelcome-behavior) or [advances](#unwelcome-sexual-advance).
 1. Promote the rules of this Code and take action (especially if you are in a [leadership position](#leadership-position)) to bring the discussion back to a more civil level whenever inappropriate behaviors are observed.
 1. Stay on topic: Make sure that you are posting to the correct channel and avoid off-topic discussions. Remember when you update an issue or respond to an email you are potentially sending to a large number of people.
-1. Step down considerately: Members of every project come and go, and the Hyperledger Project is no different. When you leave or disengage from the project, in whole or in part, we ask that you do so in a way that minimizes disruption to the project. This means you should tell people you are leaving and take the proper steps to ensure that others can pick up where you left off.
+1. Step down considerately: Members of every project come and go, and this project is no different. When you leave or disengage from the project, in whole or in part, we ask that you do so in a way that minimizes disruption to the project. This means you should tell people you are leaving and take the proper steps to ensure that others can pick up where you left off.
 
 ## Glossary
 #### Demeaning behavior
@@ -45,7 +45,7 @@ includes the following persons:
 * Anyone from the Public partaking in this project's work environment (e.g. contribute code, comment on our code or specs, email us, attend our conferences, functions, etc)
 
 #### Respect
-is the genuine consideration you have for someone (if only because of their status as participant in Hyperledger Project, like yourself), and that you show by treating them in a polite and kind way.
+is the genuine consideration you have for someone (if only because of their status as participant in this project, like yourself), and that you show by treating them in a polite and kind way.
 
 #### Sexual harassment
 includes visual displays of degrading sexual images, sexually suggestive conduct, offensive remarks of a sexual nature, requests for sexual favors, unwelcome physical contact, and sexual assault.
@@ -75,7 +75,7 @@ is the set of all available means of collaboration, including, but not limited t
 
 ## Incident Procedure
 
-To report incidents or to appeal reports of incidents, send email to iplsdk@linux.vnet.ibm.com create email. Please include any available relevant information, including links to any publicly accessible material relating to the matter. Every effort will be taken to ensure a safe and collegial environment in which to collaborate on matters relating to the Project. In order to protect the community, the Project reserves the right to take appropriate action, potentially including the removal of an individual from any and all participation in the project. The Project will work towards an equitable resolution in the event of a misunderstanding.
+To report incidents or to appeal reports of incidents, send email to iplsdk@linux.vnet.ibm.com create email. Please include any available relevant information, including links to any publicly accessible material relating to the matter. Every effort will be taken to ensure a safe and collegial environment in which to collaborate on matters relating to this project. In order to protect the community, this project reserves the right to take appropriate action, potentially including the removal of an individual from any and all participation in the project. This project will work towards an equitable resolution in the event of a misunderstanding.
 
 ## Credits
 
