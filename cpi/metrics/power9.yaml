@@ -2,21 +2,21 @@
     NAME : RUN_CPI
     DESCRIPTION : Run cycles per run instruction
     FORMULA : PM_RUN_CYC / PM_RUN_INST_CMPL
-    COMPONENTS : [ICT_NOSLOT_CYC_CPI, STALL_CPI, THRD_STALL_CPI,  NTC_ALL_FIN_CPI, OTHER_CPI]
+    COMPONENTS : [NOTHING_DISPATCHED_CPI, STALL_CPI, THREAD_BLOCK_STALL_CPI, COMPLETION_CPI, OTHER_CPI]
 2 :
-    NAME : ICT_NOSLOT_CYC_CPI
+    NAME : NOTHING_DISPATCHED_CPI
     DESCRIPTION : Number of cycles the ICT has no itags assigned to this thread
-    FORMULA : PM_ICT_NOSLOT_CYC / PM_RUN_INST_CMPL
+    FORMULA : PM_ICT_NOSLOT_CYC/PM_RUN_INST_CMPL
     COMPONENTS : [ICT_NOSLOT_IC_MISS_CPI, ICT_NOSLOT_BR_MPRED_CPI, ICT_NOSLOT_BR_MPRED_ICMISS_CPI, ICT_NOSLOT_DISP_HELD_CPI, ICT_NOSLOT_CYC_OTHER_CPI]
 3 :
     NAME : ICT_NOSLOT_IC_MISS_CPI
     DESCRIPTION : Ict empty for this thread due to Icache Miss
-    FORMULA : PM_ICT_NOSLOT_IC_MISS / PM_RUN_INST_CMPL
+    FORMULA : PM_ICT_NOSLOT_IC_MISS/PM_RUN_INST_CMPL
     COMPONENTS : [ICT_NOSLOT_IC_L2_CPI, ICT_NOSLOT_IC_L3_CPI, ICT_NOSLOT_IC_L3MISS_CPI]
 4 :
     NAME : ICT_NOSLOT_IC_L2_CPI
     DESCRIPTION : None
-    FORMULA : (PM_ICT_NOSLOT_IC_MISS / PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_IC_L3 / PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_IC_L3MISS / PM_RUN_INST_CMPL)
+    FORMULA : (PM_ICT_NOSLOT_IC_MISS - PM_ICT_NOSLOT_IC_L3 - PM_ICT_NOSLOT_IC_L3MISS)/PM_RUN_INST_CMPL
     COMPONENTS : []
 5 :
     NAME : ICT_NOSLOT_IC_L3_CPI
@@ -66,406 +66,400 @@
 14 :
     NAME : ICT_NOSLOT_DISP_HELD_OTHER_CPI
     DESCRIPTION : None
-    FORMULA : (PM_ICT_NOSLOT_DISP_HELD/PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_DISP_HELD_HB_FULL/PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_DISP_HELD_SYNC/PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_DISP_HELD_TBEGIN/PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_DISP_HELD_ISSQ/PM_RUN_INST_CMPL)
+    FORMULA : (PM_ICT_NOSLOT_DISP_HELD - PM_ICT_NOSLOT_DISP_HELD_HB_FULL - PM_ICT_NOSLOT_DISP_HELD_SYNC - PM_ICT_NOSLOT_DISP_HELD_TBEGIN - PM_ICT_NOSLOT_DISP_HELD_ISSQ)/PM_RUN_INST_CMPL
     COMPONENTS : []
 15 :
     NAME : ICT_NOSLOT_CYC_OTHER_CPI
     DESCRIPTION : ICT other stalls
-    FORMULA : (PM_ICT_NOSLOT_DISP_HELD/PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_IC_MISS / PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_BR_MPRED_ICMISS/PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_BR_MPRED/PM_RUN_INST_CMPL) - (PM_ICT_NOSLOT_DISP_HELD/PM_RUN_INST_CMPL)
+    FORMULA : (PM_ICT_NOSLOT_CYC - PM_ICT_NOSLOT_IC_MISS - PM_ICT_NOSLOT_BR_MPRED_ICMISS - PM_ICT_NOSLOT_BR_MPRED - PM_ICT_NOSLOT_DISP_HELD)/PM_RUN_INST_CMPL
     COMPONENTS : []
 16 :
-    NAME : ISSUE_HOLD_CPI
-    DESCRIPTION : None
-    FORMULA : (PM_NTC_ISSUE_HELD_DARQ_FULL/PM_RUN_INST_CMPL) + (PM_NTC_ISSUE_HELD_ARB/PM_RUN_INST_CMPL) + (PM_NTC_ISSUE_HELD_OTHER/PM_RUN_INST_CMPL)
-    COMPONENTS : [NTC_ISSUE_HELD_DARQ_FULL_CPI, NTC_ISSUE_HELD_ARB_CPI, NTC_ISSUE_HELD_OTHER_CPI]
-17 :
-    NAME : NTC_ISSUE_HELD_DARQ_FULL_CPI
-    DESCRIPTION : The NTC instruction is being held at dispatch because there are no slots in the DARQ for it
-    FORMULA : PM_NTC_ISSUE_HELD_DARQ_FULL/PM_RUN_INST_CMPL
-    COMPONENTS : []
-18 :
-    NAME : NTC_ISSUE_HELD_ARB_CPI
-    DESCRIPTION : The NTC instruction is being held at dispatch because it lost arbitration onto the issue pipe to another instruction (from the same thread or a different thread)
-    FORMULA : PM_NTC_ISSUE_HELD_ARB/PM_RUN_INST_CMPL
-    COMPONENTS : []
-19 :
-    NAME : NTC_ISSUE_HELD_OTHER_CPI
-    DESCRIPTION : The NTC instruction is being held at dispatch during regular pipeline cycles, or because the VSU is busy with multi-cycle instructions, or because of a write-back collision with VSU
-    FORMULA : PM_NTC_ISSUE_HELD_OTHER/PM_RUN_INST_CMPL
-    COMPONENTS : []
-20 :
     NAME : STALL_CPI
     DESCRIPTION : Nothing completed and ICT not empty
     FORMULA : PM_CMPLU_STALL/PM_RUN_INST_CMPL
-    COMPONENTS : [BRU_STALL_CPI, EXEC_UNIT_STALL_CPI, LSU_STALL_CPI, EXCEPTION_STALL_CPI, NTC_FLUSH_STALL_CPI, NTC_DISP_FIN_STALL_CPI, OTHER_STALL_CPI]
-21 :
+    COMPONENTS : [BRU_STALL_CPI, EXEC_UNIT_STALL_CPI, LSU_STALL_CPI, NTC_FLUSH_STALL_CPI, NTC_DISP_FIN_STALL_CPI, OTHER_STALL_CPI]
+17 :
     NAME : BRU_STALL_CPI
     DESCRIPTION : Completion stall due to a Branch Unit
     FORMULA : PM_CMPLU_STALL_BRU/PM_RUN_INST_CMPL
     COMPONENTS : []
-22 :
+18 :
     NAME : EXEC_UNIT_STALL_CPI
     DESCRIPTION : Completion stall due to execution units (FXU/VSU/CRU)
     FORMULA : PM_CMPLU_STALL_EXEC_UNIT/PM_RUN_INST_CMPL
     COMPONENTS : [SCALAR_STALL_CPI, VECTOR_STALL_CPI, EXEC_UNIT_OTHER_STALL_CPI]
-23 :
+19 :
     NAME : SCALAR_STALL_CPI
     DESCRIPTION : None
-    FORMULA : (PM_CMPLU_STALL_FXU/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_DP/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_DFU/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_PM/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_CRYPTO/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_FXU + PM_CMPLU_STALL_DP + PM_CMPLU_STALL_DFU + PM_CMPLU_STALL_PM + PM_CMPLU_STALL_CRYPTO)/PM_RUN_INST_CMPL
     COMPONENTS : [FXU_STALL_CPI, DP_STALL_CPI, DFU_STALL_CPI, PM_STALL_CPI, CRYPTO_STALL_CPI]
-24 :
+20 :
     NAME : FXU_STALL_CPI
     DESCRIPTION : Finish stall due to a scalar fixed point or CR instruction in the execution pipeline. These instructions get routed to the ALU, ALU2, and DIV pipes
     FORMULA : PM_CMPLU_STALL_FXU/PM_RUN_INST_CMPL
     COMPONENTS : [FXLONG_STALL_CPI, FXU_OTHER_STALL_CPI]
-25 :
+21 :
     NAME : FXLONG_STALL_CPI
     DESCRIPTION : Completion stall due to a long latency scalar fixed point instruction (division, square root)
     FORMULA : PM_CMPLU_STALL_FXLONG/PM_RUN_INST_CMPL
     COMPONENTS : []
-26 :
+22 :
     NAME : FXU_OTHER_STALL_CPI
     DESCRIPTION : Stalls due to short latency integer ops
-    FORMULA : (PM_CMPLU_STALL_FXU/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_FXLONG/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_FXU - PM_CMPLU_STALL_FXLONG)/PM_RUN_INST_CMPL
     COMPONENTS : []
-27 :
+23 :
     NAME : DP_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a scalar instruction issued to the Double Precision execution pipe and waiting to finish. Includes binary floating point instructions in 32 and 64 bit binary floating point format.
     FORMULA : PM_CMPLU_STALL_DP/PM_RUN_INST_CMPL
     COMPONENTS : [DPLONG_STALL_CPI, DP_OTHER_STALL_CPI]
-28 :
+24 :
     NAME : DPLONG_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a scalar multi-cycle instruction issued to the Double Precision execution pipe and waiting to finish. Includes binary floating point instructions in 32 and 64 bit binary floating point format.
     FORMULA : PM_CMPLU_STALL_DPLONG/PM_RUN_INST_CMPL
     COMPONENTS : []
-29 :
+25 :
     NAME : DP_OTHER_STALL_CPI
     DESCRIPTION : Stalls due to short latency double precision ops.
-    FORMULA : (PM_CMPLU_STALL_DP/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_DPLONG/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_DP - PM_CMPLU_STALL_DPLONG)/PM_RUN_INST_CMPL
     COMPONENTS : []
-30 :
+26 :
     NAME : DFU_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was issued to the Decimal Floating Point execution pipe and waiting to finish.
     FORMULA : PM_CMPLU_STALL_DFU/PM_RUN_INST_CMPL
     COMPONENTS : [DFLONG_STALL_CPI, DFU_OTHER_STALL_CPI]
-31 :
+27 :
     NAME : DFLONG_STALL_CPI
-    DESCRIPTION : Finish stall because the NTF instruction was issued to the Decimal Floating Point execution pipe and waiting to finish.
+    DESCRIPTION : Finish stall because the NTF instruction was a multi-cycle instruction issued to the Decimal Floating Point execution pipe and waiting to finish.
     FORMULA : PM_CMPLU_STALL_DFLONG/PM_RUN_INST_CMPL
     COMPONENTS : []
-32 :
+28 :
     NAME : DFU_OTHER_STALL_CPI
     DESCRIPTION : Stalls due to short latency decimal floating ops.
-    FORMULA : (PM_CMPLU_STALL_DFU/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_DFLONG/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_DFU - PM_CMPLU_STALL_DFLONG)/PM_RUN_INST_CMPL
     COMPONENTS : []
-33 :
+29 :
     NAME : PM_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was issued to the Permute execution pipe and waiting to finish.
     FORMULA : PM_CMPLU_STALL_PM/PM_RUN_INST_CMPL
     COMPONENTS : []
-34 :
+30 :
     NAME : CRYPTO_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was routed to the crypto execution pipe and was waiting to finish
     FORMULA : PM_CMPLU_STALL_CRYPTO/PM_RUN_INST_CMPL
     COMPONENTS : []
-35 :
+31 :
     NAME : VECTOR_STALL_CPI
     DESCRIPTION : None
-    FORMULA : (PM_CMPLU_STALL_VFXU/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_VDP/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_VFXU + PM_CMPLU_STALL_VDP)/PM_RUN_INST_CMPL
     COMPONENTS : [VFXU_STALL_CPI, VDP_STALL_CPI]
-36 :
+32 :
     NAME : VFXU_STALL_CPI
     DESCRIPTION : Finish stall due to a vector fixed point instruction in the execution pipeline. These instructions get routed to the ALU, ALU2, and DIV pipes
     FORMULA : PM_CMPLU_STALL_VFXU/PM_RUN_INST_CMPL
     COMPONENTS : [VFXLONG_STALL_CPI, VFXU_OTHER_STALL_CPI]
-37 :
+33 :
     NAME : VFXLONG_STALL_CPI
-    DESCRIPTION : Finish stall due to a vector fixed point instruction in the execution pipeline. These instructions get routed to the ALU, ALU2, and DIV pipes
+    DESCRIPTION : Completion stall due to a long latency vector fixed point instruction (division, square root)
     FORMULA : PM_CMPLU_STALL_VFXLONG/PM_RUN_INST_CMPL
     COMPONENTS : []
-38 :
+34 :
     NAME : VFXU_OTHER_STALL_CPI
     DESCRIPTION : Vector stalls due to small latency integer ops
-    FORMULA : (PM_CMPLU_STALL_VFXU/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_VFXLONG/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_VFXU - PM_CMPLU_STALL_VFXLONG)/PM_RUN_INST_CMPL
     COMPONENTS : []
-39 :
+35 :
     NAME : VDP_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a vector instruction issued to the Double Precision execution pipe and waiting to finish.
     FORMULA : PM_CMPLU_STALL_VDP/PM_RUN_INST_CMPL
     COMPONENTS : [VDPLONG_STALL_CPI, VDP_OTHER_STALL_CPI]
-40 :
+36 :
     NAME : VDPLONG_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a scalar multi-cycle instruction issued to the Double Precision execution pipe and waiting to finish. Includes binary floating point instructions in 32 and 64 bit binary floating point format.
     FORMULA : PM_CMPLU_STALL_VDPLONG/PM_RUN_INST_CMPL
     COMPONENTS : []
-41 :
+37 :
     NAME : VDP_OTHER_STALL_CPI
     DESCRIPTION : Vector stalls due to small latency double precision ops
-    FORMULA : (PM_CMPLU_STALL_VDP/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_VDPLONG/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_VDP - PM_CMPLU_STALL_VDPLONG)/PM_RUN_INST_CMPL
     COMPONENTS : []
-42 :
+38 :
     NAME : EXEC_UNIT_OTHER_STALL_CPI
     DESCRIPTION : Completion stall due to execution units for other reasons.
-    FORMULA : PM_CMPLU_STALL_EXEC_UNIT/PM_RUN_INST_CMPL
+    FORMULA : (PM_CMPLU_STALL_EXEC_UNIT - PM_CMPLU_STALL_FXU - PM_CMPLU_STALL_DP - PM_CMPLU_STALL_DFU - PM_CMPLU_STALL_PM - PM_CMPLU_STALL_CRYPTO - PM_CMPLU_STALL_VFXU - PM_CMPLU_STALL_VDP)/PM_RUN_INST_CMPL
     COMPONENTS : []
-43 :
+39 :
     NAME : LSU_STALL_CPI
     DESCRIPTION : Completion stall by LSU instruction
     FORMULA : PM_CMPLU_STALL_LSU/PM_RUN_INST_CMPL
     COMPONENTS : [LSAQ_STALL_CPI, EMQ_STALL_CPI, LRQ_STALL_CPI, DCACHE_MISS_STALL_CPI, LOAD_FINISH_STALL_CPI, SRQ_STALL_CPI, STORE_FINISH_STALL_CPI, LSU_FIN_STALL_CPI, LSU_OTHER_STALL_CPI]
-45 :
+40 :
     NAME : LSAQ_STALL_CPI
     DESCRIPTION : None
-    FORMULA : (PM_CMPLU_STALL_LRQ_FULL/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_SRQ_FULL/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LSAQ_ARB/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_LRQ_FULL + PM_CMPLU_STALL_SRQ_FULL + PM_CMPLU_STALL_LSAQ_ARB)/PM_RUN_INST_CMPL
     COMPONENTS : [LRQ_FULL_STALL_CPI, SRQ_FULL_STALL_CPI, LSAQ_ARB_STALL_CPI]
-46 :
+41 :
     NAME : LRQ_FULL_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a load that was held in LSAQ because the LRQ was full
     FORMULA : PM_CMPLU_STALL_LRQ_FULL/PM_RUN_INST_CMPL
     COMPONENTS : []
-47 :
+42 :
     NAME : SRQ_FULL_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a store that was held in LSAQ because the SRQ was full
     FORMULA : PM_CMPLU_STALL_SRQ_FULL/PM_RUN_INST_CMPL
     COMPONENTS : []
-48 :
+43 :
     NAME : LSAQ_ARB_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a load or store that was held in LSAQ because an older instruction from SRQ or LRQ won arbitration to the LSU pipe when this instruction tried to launch
     FORMULA : PM_CMPLU_STALL_LSAQ_ARB/PM_RUN_INST_CMPL
     COMPONENTS : []
-49 :
+44 :
     NAME : EMQ_STALL_CPI
     DESCRIPTION : None
-    FORMULA : (PM_CMPLU_STALL_ERAT_MISS/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_EMQ_FULL/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_ERAT_MISS + PM_CMPLU_STALL_EMQ_FULL)/PM_RUN_INST_CMPL
     COMPONENTS : [ERAT_MISS_STALL_CPI, EMQ_FULL_STALL_CPI]
-50 :
+45 :
     NAME : ERAT_MISS_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a load or store that suffered a translation miss
     FORMULA : PM_CMPLU_STALL_ERAT_MISS/PM_RUN_INST_CMPL
     COMPONENTS : []
-51 :
+46 :
     NAME : EMQ_FULL_STALL_CPI
     DESCRIPTION : Finish stall because the next to finish instruction suffered an ERAT miss and the EMQ was full
     FORMULA : PM_CMPLU_STALL_EMQ_FULL/PM_RUN_INST_CMPL
     COMPONENTS : []
-52 :
+47 :
     NAME : LRQ_STALL_CPI
     DESCRIPTION : None
-    FORMULA : (PM_CMPLU_STALL_LMQ_FULL/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_ST_FWD/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LHS/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LSU_MFSPR/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LARX/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LRQ_OTHER/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_LMQ_FULL + PM_CMPLU_STALL_ST_FWD + PM_CMPLU_STALL_LHS + PM_CMPLU_STALL_LSU_MFSPR + PM_CMPLU_STALL_LARX)/PM_RUN_INST_CMPL
     COMPONENTS : [LMQ_FULL_STALL_CPI, ST_FWD_STALL_CPI, LHS_STALL_CPI, LSU_MFSPR_STALL_CPI, LARX_STALL_CPI, LRQ_OTHER_STALL_CPI]
-53 :
+48 :
     NAME : LMQ_FULL_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a load that missed in the L1 and the LMQ was unable to accept this load miss request because it was full
     FORMULA : PM_CMPLU_STALL_LMQ_FULL/PM_RUN_INST_CMPL
     COMPONENTS : []
-54 :
+49 :
     NAME : ST_FWD_STALL_CPI
     DESCRIPTION : Completion stall due to store forward
     FORMULA : PM_CMPLU_STALL_ST_FWD/PM_RUN_INST_CMPL
     COMPONENTS : []
-55 :
+50 :
     NAME : LHS_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a load that hit on an older store and it was waiting for store data
     FORMULA : PM_CMPLU_STALL_LHS/PM_RUN_INST_CMPL
     COMPONENTS : []
-56 :
+51 :
     NAME : LSU_MFSPR_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a mfspr instruction targeting an LSU SPR and it was waiting for the register data to be returned
     FORMULA : PM_CMPLU_STALL_LSU_MFSPR/PM_RUN_INST_CMPL
     COMPONENTS : []
-57 :
+52 :
     NAME : LARX_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a larx waiting to be satisfied
     FORMULA : PM_CMPLU_STALL_LARX/PM_RUN_INST_CMPL
     COMPONENTS : []
-58 :
+53 :
     NAME : LRQ_OTHER_STALL_CPI
     DESCRIPTION : Finish stall due to LRQ miscellaneous reasons, lost arbitration to LMQ slot, bank collisions, set prediction cleanup, set prediction multihit and others
     FORMULA : PM_CMPLU_STALL_LRQ_OTHER/PM_RUN_INST_CMPL
     COMPONENTS : []
-59 :
+54 :
     NAME : DCACHE_MISS_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a load that missed the L1 and was waiting for the data to return from the nest
     FORMULA : PM_CMPLU_STALL_DCACHE_MISS/PM_RUN_INST_CMPL
     COMPONENTS : [DMISS_L2L3_STALL_CPI, DMISS_L3MISS_STALL_CPI]
-60 :
+55 :
     NAME : DMISS_L2L3_STALL_CPI
     DESCRIPTION : Completion stall by Dcache miss which resolved in L2/L3
     FORMULA : PM_CMPLU_STALL_DMISS_L2L3/PM_RUN_INST_CMPL
     COMPONENTS : [DMISS_L2L3_CONFLICT_STALL_CPI, DMISS_L2L3_NOCONFLICT_STALL_CPI]
-61 :
+56 :
     NAME : DMISS_L2L3_CONFLICT_STALL_CPI
     DESCRIPTION : Completion stall due to cache miss that resolves in the L2 or L3 with a conflict
     FORMULA : PM_CMPLU_STALL_DMISS_L2L3_CONFLICT/PM_RUN_INST_CMPL
     COMPONENTS : []
-62 :
+57 :
     NAME : DMISS_L2L3_NOCONFLICT_STALL_CPI
     DESCRIPTION : Completion stall due to cache miss that resolves in the L2 or L3 without conflict
-    FORMULA : (PM_CMPLU_STALL_DMISS_L2L3/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_DMISS_L2L3_CONFLICT/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_DMISS_L2L3 - PM_CMPLU_STALL_DMISS_L2L3_CONFLICT)/PM_RUN_INST_CMPL
     COMPONENTS : []
-63 :
+58 :
     NAME : DMISS_L3MISS_STALL_CPI
     DESCRIPTION : Completion stall due to cache miss resolving missed the L3
     FORMULA : PM_CMPLU_STALL_DMISS_L3MISS/PM_RUN_INST_CMPL
-    COMPONENTS : [DMISS_L21_L31_STALL_CPI, DMISS_LMEM_STALL_CPI, DMISS_REMOTE_STALL_CPI, DMISS_DMEM_STALL_CPI]
-64 :
+    COMPONENTS : [DMISS_L21_L31_STALL_CPI, DMISS_LMEM_STALL_CPI, DMISS_NON_LOCAL_STALL_CPI]
+59 :
     NAME : DMISS_L21_L31_STALL_CPI
     DESCRIPTION : Completion stall by Dcache miss which resolved on chip ( excluding local L2/L3)
     FORMULA : PM_CMPLU_STALL_DMISS_L21_L31/PM_RUN_INST_CMPL
     COMPONENTS : []
-65 :
+60 :
     NAME : DMISS_LMEM_STALL_CPI
     DESCRIPTION : Completion stall due to cache miss that resolves in local memory
     FORMULA : PM_CMPLU_STALL_DMISS_LMEM/PM_RUN_INST_CMPL
     COMPONENTS : []
-66 :
+61 :
+    NAME : DMISS_NON_LOCAL_STALL_CPI
+    DESCRIPTION : Completion stall due to cache miss that resolves outside of local memory
+    FORMULA : (PM_CMPLU_STALL_DMISS_L3MISS - PM_CMPLU_STALL_DMISS_L21_L31 - PM_CMPLU_STALL_DMISS_LMEM)/PM_RUN_INST_CMPL
+    COMPONENTS : [DMISS_REMOTE_STALL_CPI, DMISS_DISTANT_STALL_CPI]
+62 :
     NAME : DMISS_REMOTE_STALL_CPI
     DESCRIPTION : Completion stall by Dcache miss which resolved from remote chip (cache or memory)
     FORMULA : PM_CMPLU_STALL_DMISS_REMOTE/PM_RUN_INST_CMPL
     COMPONENTS : []
-67 :
-    NAME : DMISS_DMEM_STALL_CPI
+63 :
+    NAME : DMISS_DISTANT_STALL_CPI
     DESCRIPTION : Completion stall by Dcache miss which resolved off node memory/cache
-    FORMULA : (PM_CMPLU_STALL_DMISS_L3MISS/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_DMISS_L21_L31/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_DMISS_LMEM/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_DMISS_REMOTE/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_DMISS_L3MISS - PM_CMPLU_STALL_DMISS_L21_L31 - PM_CMPLU_STALL_DMISS_LMEM - PM_CMPLU_STALL_DMISS_REMOTE)/PM_RUN_INST_CMPL
     COMPONENTS : []
-68 :
+64 :
     NAME : LOAD_FINISH_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a load instruction with all its dependencies satisfied just going through the LSU pipe to finish
     FORMULA : PM_CMPLU_STALL_LOAD_FINISH/PM_RUN_INST_CMPL
     COMPONENTS : []
-69 :
+65 :
     NAME : SRQ_STALL_CPI
     DESCRIPTION : None
-    FORMULA : (PM_CMPLU_STALL_STORE_DATA/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_EIEIO/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_STCX/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_SLB/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_TEND/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_PASTE/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_TLBIE/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_STORE_PIPE_ARB/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_STORE_FIN_ARB/PM_RUN_INST_CMPL)
+    FORMULA : (PM_CMPLU_STALL_STORE_DATA + PM_CMPLU_STALL_EIEIO + PM_CMPLU_STALL_STCX + PM_CMPLU_STALL_SLB + PM_CMPLU_STALL_TEND + PM_CMPLU_STALL_PASTE + PM_CMPLU_STALL_TLBIE + PM_CMPLU_STALL_STORE_PIPE_ARB + PM_CMPLU_STALL_STORE_FIN_ARB)/PM_RUN_INST_CMPL
     COMPONENTS : [STORE_DATA_STALL_CPI, EIEIO_STALL_CPI, STCX_STALL_CPI, SLB_STALL_CPI, TEND_STALL_CPI, PASTE_STALL_CPI, TLBIE_STALL_CPI, STORE_PIPE_ARB_STALL_CPI, STORE_FIN_ARB_STALL_CPI]
-70 :
+66 :
     NAME : STORE_DATA_STALL_CPI
     DESCRIPTION : Finish stall because the next to finish instruction was a store waiting on data
     FORMULA : PM_CMPLU_STALL_STORE_DATA/PM_RUN_INST_CMPL
     COMPONENTS : []
-71 :
+67 :
     NAME : EIEIO_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction is an EIEIO waiting for response from L2
     FORMULA : PM_CMPLU_STALL_EIEIO/PM_RUN_INST_CMPL
     COMPONENTS : []
-72 :
+68 :
     NAME : STCX_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a stcx waiting for response from L2
     FORMULA : PM_CMPLU_STALL_STCX/PM_RUN_INST_CMPL
     COMPONENTS : []
-73 :
+69 :
     NAME : SLB_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was awaiting L2 response for an SLB
     FORMULA : PM_CMPLU_STALL_SLB/PM_RUN_INST_CMPL
     COMPONENTS : []
-74 :
+70 :
     NAME : TEND_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a tend instruction awaiting response from L2
     FORMULA : PM_CMPLU_STALL_TEND/PM_RUN_INST_CMPL
     COMPONENTS : []
-75 :
+71 :
     NAME : PASTE_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a paste waiting for response from L2
     FORMULA : PM_CMPLU_STALL_PASTE/PM_RUN_INST_CMPL
     COMPONENTS : []
-76 :
+72 :
     NAME : TLBIE_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a tlbie waiting for response from L2
     FORMULA : PM_CMPLU_STALL_TLBIE/PM_RUN_INST_CMPL
     COMPONENTS : []
-77 :
+73 :
     NAME : STORE_PIPE_ARB_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a store waiting for the next relaunch opportunity after an internal reject. This means the instruction is ready to relaunch and tried once but lost arbitration
     FORMULA : PM_CMPLU_STALL_STORE_PIPE_ARB/PM_RUN_INST_CMPL
     COMPONENTS : []
-78 :
+74 :
     NAME : STORE_FIN_ARB_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a store waiting for a slot in the store finish pipe. This means the instruction is ready to finish but there are instructions ahead of it, using the finish pipe
     FORMULA : PM_CMPLU_STALL_STORE_FIN_ARB/PM_RUN_INST_CMPL
     COMPONENTS : []
-79 :
+75 :
     NAME : STORE_FINISH_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was a store with all its dependencies met, just waiting to go through the LSU pipe to finish
     FORMULA : PM_CMPLU_STALL_STORE_FINISH/PM_RUN_INST_CMPL
     COMPONENTS : []
-80 :
+76 :
     NAME : LSU_FIN_STALL_CPI
     DESCRIPTION : Finish stall because the NTF instruction was an LSU op (other than a load or a store) with all its dependencies met and just going through the LSU pipe to finish
     FORMULA : PM_CMPLU_STALL_LSU_FIN/PM_RUN_INST_CMPL
     COMPONENTS : []
-81 :
+77 :
     NAME : LSU_OTHER_STALL_CPI
     DESCRIPTION : Completion LSU stall for other reasons
-    FORMULA : (PM_CMPLU_STALL_LSU/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_LSU_FIN/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_STORE_FINISH/PM_RUN_INST_CMPL) - ((PM_CMPLU_STALL_STORE_DATA/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_EIEIO/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_STCX/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_SLB/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_TEND/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_PASTE/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_TLBIE/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_STORE_PIPE_ARB/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_STORE_FIN_ARB/PM_RUN_INST_CMPL)) - (PM_CMPLU_STALL_LOAD_FINISH/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_DCACHE_MISS/PM_RUN_INST_CMPL) - ((PM_CMPLU_STALL_LMQ_FULL/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_ST_FWD/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LHS/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LSU_MFSPR/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LARX/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LRQ_OTHER/PM_RUN_INST_CMPL)) - ((PM_CMPLU_STALL_ERAT_MISS/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_EMQ_FULL/PM_RUN_INST_CMPL)) - ((PM_CMPLU_STALL_LRQ_FULL/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_SRQ_FULL/PM_RUN_INST_CMPL) + (PM_CMPLU_STALL_LSAQ_ARB/PM_RUN_INST_CMPL))
+    FORMULA : (PM_CMPLU_STALL_LSU - PM_CMPLU_STALL_LSU_FIN - PM_CMPLU_STALL_STORE_FINISH - (PM_CMPLU_STALL_STORE_DATA + PM_CMPLU_STALL_EIEIO + PM_CMPLU_STALL_STCX + PM_CMPLU_STALL_SLB + PM_CMPLU_STALL_TEND + PM_CMPLU_STALL_PASTE + PM_CMPLU_STALL_TLBIE + PM_CMPLU_STALL_STORE_PIPE_ARB + PM_CMPLU_STALL_STORE_FIN_ARB) - PM_CMPLU_STALL_LOAD_FINISH - PM_CMPLU_STALL_DCACHE_MISS - (PM_CMPLU_STALL_LMQ_FULL + PM_CMPLU_STALL_ST_FWD + PM_CMPLU_STALL_LHS + PM_CMPLU_STALL_LSU_MFSPR + PM_CMPLU_STALL_LARX) - (PM_CMPLU_STALL_ERAT_MISS + PM_CMPLU_STALL_EMQ_FULL) - (PM_CMPLU_STALL_LRQ_FULL + PM_CMPLU_STALL_SRQ_FULL + PM_CMPLU_STALL_LSAQ_ARB))/PM_RUN_INST_CMPL
     COMPONENTS : []
-
+78 :
+    NAME : NTC_FLUSH_STALL_CPI
+    DESCRIPTION : Completion stall due to ntc flush
+    FORMULA : PM_CMPLU_STALL_NTC_FLUSH/PM_RUN_INST_CMPL
+    COMPONENTS : []
+79 :
+    NAME : NTC_DISP_FIN_STALL_CPI
+    DESCRIPTION : Finish stall because the NTF instruction was one that must finish at dispatch.
+    FORMULA : PM_CMPLU_STALL_NTC_DISP_FIN/PM_RUN_INST_CMPL
+    COMPONENTS : []
+80 :
+    NAME : OTHER_STALL_CPI
+    DESCRIPTION : Completion stall for other reasons
+    FORMULA : (PM_CMPLU_STALL - PM_CMPLU_STALL_NTC_DISP_FIN - PM_CMPLU_STALL_NTC_FLUSH - PM_CMPLU_STALL_EXCEPTION - PM_CMPLU_STALL_LSU - PM_CMPLU_STALL_EXEC_UNIT - PM_CMPLU_STALL_BRU)/PM_RUN_INST_CMPL
+    COMPONENTS : []
+81 :
+    NAME : THREAD_BLOCK_STALL_CPI
+    DESCRIPTION : Completion Stalled because the thread was blocked
+    FORMULA : PM_CMPLU_STALL_THRD/PM_RUN_INST_CMPL
+    COMPONENTS : [EXCEPTION_STALL_CPI, ANY_SYNC_STALL_CPI, SYNC_PMU_INT_STALL_CPI, SPEC_FINISH_STALL_CPI, FLUSH_ANY_THREAD_STALL_CPI, LSU_FLUSH_NEXT_STALL_CPI, NESTED_TBEGIN_STALL_CPI, NESTED_TEND_STALL_CPI, MTFPSCR_STALL_CPI, OTHER_THREAD_CMPL_STALL]
 82 :
     NAME : EXCEPTION_STALL_CPI
     DESCRIPTION : Cycles in which the NTC instruction is not allowed to complete because it was interrupted by ANY exception, which has to be serviced before the instruction can complete
     FORMULA : PM_CMPLU_STALL_EXCEPTION/PM_RUN_INST_CMPL
     COMPONENTS : []
+83 :
+    NAME : ANY_SYNC_STALL_CPI
+    DESCRIPTION : Cycles in which the NTC sync instruction (isync, lwsync or hwsync) is not allowed to complete
+    FORMULA : PM_CMPLU_STALL_ANY_SYNC / PM_RUN_INST_CMPL
+    COMPONENTS : []
 84 :
-    NAME : NTC_FLUSH_STALL_CPI
-    DESCRIPTION : Completion stall due to ntc flush
-    FORMULA : PM_CMPLU_STALL_NTC_FLUSH/PM_RUN_INST_CMPL
+    NAME : SYNC_PMU_INT_STALL_CPI
+    DESCRIPTION : Cycles in which the NTC instruction is waiting for a synchronous PMU interrupt
+    FORMULA : PM_CMPLU_STALL_SYNC_PMU_INT / PM_RUN_INST_CMPL
     COMPONENTS : []
 85 :
-    NAME : NTC_DISP_FIN_STALL_CPI
-    DESCRIPTION : Finish stall because the NTF instruction was one that must finish at dispatch.
-    FORMULA : PM_CMPLU_STALL_NTC_DISP_FIN/PM_RUN_INST_CMPL
-    COMPONENTS : []
-86 :
-    NAME : OTHER_STALL_CPI
-    DESCRIPTION : Completion stall for other reasons
-    FORMULA : (PM_CMPLU_STALL/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_NTC_DISP_FIN/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_NTC_FLUSH/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_EXCEPTION/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_LSU/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_EXEC_UNIT/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_BRU/PM_RUN_INST_CMPL)
-    COMPONENTS : []
-87 :
-    NAME : THRD_STALL_CPI
-    DESCRIPTION : Completion Stalled because the thread was blocked
-    FORMULA : PM_CMPLU_STALL_THRD/PM_RUN_INST_CMPL
-    COMPONENTS : [SPEC_FINISH_STALL_CPI, FLUSH_ANY_THREAD_STALL_CPI, LSU_FLUSH_NEXT_STALL_CPI, NESTED_TBEGIN_STALL_CPI, NESTED_TEND_STALL_CPI, MTFPSCR_STALL_CPI, OTHER_CMPL_STALL_CPI]
-88 :
     NAME : SPEC_FINISH_STALL_CPI
     DESCRIPTION : Finish stall while waiting for the non-speculative finish of either a stcx waiting for its result or a load waiting for non-critical sectors of data and ECC
     FORMULA : PM_CMPLU_STALL_SPEC_FINISH/PM_RUN_INST_CMPL
     COMPONENTS : []
-89 :
+86 :
     NAME : FLUSH_ANY_THREAD_STALL_CPI
     DESCRIPTION : Cycles in which the NTC instruction is not allowed to complete because any of the 4 threads in the same core suffered a flush, which blocks completion
     FORMULA : PM_CMPLU_STALL_FLUSH_ANY_THREAD/PM_RUN_INST_CMPL
     COMPONENTS : []
-92 :
+87 :
     NAME : LSU_FLUSH_NEXT_STALL_CPI
     DESCRIPTION : Completion stall of one cycle because the LSU requested to flush the next iop in the sequence. It takes 1 cycle for the ISU to process this request before the LSU instruction is allowed to complete
     FORMULA : PM_CMPLU_STALL_LSU_FLUSH_NEXT/PM_RUN_INST_CMPL
     COMPONENTS : []
-93 :
+88 :
     NAME : NESTED_TBEGIN_STALL_CPI
     DESCRIPTION : Completion stall because the ISU is updating the TEXASR to keep track of the nested tbegin. This is a short delay, and it includes ROT
     FORMULA : PM_CMPLU_STALL_NESTED_TBEGIN/PM_RUN_INST_CMPL
     COMPONENTS : []
-94 :
+89 :
     NAME : NESTED_TEND_STALL_CPI
     DESCRIPTION : Completion stall because the ISU is updating the TEXASR to keep track of the nested tend and decrement the TEXASR nested level. This is a short delay
     FORMULA : PM_CMPLU_STALL_NESTED_TEND/PM_RUN_INST_CMPL
     COMPONENTS : []
-95 :
+90 :
     NAME : MTFPSCR_STALL_CPI
     DESCRIPTION : Completion stall because the ISU is updating the register and notifying the Effective Address Table (EAT)
     FORMULA : PM_CMPLU_STALL_MTFPSCR/PM_RUN_INST_CMPL
     COMPONENTS : []
-96 :
-    NAME : OTHER_CMPL_STALL_CPI
-    DESCRIPTION : Instructions the core completed while this thread was stalled
-    FORMULA : PM_CMPLU_STALL_OTHER_CMPL/PM_RUN_INST_CMPL
+91 :
+    NAME : OTHER_THREAD_CMPL_STALL
+    DESCRIPTION : Completion stall because a different thread was using the completion pipe
+    FORMULA : (PM_CMPLU_STALL_THRD - PM_CMPLU_STALL_EXCEPTION - PM_CMPLU_STALL_ANY_SYNC - PM_CMPLU_STALL_SYNC_PMU_INT - PM_CMPLU_STALL_SPEC_FINISH - PM_CMPLU_STALL_FLUSH_ANY_THREAD - PM_CMPLU_STALL_LSU_FLUSH_NEXT - PM_CMPLU_STALL_NESTED_TBEGIN - PM_CMPLU_STALL_NESTED_TEND - PM_CMPLU_STALL_MTFPSCR)/PM_RUN_INST_CMPL
     COMPONENTS : []
-97 :
-    NAME : NTC_ALL_FIN_CPI
-    DESCRIPTION : Cycles in which the oldest instruction in the pipeline (NTC) finishes. This event is used to account for cycles in which work is being completed in the CPI stack
-    FORMULA : PM_NTC_ALL_FIN / PM_RUN_INST_CMPL
+92 :
+    NAME : COMPLETION_CPI
+    DESCRIPTION : Cycles in which a Group Completed
+    FORMULA : PM_1PLUS_PPC_CMPL / PM_RUN_INST_CMPL
     COMPONENTS : []
-98 :
+93 :
     NAME : OTHER_CPI
     DESCRIPTION : Cycles unaccounted for
-    FORMULA : (PM_RUN_CYC / PM_RUN_INST_CMPL) - (PM_NTC_ALL_FIN/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL_THRD/PM_RUN_INST_CMPL) - (PM_CMPLU_STALL/PM_RUN_INST_CMPL) - ((PM_NTC_ISSUE_HELD_DARQ_FULL/PM_RUN_INST_CMPL) + (PM_NTC_ISSUE_HELD_ARB/PM_RUN_INST_CMPL) + (PM_NTC_ISSUE_HELD_OTHER/PM_RUN_INST_CMPL)) - (PM_ICT_NOSLOT_DISP_HELD/PM_RUN_INST_CMPL)
+    FORMULA : (PM_RUN_CYC - PM_1PLUS_PPC_CMPL - PM_CMPLU_STALL_THRD - PM_CMPLU_STALL - PM_ICT_NOSLOT_CYC)/PM_RUN_INST_CMPL
     COMPONENTS : []
