@@ -24,22 +24,15 @@ limitations under the License.
         * Matheus Castanho <mscastanho@ibm.com>
 """
 
-from setuptools import setup, find_packages
-try:
-    from pip._internal.req import parse_requirements
-except ImportError:
-    from pip.req import parse_requirements
+import setuptools
 
 with open('README.md') as f:
     README = f.read()
 
-REQUIREMENTS_LIST = parse_requirements('./requirements.txt', session=False)
-try:
-    REQUIREMENTS = [str(required.req) for required in REQUIREMENTS_LIST]
-except AttributeError:
-    REQUIREMENTS = [str(required.requirement) for required in REQUIREMENTS_LIST]
+with open('requirements.txt') as f:
+    REQUIREMENTS = [line.strip() for line in f]
 
-setup(
+setuptools.setup(
     name='cpi',
     version='1.0.timestamp',
     description='Profiles C/C++ applications with the CPI (cycles per \
@@ -52,7 +45,7 @@ dbkreling@br.ibm.com, merjildo@br.ibm.com',
     url='https://developer.ibm.com/linuxonpower/sdk/',
     license='Apache Software License 2.0',
     install_requires=REQUIREMENTS,
-    packages=find_packages(exclude=("tests",)),
+    packages=setuptools.find_packages(exclude=("tests",)),
     include_package_data=True,
     test_suite='nose.collector',
     tests_require=['nose'],
