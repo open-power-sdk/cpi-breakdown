@@ -2,11 +2,11 @@
 set +e
 : '
 
-Copyright (C) 2017 IBM Corporation
+Copyright (C) 2021 IBM Corporation
 
 Licensed under the Apache License, Version 2.0 (the “License”);
 you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+You may obtain a copy of the License at:
 
 http://www.apache.org/licenses/LICENSE-2.0
 
@@ -21,6 +21,10 @@ limitations under the License.
 '
 
 DIR=$(basename "$PWD")
+
+usage(){
+	echo "Usage: $0 [ build | tests | release | run | clean | rpm | -h or --help ]"
+}
 
 createVirtEnv(){
 	python3 -m venv $DIR
@@ -97,7 +101,7 @@ buildRPM(){
 
 #read the inputs
 if [ $# -ne 1 ]; then
-    echo "usage: dev [ build | tests | release | run | clean | rpm | -h or --help ]"
+    usage
     exit 1
 fi
 
@@ -122,12 +126,15 @@ elif [[ "$1" == "release" ]]; then
 elif [[ "$1" == "rpm" ]]; then
     buildRPM
 elif [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
-    echo "usage: dev [clean | tests | release]"
-	echo "	* clean: excute a new clean build which do not install or allow execute. Useful for integrity verification."
-	echo "	* tests: run all the unit tests inside a virtual environment."
-	echo "	* release: creates all the necessary packages to distribute the application."
-	echo "	* run: creates a virtual environment where the application is installed and executed"
+    usage
+	echo "	* build: Build tarball."
+	echo "	* tests: Run all the unit tests inside a virtual environment."
+	echo "	* release: Build and create all the necessary packages to distribute the application."
+	echo "	* run: Create a virtual environment where the application is then installed and executed."
+	echo "	* clean: Remove build-related artifacts. Useful for integrity verification."
+	echo "	* rpm: Create installable RPM package."
 else
-	echo "Please, enter the correct command."
-	echo "usage: dev [ build | tests | install | release | run | clean | -h or --help ]"
+	echo "Command \"$1\" not recognized."
+	usage
+	exit 1
 fi
