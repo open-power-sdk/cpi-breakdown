@@ -23,7 +23,7 @@ limitations under the License.
 DIR=$(basename "$PWD")
 
 usage(){
-	echo "Usage: $0 [ build | tests | release | run | clean | rpm | -h or --help ]"
+    echo "Usage: $0 [ build | tests | install [--user] | release | run | clean | rpm | -h or --help ]"
 }
 
 createVirtEnv(){
@@ -63,10 +63,17 @@ buildRun(){
 }
 
 buildInstall(){
+	if [ -z "$1" ]; then
+	  SUDO=sudo
+	  SCOPE=
+	elif [ "$1" == "--user" ]; then
+	  SUDO=
+	  SCOPE=--user
+	fi
 	clean
 	python3 ./setup.py sdist
 	python3 ./setup.py check -m
-        sudo pip3 install --upgrade ./dist/*.tar.gz
+        $SUDO pip3 install $SCOPE --upgrade ./dist/*.tar.gz
 	return $TRUE
 }
 
@@ -100,7 +107,7 @@ buildRPM(){
 }
 
 #read the inputs
-if [ $# -ne 1 ]; then
+if [[ $# != 1 && "$1" != install && $# > 2 ]]; then
     usage
     exit 1
 fi
@@ -116,7 +123,8 @@ if [[ "$1" == "build" ]]; then
 elif [[ "$1" == "tests" ]]; then
     buildTests
 elif [[ "$1" == "install" ]]; then
-    buildInstall
+    shift 1
+    buildInstall $*
 elif [[ "$1" == "run" ]]; then
     buildRun $tool
 elif [[ "$1" == "clean" ]]; then
