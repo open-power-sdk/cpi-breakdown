@@ -4,5 +4,7 @@ include cpi/events/power8.yaml
 include cpi/metrics/power8.yaml
 include cpi/events/power9.yaml
 include cpi/metrics/power9.yaml
+include cpi/events/power10.yaml
+include cpi/metrics/power10.yaml
 include README.md
 include LICENSE

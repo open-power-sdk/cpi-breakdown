@@ -1,0 +1,94 @@
+1 :
+    PM_DISP_STALL_BR_MPRED_IC_L2 : [100000, "Description"]
+    PM_DISP_STALL_BR_MPRED_IC_L3 : [100000, "Description"]
+    PM_DISP_STALL_BR_MPRED_ICMISS : [100000, "Description"]
+    PM_DISP_STALL_BR_MPRED_IC_L3MISS : [100000, "Description"]
+2 :
+    PM_DISP_STALL_IC_L2 : [100000, "Description"]
+    PM_DISP_STALL_IC_MISS : [100000, "Description"]
+    PM_DISP_STALL_IC_L3 : [100000, "Description"]
+    PM_DISP_STALL_IC_L3MISS : [100000, "Description"]
+3 :
+    PM_DISP_STALL_TRANSLATION : [100000, "Description"]
+    PM_DISP_STALL_IERAT_ONLY_MISS : [100000, "Description"]
+    PM_DISP_STALL_ITLB_MISS : [100000, "Description"]
+    PM_DISP_STALL_BR_MPRED : [100000, "Description"]
+4 :
+    PM_DISP_STALL_HELD_STF_MAPPER_CYC : [100000, "Description"]
+    PM_DISP_STALL_HELD_XVFC_MAPPER_CYC : [100000, "Description"]
+    PM_DISP_STALL_HELD_RENAME_CYC : [100000, "Description"]
+    PM_DISP_STALL_HELD_SYNC_CYC : [100000, "Description"]
+5 :
+    PM_DISP_STALL_HELD_OTHER_CYC : [100000, "Description"]
+    # PM_SUSPENDED : [100000, "Description"]
+    PM_DISP_STALL_HELD_SCOREBOARD_CYC : [100000, "Description"]
+    PM_DISP_STALL_HELD_CYC : [100000, "Description"]
+6 :
+    PM_DISP_STALL_HELD_HALT_CYC : [100000, "Description"]
+    # PM_SUSPENDED : [100000, "Description"]
+    PM_RUN_CYC : [100000, "Description"]
+    # PM_SUSPENDED : [100000, "Description"]
+    # PM_SUSPENDED : [100000, "Description"]
+    PM_RUN_INST_CMPL : [100000, "Description"]
+7 :
+    PM_DISP_STALL_CYC : [100000, "Description"]
+    PM_DISP_STALL_FETCH : [100000, "Description"]
+    PM_DISP_STALL_FLUSH : [100000, "Description"]
+    # PM_SUSPENDED : [100000, "Description"]
+    PM_EXEC_STALL_UNKNOWN : [100000, "Description"]
+8 :
+    PM_EXEC_STALL_STORE_PIPE : [100000, "Description"]
+    PM_EXEC_STALL_TLBIE : [100000, "Description"]
+    PM_EXEC_STALL_STORE_MISS : [100000, "Description"]
+    PM_EXEC_STALL_PTESYNC : [100000, "Description"]
+9 :
+    PM_EXEC_STALL_DMISS_L21_L31 : [100000, "Description"]
+    PM_EXEC_STALL_DMISS_OFF_CHIP : [100000, "Description"]
+    PM_EXEC_STALL_DMISS_LMEM : [100000, "Description"]
+    PM_EXEC_STALL_DMISS_OFF_NODE : [100000, "Description"]
+10 :
+    PM_EXEC_STALL_DMISS_L2L3 : [100000, "Description"]
+    PM_EXEC_STALL_DMISS_L3MISS : [100000, "Description"]
+    PM_EXEC_STALL_DMISS_L2L3_NOCONFLICT : [100000, "Description"]
+    PM_EXEC_STALL_DMISS_L2L3_CONFLICT : [100000, "Description"]
+11 :
+    # PM_SUSPENDED : [100000, "Description"]
+    PM_EXEC_STALL_LSU : [100000, "Description"]
+    PM_EXEC_STALL_STORE : [100000, "Description"]
+    PM_EXEC_STALL_LOAD : [100000, "Description"]
+12 :
+    PM_EXEC_STALL_TRANSLATION : [100000, "Description"]
+    PM_EXEC_STALL_VSU : [100000, "Description"]
+    PM_EXEC_STALL_DERAT_DTLB_MISS : [100000, "Description"]
+    PM_EXEC_STALL_DERAT_ONLY_MISS : [100000, "Description"]
+13 :
+    PM_EXEC_STALL_FIN_AT_DISP : [100000, "Description"]
+    PM_EXEC_STALL_NTC_FLUSH : [100000, "Description"]
+    PM_EXEC_STALL_SIMPLE_FX : [100000, "Description"]
+    PM_EXEC_STALL_BRU : [100000, "Description"]
+14 :
+    PM_1PLUS_PPC_CMPL : [100000, "Description"]
+    PM_DISP_STALL_HELD_ISSQ_FULL_CYC : [100000, "Description"]
+    PM_EXEC_STALL : [100000, "Description"]
+    PM_CYC : [100000, "Description"]
+15 :
+    # PM_SUSPENDED : [100000, "Description"]
+    PM_CYC : [100000, "Description"]
+    PM_NTC_FIN : [100000, "Description"]
+    PM_EXEC_STALL_STORE : [100000, "Description"]
+    PM_EXEC_STALL_TLBIEL : [100000, "Description"]
+16 :
+    # PM_SUSPENDED : [100000, "Description"]
+    PM_ISSUE_STALL : [100000, "Description"]
+    PM_EXEC_STALL_LOAD_FINISH : [100000, "Description"]
+    PM_INST_CMPL : [100000, "Description"]
+17 :
+    PM_CMPL_STALL_LWSYNC : [100000, "Description"]
+    PM_CMPL_STALL_STCX : [100000, "Description"]
+    PM_CMPL_STALL_EXCEPTION : [100000, "Description"]
+    PM_CMPL_STALL : [100000, "Description"]
+18 :
+    # PM_SUSPENDED : [100000, "Description"]
+    PM_CMPL_STALL_SPECIAL : [100000, "Description"]
+    PM_CMPL_STALL_MEM_ECC : [100000, "Description"]
+    PM_CMPL_STALL_HWSYNC : [100000, "Description"]

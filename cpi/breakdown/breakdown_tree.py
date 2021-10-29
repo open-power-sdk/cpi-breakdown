@@ -44,12 +44,15 @@ class BreakdownTree():
     def print_tree(self):
         '''
         Starts the printing process by the first level on events which
-        contains RUN_CPI
+        contains CPI (or RUN_CPI)
         '''
+        root = 'CPI'
+        if root not in self.metrics_value_dict:
+            root = 'RUN_CPI'
         identation_size = 1
         print()
-        print("RUN_CPI" + ': ' + self.metrics_value_dict["RUN_CPI"])
-        level1 = self.metric_components['RUN_CPI']
+        print(f"{root}" + ': ' + self.metrics_value_dict[root])
+        level1 = self.metric_components[root]
         for level2 in level1:
             msg = self.IDENTATION + level2 + ': '
             print(msg + self.metrics_value_dict[level2])

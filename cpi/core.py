@@ -26,7 +26,7 @@ import time
 import sys
 
 # List with supported processors for hardware dependent cpi features
-SUPPORTED_PROCESSORS = ["POWER8", "POWER9"]
+SUPPORTED_PROCESSORS = ["POWER8", "POWER9", "POWER10" ]
 
 
 def execute(command):

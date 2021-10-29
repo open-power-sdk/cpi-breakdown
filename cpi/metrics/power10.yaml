@@ -1,0 +1,300 @@
+1 :
+    NAME : CPI
+    DESCRIPTION : Average cycles per completed instruction
+    FORMULA : PM_CYC/PM_INST_CMPL
+    COMPONENTS : [NOTHING_DISPATCHED_CPI,ISSUE_STALL_CPI,EXECUTION_STALL_CPI,COMPLETION_STALL_CPI,STALL_UNKNOWN_CPI]
+2 :
+    NAME : NOTHING_DISPATCHED_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled for any reason
+    FORMULA : PM_DISP_STALL_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : [NOTHING_DISPATCHED_FLUSH_CPI,NOTHING_DISPATCHED_FETCH_CPI,NOTHING_DISPATCHED_TRANSLATION_CPI,NOTHING_DISPATCHED_IC_MISS_CPI,NOTHING_DISPATCHED_BR_MPRED_ICMISS_CPI,NOTHING_DISPATCHED_BR_MPRED_CPI,NOTHING_DISPATCHED_HELD_CPI]
+3 :
+    NAME : NOTHING_DISPATCHED_FLUSH_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled because there was a flush
+    FORMULA : PM_DISP_STALL_FLUSH/PM_RUN_INST_CMPL
+    COMPONENTS : []
+4 :
+    NAME : NOTHING_DISPATCHED_FETCH_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled because Fetch was being held,  so there was nothing in the pipeline for this thread 
+    FORMULA : PM_DISP_STALL_FETCH/PM_RUN_INST_CMPL
+    COMPONENTS : []
+5 :
+    NAME : NOTHING_DISPATCHED_TRANSLATION_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled because the MMU was handling a translation miss
+    FORMULA : PM_DISP_STALL_TRANSLATION/PM_RUN_INST_CMPL
+    COMPONENTS : [NOTHING_DISPATCHED_IERAT_ONLY_MISS_CPI,NOTHING_DISPATCHED_ITLB_MISS_CPI]
+6 :
+    NAME : NOTHING_DISPATCHED_IERAT_ONLY_MISS_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled waiting to resolve an instruction ERAT miss
+    FORMULA : PM_DISP_STALL_IERAT_ONLY_MISS/PM_RUN_INST_CMPL
+    COMPONENTS : []
+7 :
+    NAME : NOTHING_DISPATCHED_ITLB_MISS_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled waiting to resolve an instruction TLB miss
+    FORMULA : PM_DISP_STALL_ITLB_MISS/PM_RUN_INST_CMPL
+    COMPONENTS : []
+8 :
+    NAME : NOTHING_DISPATCHED_IC_MISS_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled due to an icache miss
+    FORMULA : PM_DISP_STALL_IC_MISS/PM_RUN_INST_CMPL
+    COMPONENTS : [NOTHING_DISPATCHED_IC_L2_CPI,NOTHING_DISPATCHED_IC_L3_CPI,NOTHING_DISPATCHED_IC_L3MISS_CPI]
+9 :
+    NAME : NOTHING_DISPATCHED_IC_L2_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled while the instruction was fetched form the local L2
+    FORMULA : PM_DISP_STALL_IC_L2/PM_RUN_INST_CMPL
+    COMPONENTS : []
+10 :
+    NAME : NOTHING_DISPATCHED_IC_L3_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled while the instruction was fetched form the local L3
+    FORMULA : PM_DISP_STALL_IC_L3/PM_RUN_INST_CMPL
+    COMPONENTS : []
+11 :
+    NAME : NOTHING_DISPATCHED_IC_L3MISS_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled while the instruction was fetched from any source beyond the local L3
+    FORMULA : PM_DISP_STALL_IC_L3MISS/PM_RUN_INST_CMPL
+    COMPONENTS : []
+12 :
+    NAME : NOTHING_DISPATCHED_BR_MPRED_ICMISS_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled due to an icache miss after a branch mispredict
+    FORMULA : PM_DISP_STALL_BR_MPRED_ICMISS/PM_RUN_INST_CMPL
+    COMPONENTS : [NOTHING_DISPATCHED_BR_MPRED_IC_L2_CPI,NOTHING_DISPATCHED_BR_MPRED_IC_L3_CPI,NOTHING_DISPATCHED_BR_MPRED_IC_L3MISS_CPI]
+13 :
+    NAME : NOTHING_DISPATCHED_BR_MPRED_IC_L2_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled while instruction was fetched from the local L2 after suffering a branch mispredict
+    FORMULA : PM_DISP_STALL_BR_MPRED_IC_L2/PM_RUN_INST_CMPL
+    COMPONENTS : []
+14 :
+    NAME : NOTHING_DISPATCHED_BR_MPRED_IC_L3_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled while instruction was fetched from the local L3 after suffering a branch mispredict
+    FORMULA : PM_DISP_STALL_BR_MPRED_IC_L3/PM_RUN_INST_CMPL
+    COMPONENTS : []
+15 :
+    NAME : NOTHING_DISPATCHED_BR_MPRED_IC_L3MISS_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled while instruction was fetched from any source beyond  the local L3 after suffering a branch mispredict
+    FORMULA : PM_DISP_STALL_BR_MPRED_IC_L3MISS/PM_RUN_INST_CMPL
+    COMPONENTS : []
+16 :
+    NAME : NOTHING_DISPATCHED_BR_MPRED_CPI
+    DESCRIPTION : Average cycles per instruction when dispatch was stalled due to a branch mispredict
+    FORMULA : PM_DISP_STALL_BR_MPRED/PM_RUN_INST_CMPL
+    COMPONENTS : []
+17 :
+    NAME : NOTHING_DISPATCHED_HELD_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch for any reason
+    FORMULA : PM_DISP_STALL_HELD_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : [DISP_HELD_STALL_SYNC_CPI,DISP_HELD_STALL_SCOREBOARD_CPI,DISP_HELD_STALL_ISSQ_FULL_CPI,NOTHING_DISPATCHED_HELD_RENAME_CPI,NOTHING_DISPATCHED_HELD_HALT_CPI,NOTHING_DISPATCHED_HELD_OTHER_CPI]
+18 :
+    NAME : DISP_HELD_STALL_SYNC_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch because of a synchronizing instruction that requires the ICT to be empty before dispatch
+    FORMULA : PM_DISP_STALL_HELD_SYNC_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+19 :
+    NAME : DISP_HELD_STALL_SCOREBOARD_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch while waiting on the scoreboard
+    FORMULA : PM_DISP_STALL_HELD_SCOREBOARD_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+20 :
+    NAME : DISP_HELD_STALL_ISSQ_FULL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch due to issue q full
+    FORMULA : PM_DISP_STALL_HELD_ISSQ_FULL_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+21 :
+    NAME : NOTHING_DISPATCHED_HELD_RENAME_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch because the mapper/SRB was full
+    FORMULA : PM_DISP_STALL_HELD_RENAME_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : [NOTHING_DISPATCHED_HELD_STF_MAPPER_CPI,NOTHING_DISPATCHED_HELD_XVFC_MAPPER_CPI]
+22 :
+    NAME : NOTHING_DISPATCHED_HELD_STF_MAPPER_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch because the STF mapper/SRB was full
+    FORMULA : PM_DISP_STALL_HELD_STF_MAPPER_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+23 :
+    NAME : NOTHING_DISPATCHED_HELD_XVFC_MAPPER_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch because the XVFC mapper/SRB was full
+    FORMULA : PM_DISP_STALL_HELD_XVFC_MAPPER_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+24 :
+    NAME : NOTHING_DISPATCHED_HELD_HALT_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch because of power management
+    FORMULA : PM_DISP_STALL_HELD_HALT_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+25 :
+    NAME : NOTHING_DISPATCHED_HELD_OTHER_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction was held at dispatch for any other reason
+    FORMULA : PM_DISP_STALL_HELD_OTHER_CYC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+26 :
+    NAME : ISSUE_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction has been dispatched but not issued for any reason
+    FORMULA : PM_ISSUE_STALL/PM_RUN_INST_CMPL
+    COMPONENTS : []
+27 :
+    NAME : EXECUTION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting to be finished in one of the execution units
+    FORMULA : PM_EXEC_STALL/PM_RUN_INST_CMPL
+    COMPONENTS : [NTC_FLUSH_STALL_CPI,FIN_AT_DISP_STALL_CPI,BRU_STALL_CPI,SIMPLE_FX_STALL_CPI,VSU_STALL_CPI,TRANSLATION_STALL_CPI,LSU_STALL_CPI]
+28 :
+    NAME : NTC_FLUSH_STALL_CPI
+    DESCRIPTION : Average cycles per instruction spent executing an NTC instruction that gets flushed some time after dispatch
+    FORMULA : PM_EXEC_STALL_NTC_FLUSH/PM_RUN_INST_CMPL
+    COMPONENTS : []
+29 :
+    NAME : FIN_AT_DISP_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the instruction finishes at dispatch
+    FORMULA : PM_EXEC_STALL_FIN_AT_DISP/PM_RUN_INST_CMPL
+    COMPONENTS : []
+30 :
+    NAME : BRU_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is executing in the branch unit
+    FORMULA : PM_EXEC_STALL_BRU/PM_RUN_INST_CMPL
+    COMPONENTS : []
+31 :
+    NAME : SIMPLE_FX_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is a simple fixed point instr that is executing in the lsu unit
+    FORMULA : PM_EXEC_STALL_SIMPLE_FX/PM_RUN_INST_CMPL
+    COMPONENTS : []
+32 :
+    NAME : VSU_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is executing in the vsu unit
+    FORMULA : PM_EXEC_STALL_VSU/PM_RUN_INST_CMPL
+    COMPONENTS : []
+33 :
+    NAME : TRANSLATION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting to be finished in one of the execution units
+    FORMULA : PM_EXEC_STALL_TRANSLATION/PM_RUN_INST_CMPL
+    COMPONENTS : [DERAT_ONLY_MISS_STALL_CPI,DERAT_DTLB_MISS_STALL_CPI]
+34 :
+    NAME : DERAT_ONLY_MISS_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is a load or store that suffered a translation miss
+    FORMULA : PM_EXEC_STALL_DERAT_ONLY_MISS/PM_RUN_INST_CMPL
+    COMPONENTS : []
+35 :
+    NAME : DERAT_DTLB_MISS_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is recovering from a TLB miss
+    FORMULA : PM_EXEC_STALL_DERAT_DTLB_MISS/PM_RUN_INST_CMPL
+    COMPONENTS : []
+36 :
+    NAME : LSU_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is executing in the lsu unit
+    FORMULA : PM_EXEC_STALL_LSU/PM_RUN_INST_CMPL
+    COMPONENTS : [LOAD_STALL_CPI,STORE_STALL_CPI]
+37 :
+    NAME : LOAD_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is a load that is executing in the lsu unit
+    FORMULA : PM_EXEC_STALL_LOAD/PM_RUN_INST_CMPL
+    COMPONENTS : [DMISS_L2L3_STALL_CPI,DMISS_L3MISS_STALL_CPI,TLBIEL_STALL_CPI,LOAD_FINISH_STALL_CPI]
+38 :
+    NAME : DMISS_L2L3_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting for a load miss to resolve from either the local L2 or local L3
+    FORMULA : PM_EXEC_STALL_DMISS_L2L3/PM_RUN_INST_CMPL
+    COMPONENTS : [DMISS_L2L3_CONFLICT_STALL_CPI,DMISS_L2L3_NOCONFLICT_STALL_CPI]
+39 :
+    NAME : DMISS_L2L3_CONFLICT_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting for a load miss to resolve from either the local L2 or local L3, with an RC dispatch conflict
+    FORMULA : PM_EXEC_STALL_DMISS_L2L3_CONFLICT/PM_RUN_INST_CMPL
+    COMPONENTS : []
+40 :
+    NAME : DMISS_L2L3_NOCONFLICT_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting for a load miss to resolve from either the local L2 or local L3, without an RC dispatch conflict
+    FORMULA : PM_EXEC_STALL_DMISS_L2L3_NOCONFLICT/PM_RUN_INST_CMPL
+    COMPONENTS : []
+41 :
+    NAME : DMISS_L3MISS_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting for a load miss to resolve from a source beyond the local L2 and local L3
+    FORMULA : PM_EXEC_STALL_DMISS_L3MISS/PM_RUN_INST_CMPL
+    COMPONENTS : [DMISS_L21_L31_STALL_CPI,DMISS_LMEM_STALL_CPI,DMISS_OFF_CHIP_STALL_CPI,DMISS_OFF_NODE_STALL_CPI]
+42 :
+    NAME : DMISS_L21_L31_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting for a load miss to resolve from a neighbor chiplet's L2 or L3 in the same chip.
+    FORMULA : PM_EXEC_STALL_DMISS_L21_L31/PM_RUN_INST_CMPL
+    COMPONENTS : []
+43 :
+    NAME : DMISS_LMEM_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting for a load miss to resolve from local memory, L4 or OpenCapp chip
+    FORMULA : PM_EXEC_STALL_DMISS_LMEM/PM_RUN_INST_CMPL
+    COMPONENTS : []
+44 :
+    NAME : DMISS_OFF_CHIP_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting for a load miss to resolve from a remote chip (cache, L4, memory or CAPP) in the same group
+    FORMULA : PM_EXEC_STALL_DMISS_OFF_CHIP/PM_RUN_INST_CMPL
+    COMPONENTS : []
+45 :
+    NAME : DMISS_OFF_NODE_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is waiting for a load miss to resolve from a distant chip (cache, L4, memory or CAPP chip)
+    FORMULA : PM_EXEC_STALL_DMISS_OFF_NODE/PM_RUN_INST_CMPL
+    COMPONENTS : []
+46 :
+    NAME : TLBIEL_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is executing a TLBIEL instruction
+    FORMULA : PM_EXEC_STALL_TLBIEL/PM_RUN_INST_CMPL
+    COMPONENTS : []
+47 :
+    NAME : LOAD_FINISH_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is finishing a load after its data has been reloaded from a data source beyond the local L1, OR when the LSU is processing an L1-hit, OR when the NTF instruction merged with another load in the LMQ
+    FORMULA : PM_EXEC_STALL_LOAD_FINISH/PM_RUN_INST_CMPL
+    COMPONENTS : []
+48 :
+    NAME : STORE_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is a store that is executing in the lsu unit
+    FORMULA : PM_EXEC_STALL_STORE/PM_RUN_INST_CMPL
+    COMPONENTS : [STORE_PIPE_STALL_CPI,STORE_MISS_STALL_CPI,TLBIE_STALL_CPI,PTESYNC_STALL_CPI]
+49 :
+    NAME : STORE_PIPE_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is in the store unit outside of handling store misses or other special store operations
+    FORMULA : PM_EXEC_STALL_STORE_PIPE/PM_RUN_INST_CMPL
+    COMPONENTS : []
+50 :
+    NAME : STORE_MISS_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is a store whose cache line was not resident in the L1 and had to wait for allocation of the missing line into the L1
+    FORMULA : PM_EXEC_STALL_STORE_MISS/PM_RUN_INST_CMPL
+    COMPONENTS : []
+51 :
+    NAME : TLBIE_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is a TLBIE instruction waiting for a response from the L2
+    FORMULA : PM_EXEC_STALL_TLBIE/PM_RUN_INST_CMPL
+    COMPONENTS : []
+52 :
+    NAME : PTESYNC_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is executing a PTESYNC instruction
+    FORMULA : PM_EXEC_STALL_PTESYNC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+53 :
+    NAME : COMPLETION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction cannot complete because the thread was blocked
+    FORMULA : PM_CMPL_STALL/PM_RUN_INST_CMPL
+    COMPONENTS : [EXCEPTION_COMPLETION_STALL_CPI,MEM_ECC_COMPLETION_STALL_CPI,STCX_COMPLETION_STALL_CPI,LWSYNC_COMPLETION_STALL_CPI,HWSYNC_COMPLETION_STALL_CPI,SPECIAL_COMPLETION_STALL_CPI]
+54 :
+    NAME : EXCEPTION_COMPLETION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction cannot complete because it was interrupted by ANY exception
+    FORMULA : PM_CMPL_STALL_EXCEPTION/PM_RUN_INST_CMPL
+    COMPONENTS : []
+55 :
+    NAME : MEM_ECC_COMPLETION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is stuck at finish waiting for the non-speculative finish of either a stcx waiting for its result or a load waiting for non-critical sectors of data and ECC
+    FORMULA : PM_CMPL_STALL_MEM_ECC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+56 :
+    NAME : STCX_COMPLETION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction cannot complete the instruction is a stcx waiting for resolution from the nest.
+    FORMULA : PM_CMPL_STALL_STCX/PM_RUN_INST_CMPL
+    COMPONENTS : []
+57 :
+    NAME : LWSYNC_COMPLETION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is a LWSYNC instruction waiting to complete
+    FORMULA : PM_CMPL_STALL_LWSYNC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+58 :
+    NAME : HWSYNC_COMPLETION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction is a HWSYNC instruction stuck at finish waiting for a response from the L2
+    FORMULA : PM_CMPL_STALL_HWSYNC/PM_RUN_INST_CMPL
+    COMPONENTS : []
+59 :
+    NAME : SPECIAL_COMPLETION_STALL_CPI
+    DESCRIPTION : Average cycles per instruction when the ntc instruction required special handling before completion
+    FORMULA : PM_CMPL_STALL_SPECIAL/PM_RUN_INST_CMPL
+    COMPONENTS : []
+60 :
+    NAME : STALL_UNKNOWN_CPI
+    DESCRIPTION : Average cycles per instruction the NTC instruction is executing without an instruction type
+    FORMULA : PM_EXEC_STALL_UNKNOWN/PM_RUN_INST_CMPL
+    COMPONENTS : []
