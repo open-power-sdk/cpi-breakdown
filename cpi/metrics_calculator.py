@@ -76,8 +76,12 @@ class MetricsCalculator():
         '''
         parsed_output = defaultdict(list)
         parsed_output = parsed_output_dict
+        cycles = 'PM_CYC'
+        instructions = 'PM_RUN_INST_CMPL'
+        if 'PM_CYC' not in parsed_output:
+            cycles = 'PM_RUN_CYC'
         metrics_results = []
-        if int(parsed_output.get('PM_RUN_INST_CMPL')[0]) > 0:
+        if True:
             for group in self.metrics_groups.values():
                 result_tmp = []
                 # Split the metrics in all components to allow replacing
@@ -105,8 +109,8 @@ class MetricsCalculator():
                 if metric_result > 0:
                     result_tmp.append("%.3f" % metric_result)
                     cmd = ('(float(metric_result)/(float(parsed_output.get'
-                           '(\'PM_RUN_CYC\'))/float(parsed_output.get'
-                           '(\'PM_RUN_INST_CMPL\'))))*100')
+                           '(cycles))/float(parsed_output.get'
+                           '(instructions))))*100')
                     result_tmp.append("%.2f" % eval(cmd))
                 else:
                     result_tmp.append(0)
