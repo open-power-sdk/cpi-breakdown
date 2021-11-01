@@ -39,7 +39,6 @@ destroyVirtEnv(){
 }
 
 clean(){
-	rm -rf ./$DIR
 	rm -rf ./*egg*
 	rm -rf ./build
 	rm -rf ./dist
